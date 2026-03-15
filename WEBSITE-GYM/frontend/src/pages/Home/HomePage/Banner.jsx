@@ -5,3 +5,23 @@ export default function Banner() {
     </div>
   );
 }
+
+// Banner
+
+// About Gym
+
+//History
+
+// Mission / Vision
+
+// Trainers
+
+// Facilities
+
+// Achievements
+
+// Customer Reviews
+
+// Call To Action
+
+// Contact Info
