@@ -6,6 +6,8 @@ import { Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import HomePage from "../pages/Home/HomePage";
 import AccountPage from "../pages/Home/AccountPage";
+import LoginPage from "../pages/Home/AccountPage/LoginPage";
+import RegisterPage from "../pages/Home/AccountPage/RegisterPage";
 import AboutPage from "../pages/Home/AboutPage";
 import ServicePage from "../pages/Home/ServicePage";
 import ProductPage from "../pages/Home/ProductPage";
@@ -29,6 +31,14 @@ const routes = [
             {
                 path: "account",
                 element: AccountPage,
+            },
+            {
+                path: "login",
+                element: LoginPage,
+            },
+            {
+                path: "register",
+                element: RegisterPage,
             },
             {
                 path: "about",

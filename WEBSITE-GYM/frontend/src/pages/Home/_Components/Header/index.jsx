@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import ImporterButton from "../ImporterButton";
 
 const navItems = [
     { label: "Trang chủ", path: "/" },
@@ -14,7 +15,7 @@ const Header = () => {
         <header className="bg-black/95 backdrop-blur sticky top-0 z-50 border-b border-red-900">
             <div className="max-w-7xl mx-auto relative flex items-center px-2 py-4">
 
-                {/* Logo + tên web */}
+                {/* Logo */}
                 <div className="flex items-center gap-5">
                     <img
                         src="/images/logo/logo.png"
@@ -22,8 +23,8 @@ const Header = () => {
                         className="w-15 h-15 object-contain scale-170"
                     />
 
-                    <a
-                        href="/"
+                    <NavLink
+                        to="/"
                         className="text-2xl font-bold transition-colors"
                     >
                         <span className="text-red-500 hover:text-red-400">
@@ -32,16 +33,14 @@ const Header = () => {
                         <span className="text-yellow-500 hover:text-yellow-400 ml-1">
                             GYM
                         </span>
-                    </a>
+                    </NavLink>
                 </div>
-
 
                 {/* Menu */}
                 <nav className="
                     group hidden md:flex items-center gap-8 text-lg font-medium
                     absolute left-1/2 -translate-x-1/2
                 ">
-
                     {navItems.map((item) => (
                         <NavLink
                             key={item.label}
@@ -68,24 +67,14 @@ const Header = () => {
                         >
                             {item.label}
                         </NavLink>
-
                     ))}
                 </nav>
 
-                {/* Account */}
+                {/* User */}
                 <div className="ml-auto flex items-center gap-3">
-
-                    <NavLink
-                        to="/account"
-                        className="
-                            px-4 py-1.5 rounded-lg
-                            bg-red-600 text-white
-                            hover:bg-red-500 transition-colors
-                        "
-                    >
-                        Account
+                    <NavLink to="/account">
+                        <ImporterButton />
                     </NavLink>
-
                 </div>
             </div>
         </header>
