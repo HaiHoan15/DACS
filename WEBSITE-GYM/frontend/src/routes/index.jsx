@@ -5,6 +5,11 @@ import { Route, Navigate } from "react-router-dom";
 // trang chính
 import Home from "../pages/Home";
 import HomePage from "../pages/Home/HomePage";
+import AccountPage from "../pages/Home/AccountPage";
+import AboutPage from "../pages/Home/AboutPage";
+import ServicePage from "../pages/Home/ServicePage";
+import ProductPage from "../pages/Home/ProductPage";
+import NewsPage from "../pages/Home/NewsPage";
 
 //trang quản lý
 import Admin from "../pages/Admin";
@@ -21,10 +26,27 @@ const routes = [
                 index: true,
                 element: HomePage,
             },
-            // {
-            //     path: "gioi-thieu",
-            //     element: AboutPage,
-            // },
+            {
+                path: "account",
+                element: AccountPage,
+            },
+            {
+                path: "about",
+                element: AboutPage,
+            },
+            {
+                path: "service",
+                element: ServicePage,
+            },
+            {
+                path: "product",
+                element: ProductPage,
+            },
+            {
+                path: "news",
+                element: NewsPage,
+
+            }
         ],
     },
     {
