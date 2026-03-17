@@ -8,4 +8,20 @@ const api = axios.create({
   },
 });
 
+// Hàm đăng nhập
+export const loginUser = async (email, password) => {
+  try {
+    const response = await api.post("AuthController.php", {
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Lỗi kết nối server",
+    };
+  }
+};
+
 export default api;

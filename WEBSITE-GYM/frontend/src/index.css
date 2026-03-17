@@ -4,3 +4,21 @@
 @source "../node_modules/flowbite";
 @import "animate.css";
 /* @import "@fortawesome/fontawesome-free/css/all.min.css"; */
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+}

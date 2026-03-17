@@ -1,5 +1,9 @@
-import { NavLink } from "react-router-dom";
-import ImporterButton from "../ImporterButton";
+import { NavLink, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../../../redux/authSlice";
+
+import LoginButton from "../../../../components/LoginButton";
+import MenuButton from "../../../../components/MenuButton";
 
 const navItems = [
     { label: "Trang chủ", path: "/" },
@@ -10,6 +14,18 @@ const navItems = [
 ];
 
 const Header = () => {
+    const user = useSelector((state) => state.auth.user);
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const defaultUserImage = "/images/error/user.png";
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+
+    const userImageSrc = user?.avatar || defaultUserImage;
+    const userProfilePath = "/user";
+    const isUserRouteActive = location.pathname.startsWith(userProfilePath);
 
     return (
         <header className="bg-black/95 backdrop-blur sticky top-0 z-50 border-b border-red-900">
@@ -70,11 +86,49 @@ const Header = () => {
                     ))}
                 </nav>
 
-                {/* User */}
+                {/* User Section */}
                 <div className="ml-auto flex items-center gap-3">
-                    <NavLink to="/account">
-                        <ImporterButton />
-                    </NavLink>
+                    {user ? (
+                        // Đã đăng nhập
+                        <div className="flex items-center gap-3">
+                            {/* Avatar + tên user */}
+                            <NavLink
+                                to={userProfilePath}
+                                className={() =>
+                                    `flex items-center gap-2 px-3 py-1.5 rounded-full shadow-sm transition duration-300 ${isUserRouteActive
+                                        ? "bg-gradient-to-r from-red-500 to-yellow-500 text-white shadow-lg hover:bg-yellow-500 hover:shadow-yellow-500/50"
+                                        : "bg-gray-700/50 text-gray-300 hover:bg-red-500 hover:text-white hover:shadow-md"
+                                    }`
+                                }
+                            >
+                                <img
+                                    src={userImageSrc}
+                                    alt="User avatar"
+                                    onError={(e) => {
+                                        e.currentTarget.onerror = null;
+                                        e.currentTarget.src = defaultUserImage;
+                                    }}
+                                    className="w-8 h-8 rounded-full object-cover border border-gray-300"
+                                />
+                                <span className="font-medium">{user.username}</span>
+                            </NavLink>
+
+                            <MenuButton />
+
+                            {/* Logout Button */}
+                            <button
+                                onClick={handleLogout}
+                                className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition text-sm font-medium"
+                            >
+                                Đăng xuất
+                            </button>
+                        </div>
+                    ) : (
+                        // Chưa đăng nhập
+                        <NavLink to="/login">
+                            <LoginButton />
+                        </NavLink>
+                    )}
                 </div>
             </div>
         </header>
