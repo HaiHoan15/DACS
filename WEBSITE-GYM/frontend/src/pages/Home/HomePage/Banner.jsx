@@ -33,7 +33,7 @@ export default function Home() {
         <div className="max-w-2xl" data-aos="fade-up">
 
           {/* Title nhỏ */}
-          <p className="text-red-500 font-semibold mb-3 tracking-wide font-bold">
+          <p className="text-red-500 mb-3 tracking-wide font-bold">
             CHÀO MỪNG ĐẾN VỚI
           </p>
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Checkbox = () => {
+const MenuButton = ({ isOpen = false, onChange, id = "menu-button" }) => {
     return (
         <> <style>{`
         .burger {
@@ -64,8 +64,13 @@ const Checkbox = () => {
     }
   `}</style>
 
-            <label className="burger" htmlFor="burger">
-                <input type="checkbox" id="burger" />
+            <label className="burger" htmlFor={id}>
+                <input
+                    type="checkbox"
+                    id={id}
+                    checked={isOpen}
+                    onChange={onChange}
+                />
                 <span />
                 <span />
                 <span />
@@ -74,4 +79,4 @@ const Checkbox = () => {
     );
 };
 
-export default Checkbox;
+export default MenuButton;

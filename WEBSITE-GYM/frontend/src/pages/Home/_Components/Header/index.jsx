@@ -1,9 +1,8 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../../../redux/authSlice";
+import { NavLink, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import LoginButton from "../../../../components/LoginButton";
-import MenuButton from "../../../../components/MenuButton";
+import UserDropdown from "../UserDropdown";
 
 const navItems = [
     { label: "Trang chủ", path: "/" },
@@ -15,15 +14,8 @@ const navItems = [
 
 const Header = () => {
     const user = useSelector((state) => state.auth.user);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
     const location = useLocation();
     const defaultUserImage = "/images/error/user.png";
-
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate("/", { replace: true });
-    };
 
     const userImageSrc = user?.avatar || defaultUserImage;
     const userProfilePath = "/user";
@@ -120,15 +112,7 @@ const Header = () => {
                                 </span>
                             </NavLink>
 
-                            <MenuButton />
-
-                            {/* Logout Button */}
-                            <button
-                                onClick={handleLogout}
-                                className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition text-sm font-medium"
-                            >
-                                Đăng xuất
-                            </button>
+                            <UserDropdown />
                         </div>
                     ) : (
                         // Chưa đăng nhập
