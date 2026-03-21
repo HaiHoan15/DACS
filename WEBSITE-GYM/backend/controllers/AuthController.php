@@ -49,7 +49,7 @@ class AuthController {
         
         sendJsonResponse([
             'success' => true,
-            'message' => 'Đăng nhập thành công',
+            'message' => 'Đăng nhập thành công, đang chuyển hướng...',
             'user' => $user
         ], 200);
     }

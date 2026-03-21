@@ -33,6 +33,33 @@ export const loginUserAsync = createAsyncThunk(
   }
 );
 
+// Async thunk để xử lý register
+export const registerUserAsync = createAsyncThunk(
+  'auth/registerUser',
+  async ({ email, username, password, confirmPassword, address, phone }, { rejectWithValue }) => {
+    try {
+      const response = await api.post("RegisterController.php", {
+        email,
+        username,
+        password,
+        confirmPassword,
+        address,
+        phone,
+      });
+      
+      if (response.data.success) {
+        return response.data; // { success: true, message: "..." }
+      } else {
+        return rejectWithValue(response.data.message || "Lỗi đăng ký");
+      }
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Lỗi kết nối server"
+      );
+    }
+  }
+);
+
 const initialState = {
   user: getUser(),
   loading: false,
@@ -64,6 +91,18 @@ const authSlice = createSlice({
         localStorage.setItem("user", JSON.stringify(action.payload.user));
       })
       .addCase(loginUserAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(registerUserAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUserAsync.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(registerUserAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

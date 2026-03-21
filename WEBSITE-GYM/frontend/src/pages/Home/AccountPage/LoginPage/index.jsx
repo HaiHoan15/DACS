@@ -25,7 +25,7 @@ export default function LoginPage() {
     if (result.type === loginUserAsync.fulfilled.type) {
       // Đăng nhập thành công
       setNotification({
-        message: "Đăng nhập thành công!",
+        message: "Đăng nhập thành công! Đang chuyển hướng...",
         type: "success",
       });
 

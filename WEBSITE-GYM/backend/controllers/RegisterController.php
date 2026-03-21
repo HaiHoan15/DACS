@@ -22,7 +22,7 @@ class RegisterController {
             sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         }
 
-        $input = json_decode(file_get_contents("php://input"), true);
+        $input = getJsonInput();
         
         // Kiểm tra dữ liệu bắt buộc
         if (empty($input['email']) || empty($input['username']) || empty($input['password']) || empty($input['confirmPassword'])) {

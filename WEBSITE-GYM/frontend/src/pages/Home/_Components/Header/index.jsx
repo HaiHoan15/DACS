@@ -97,7 +97,7 @@ const Header = () => {
                             <NavLink
                                 to={userProfilePath}
                                 className={() =>
-                                    `flex items-center gap-2 px-3 py-1.5 rounded-full shadow-sm transition duration-300 ${isUserRouteActive
+                                    `flex items-center gap-2 px-3 py-1.5 rounded-full shadow-sm transition duration-300 min-w-0 ${isUserRouteActive
                                         ? "bg-gradient-to-r from-red-500 to-yellow-500 text-white shadow-lg hover:bg-yellow-500 hover:shadow-yellow-500/50"
                                         : "bg-gray-700/50 text-gray-300 hover:bg-red-500 hover:text-white hover:shadow-md"
                                     }`
@@ -112,7 +112,12 @@ const Header = () => {
                                     }}
                                     className="w-8 h-8 rounded-full object-cover border border-gray-300"
                                 />
-                                <span className="font-medium">{user.username}</span>
+                                <span
+                                    className="font-medium max-w-[140px] truncate"
+                                    title={user.username}
+                                >
+                                    {user.username}
+                                </span>
                             </NavLink>
 
                             <MenuButton />
