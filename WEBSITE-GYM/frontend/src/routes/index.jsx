@@ -68,7 +68,7 @@ const routes = [
             },
             {
                 path: "user/:username",
-                element: UserPage,
+                element: ProtectedUserRouteWrapper(UserPage),
             }
         ],
     },
@@ -104,6 +104,25 @@ function AdminRouteWrapper(Component) {
             <AdminRoute>
                 <Component />
             </AdminRoute>
+        );
+    };
+}
+
+//chặn vào trang user nếu chưa đăng nhập
+function ProtectedUserRoute({ children }) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Vui lòng đăng nhập để truy cập trang này!");
+        return <Navigate to="/login" replace />;
+    }
+    return children;
+}
+function ProtectedUserRouteWrapper(Component) {
+    return function ProtectedUser() {
+        return (
+            <ProtectedUserRoute>
+                <Component />
+            </ProtectedUserRoute>
         );
     };
 }

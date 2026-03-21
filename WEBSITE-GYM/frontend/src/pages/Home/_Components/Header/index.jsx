@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../../../redux/authSlice";
 
@@ -16,11 +16,13 @@ const navItems = [
 const Header = () => {
     const user = useSelector((state) => state.auth.user);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const location = useLocation();
     const defaultUserImage = "/images/error/user.png";
 
     const handleLogout = () => {
         dispatch(logout());
+        navigate("/", { replace: true });
     };
 
     const userImageSrc = user?.avatar || defaultUserImage;
@@ -28,7 +30,7 @@ const Header = () => {
     const isUserRouteActive = location.pathname.startsWith(userProfilePath);
 
     return (
-        <header className="bg-black/95 backdrop-blur sticky top-0 z-50 border-b border-red-900">
+        <header className="bg-black/75 backdrop-blur sticky top-0 z-50 border-b border-red-900">
             <div className="max-w-7xl mx-auto relative flex items-center px-2 py-4">
 
                 {/* Logo */}

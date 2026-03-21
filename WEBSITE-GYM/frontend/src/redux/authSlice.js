@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "../API/api";
 
 const getUser = () => {
   try {
@@ -9,8 +10,33 @@ const getUser = () => {
   }
 };
 
+// Async thunk để xử lý login
+export const loginUserAsync = createAsyncThunk(
+  'auth/loginUser',
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const response = await api.post("AuthController.php", {
+        email,
+        password,
+      });
+      
+      if (response.data.success) {
+        return response.data; // { success: true, user: {...}, message: "..." }
+      } else {
+        return rejectWithValue(response.data.message || "Lỗi đăng nhập");
+      }
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Lỗi kết nối server"
+      );
+    }
+  }
+);
+
 const initialState = {
   user: getUser(),
+  loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
@@ -25,6 +51,22 @@ const authSlice = createSlice({
       state.user = null;
       localStorage.removeItem("user");
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginUserAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUserAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
+      })
+      .addCase(loginUserAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

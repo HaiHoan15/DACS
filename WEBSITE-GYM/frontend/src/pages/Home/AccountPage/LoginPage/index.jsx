@@ -1,32 +1,31 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../../../redux/authSlice";
-import { loginUser } from "../../../../API/api";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserAsync } from "../../../../redux/authSlice";
 import Notification from "../../../../components/Notification";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  // Lấy loading và error từ Redux store
+  const loading = useSelector((state) => state.auth.loading);
+  const error = useSelector((state) => state.auth.error);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
-    const result = await loginUser(email, password);
+    // Dispatch async thunk
+    const result = await dispatch(loginUserAsync({ email, password }));
 
-    if (result.success) {
-      // Lưu user vào Redux store
-      dispatch(setUser(result.user));
-
-      // Hiển thị notification thành công
+    if (result.type === loginUserAsync.fulfilled.type) {
+      // Đăng nhập thành công
       setNotification({
-        message: result.message,
+        message: "Đăng nhập thành công!",
         type: "success",
       });
 
@@ -35,14 +34,12 @@ export default function LoginPage() {
         navigate("/");
       }, 2000);
     } else {
-      // Hiển thị notification lỗi
+      // Đăng nhập thất bại
       setNotification({
-        message: result.message,
+        message: result.payload || "Đăng nhập thất bại",
         type: "error",
       });
     }
-
-    setLoading(false);
   };
 
   return (
