@@ -35,14 +35,14 @@ export default function History() {
     return (
         <section
             className="py-20 bg-repeat bg-top"
-            style={{ backgroundImage: "url('/images/about-page/history-1.jpg')" }}
+            style={{ backgroundImage: "url('/images/about-page/history-1.png')" }}
         >
             <div className="max-w-6xl mx-auto px-6">
 
                 {/* Title */}
                 <h2
                     className="text-3xl md:text-5xl font-extrabold text-center mb-16"
-                    data-aos="fade-down"
+                    data-aos="fade-up"
                 >
                     <span className="text-white">Lịch sử phát triển </span>
                     <span className="bg-gradient-to-r from-red-500 to-yellow-400 bg-clip-text text-transparent">

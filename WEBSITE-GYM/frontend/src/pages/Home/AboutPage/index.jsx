@@ -6,10 +6,12 @@ import Banner from "./about-pages/Banner";
 import AboutIntro from "./about-pages/AboutIntro";
 import History from "./about-pages/History";
 import MissionVision from "./about-pages/MissionVision";
+import TeamSection from "./about-pages/TeamSection";
 import FacilitiesSection from "./about-pages/FacilitiesSection";
 import AchievementsSection from "./about-pages/AchievementsSection";
 import CustomerReviewsSection from "./about-pages/CustomerReviewsSection";
 import CTASection from "./about-pages/CTASection";
+import ContactSection from "./about-pages/ContactSection";
 
 export default function HomePage() {
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function HomePage() {
       <MissionVision />
 
       {/* Đội ngũ THREEGYM */}
-
+      <TeamSection />
 
       {/* cơ sở vật chất */}
       <FacilitiesSection /> 
@@ -51,6 +53,7 @@ export default function HomePage() {
       <CTASection />
 
       {/* Thông tin liên hệ */}
+      <ContactSection />
     </div>
   );
 }

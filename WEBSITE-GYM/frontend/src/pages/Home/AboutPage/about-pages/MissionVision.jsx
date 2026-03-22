@@ -30,7 +30,7 @@ export default function MissionVision() {
                 {/* Title */}
                 <h2
                     className="text-3xl md:text-5xl font-extrabold text-center mb-16"
-                    data-aos="fade-down"
+                    data-aos="fade-up"
                 >
                     <span className="text-gray-900">Sứ mệnh – Tầm nhìn – </span>
                     <span className="bg-gradient-to-r from-red-500 to-yellow-400 bg-clip-text text-transparent">

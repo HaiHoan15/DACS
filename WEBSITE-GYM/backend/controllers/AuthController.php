@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__ . '/../config/cors.php');
-require_once(__DIR__ . '/../config/databasde.php');
+require_once(__DIR__ . '/../config/database.php');
 require_once(__DIR__ . '/../models/UserModel.php');
 
 enableCORS();
