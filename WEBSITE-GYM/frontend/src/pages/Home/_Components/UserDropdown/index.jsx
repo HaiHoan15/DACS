@@ -35,7 +35,20 @@ const UserDropdown = () => {
     if (!user) return null;
 
     const defaultUserImage = "/images/error/user.png";
-    const userImageSrc = user?.avatar || defaultUserImage;
+
+    // Lấy URL avatar từ user.avatarUrl hoặc xây dựng từ avatar filename
+    const getAvatarUrl = () => {
+        if (user?.avatarUrl) {
+            // Thêm timestamp để tránh cache browser
+            return `${user.avatarUrl}?t=${user.avatar ? user.avatar.split('_')[2] || Date.now() : Date.now()}`;
+        }
+        if (user?.avatar) {
+            return `/backend/public/uploads/avatars/${user.avatar}`;
+        }
+        return defaultUserImage;
+    };
+
+    const userImageSrc = getAvatarUrl();
 
     return (
         <div ref={menuRef} className="relative inline-block">

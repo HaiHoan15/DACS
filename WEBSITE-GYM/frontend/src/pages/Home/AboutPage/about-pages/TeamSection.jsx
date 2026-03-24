@@ -3,23 +3,23 @@ import AOS from "aos";
 
 export default function TeamSection() {
     const trainers = [
-        { name: "Nguyễn Minh Anh", desc: "Chuyên PT thể hình", image: "/images/about-page/trainer-1.jpg", specialty: "PT Bodybuilding" },
-        { name: "Trần Hoàng Phúc", desc: "Chuyên cardio", image: "/images/about-page/trainer-2.jpg", specialty: "Cardio Training" },
-        { name: "Lê Thanh Tùng", desc: "Yoga & Fitness", image: "/images/about-page/trainer-3.png", specialty: "Yoga" },
-        { name: "Phạm Quốc Bảo", desc: "Gym nâng cao", image: "/images/about-page/trainer-4.png", specialty: "Advanced Training" },
-        { name: "Đặng Gia Huy", desc: "PT chuyên sâu", image: "/images/about-page/trainer-5.jpg", specialty: "Personal Training" },
-        { name: "Võ Minh Quân", desc: "Bodybuilding", image: "/images/about-page/trainer-6.jpg", specialty: "Bodybuilding" },
-        { name: "Huỳnh Anh Khoa", desc: "Crossfit", image: "/images/about-page/trainer-7.png", specialty: "Crossfit" },
-        { name: "Bùi Thành Đạt", desc: "Giảm cân", image: "/images/about-page/trainer-8.jpg", specialty: "Weight Loss" },
+        { name: "Nguyễn Minh Anh (fake)", desc: "Chuyên PT thể hình", image: "/images/about-page/trainer-1.jpg", specialty: "PT Bodybuilding" },
+        { name: "Trần Hoàng Phúc (fake)", desc: "Chuyên cardio", image: "/images/about-page/trainer-2.jpg", specialty: "Cardio Training" },
+        { name: "Lê Thanh Tùng (fake)", desc: "Yoga & Fitness", image: "/images/about-page/trainer-3.png", specialty: "Yoga" },
+        { name: "Phạm Quốc Bảo (fake)", desc: "Gym nâng cao", image: "/images/about-page/trainer-4.png", specialty: "Advanced Training" },
+        { name: "Đặng Gia Huy (fake)", desc: "PT chuyên sâu", image: "/images/about-page/trainer-5.jpg", specialty: "Personal Training" },
+        { name: "Võ Minh Quân (fake)", desc: "Bodybuilding", image: "/images/about-page/trainer-6.jpg", specialty: "Bodybuilding" },
+        { name: "Huỳnh Anh Khoa (fake)", desc: "Crossfit", image: "/images/about-page/trainer-7.png", specialty: "Crossfit" },
+        { name: "Bùi Thành Đạt (fake)", desc: "Giảm cân", image: "/images/about-page/trainer-8.jpg", specialty: "Weight Loss" },
     ];
 
     //  clone để loop mượt
     const extended = [...trainers, ...trainers];
 
     const developers = [
-        { name: "Nguyễn Hải Hoàng", desc: "Trụ cột chính trong phần phát triển hệ thống website THREEGYM.", image: "/images/about-page/dev-1.jpg", role: "Full Stack Developer" },
+        { name: "Nguyễn Hải Hoàng (real)", desc: "Trụ cột chính trong phần phát triển hệ thống website THREEGYM.", image: "/images/about-page/dev-1.jpg", role: "Full Stack Developer" },
         { name: "Cao Đoàn Minh Trung", desc: "Nà ná na nà đoàn Cao đ... (chả biết ghi gì nên để đây đó)", image: "/images/about-page/dev-2.jpg", role: "Frontend Developer" },
-        { name: "Trần Nguyễn Quốc Thái", desc: "Quốc vướng ThaiLan... (chả biết ghi gì nên để đây đó)", image: "/images/about-page/dev-3.jpg", role: "Backend Developer" },
+        { name: "Trần Nguyễn Quốc Thái", desc: "Quốc vương ThaiLan... (chả biết ghi gì nên để đây đó)", image: "/images/about-page/dev-3.jpg", role: "Backend Developer" },
     ];
 
     const [index, setIndex] = useState(0);

@@ -33,7 +33,7 @@ class RegisterController {
         $username = trim($input['username']);
         $password = trim($input['password']);
         $confirmPassword = trim($input['confirmPassword']);
-        $avatar = isset($input['avatar']) ? trim($input['avatar']) : null;
+        // Avatar upload sẽ được xử lý riêng qua AvatarController
         $address = isset($input['address']) ? trim($input['address']) : null;
         $phone = isset($input['phone']) ? trim($input['phone']) : null;
 
@@ -65,12 +65,12 @@ class RegisterController {
         // Hash mật khẩu
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Tạo user mới
+        // Tạo user mới (avatar sẽ được upload riêng sau đó)
         $userData = [
             'username' => $username,
             'email' => $email,
             'password' => $hashedPassword,
-            'avatar' => $avatar,
+            'avatar' => null,  // Avatar sẽ upload qua AvatarController
             'address' => $address,
             'phone' => $phone,
             'role' => 'user'  // Mặc định role là user

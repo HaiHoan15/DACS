@@ -7,7 +7,7 @@ import Notification from "../../../../components/Notification";
 export default function RegisterPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const loading = useSelector((state) => state.auth.loading);
   const error = useSelector((state) => state.auth.error);
 

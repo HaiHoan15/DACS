@@ -47,6 +47,13 @@ class AuthController {
         // Đăng nhập thành công, trả về thông tin user (không bao gồm password)
         unset($user['password']);
         
+        // Thêm URL avatar
+        if ($user['avatar']) {
+            $user['avatarUrl'] = '/uploads/avatars/' . $user['avatar'];
+        } else {
+            $user['avatarUrl'] = '/images/error/user.png'; // Default avatar
+        }
+        
         sendJsonResponse([
             'success' => true,
             'message' => 'Đăng nhập thành công, đang chuyển hướng...',

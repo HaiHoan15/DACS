@@ -31,4 +31,23 @@ class UserModel {
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    // Lấy user theo ID (kèm URL avatar)
+    public function getUserById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($user && $user['avatar']) {
+            $user['avatarUrl'] = '/uploads/avatars/' . $user['avatar'];
+        } else {
+            $user['avatarUrl'] = '/images/error/user.png'; // Default avatar
+        }
+
+        return $user;
+    }
 }

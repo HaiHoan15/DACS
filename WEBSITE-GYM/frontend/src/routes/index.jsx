@@ -93,8 +93,7 @@ const routes = [
 function AdminRoute({ children }) {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user || user.Role !== "admin") {
-        alert("Bạn không có quyền truy cập trang này!");
-        return <Navigate to="/" replace />;
+        return <Navigate to="/login" replace />;
     }
     return children;
 }
@@ -112,7 +111,6 @@ function AdminRouteWrapper(Component) {
 function ProtectedUserRoute({ children }) {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
-        alert("Vui lòng đăng nhập để truy cập trang này!");
         return <Navigate to="/login" replace />;
     }
     return children;
