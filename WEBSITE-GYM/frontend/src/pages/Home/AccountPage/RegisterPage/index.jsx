@@ -19,6 +19,7 @@ export default function RegisterPage() {
     address: "",
     phone: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [notification, setNotification] = useState(null);
 
   const handleChange = (e) => {
@@ -151,15 +152,24 @@ export default function RegisterPage() {
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Mật khẩu <span className="text-red-500">*</span>
               </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                required
-                className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  required
+                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition"
+                >
+                  {showPassword ? "Ẩn" : "Hiện"}
+                </button>
+              </div>
               <p className="text-xs text-gray-400 mt-1">Tối thiểu 6 ký tự</p>
             </div>
 
@@ -168,15 +178,24 @@ export default function RegisterPage() {
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Xác nhận mật khẩu <span className="text-red-500">*</span>
               </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="••••••••"
-                required
-                className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  required
+                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition"
+                >
+                  {showPassword ? "Ẩn" : "Hiện"}
+                </button>
+              </div>
             </div>
 
             {/* Address (Optional) */}

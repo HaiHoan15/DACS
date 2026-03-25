@@ -7,13 +7,14 @@ import Notification from "../../../../components/Notification";
 export default function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   // Lấy loading và error từ Redux store
   const loading = useSelector((state) => state.auth.loading);
   const _error = useSelector((state) => state.auth.error);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [notification, setNotification] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -29,9 +30,13 @@ export default function LoginPage() {
         type: "success",
       });
 
-      // Đợi 2 giây rồi chuyển về trang chủ
+      // Kiểm tra role để redirect đúng
+      const user = result.payload.user;
+      const redirectPath = user.role === "admin" ? "/admin" : "/";
+
+      // Đợi 2 giây rồi chuyển về trang thích hợp
       setTimeout(() => {
-        navigate("/");
+        navigate(redirectPath);
       }, 2000);
     } else {
       // Đăng nhập thất bại
@@ -85,14 +90,23 @@ export default function LoginPage() {
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Mật khẩu
               </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition"
+                >
+                  {showPassword ? "Ẩn" : "Hiện"}
+                </button>
+              </div>
             </div>
 
             {/* Login Button */}

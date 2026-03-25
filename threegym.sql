@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 
 -- Dumping data for table threegym.accounts: ~4 rows (approximately)
 INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `avatar`, `address`, `phone`, `role`, `created_at`) VALUES
-	(1, 'admin', 'admin@threegym.com', '$2y$10$B.9RQKXwBm9SQRyrtWFhW.c72IFegdvHqzUVFG6Qv0xyw91dnAT7q', NULL, NULL, NULL, 'admin', '2026-03-16 07:44:23'),
-	(2, 'user01', 'user@threegym.com', '$2y$10$zDqHCmi3D8v1dlsnglvQ.eyj.jxTAkE5av3bCNjQ6cbnkmcvPyKEq', 'avatar_2_1774361006.png', 'gg', '32552323535', 'user', '2026-03-16 07:44:23'),
+	(1, 'admin01', 'admin@threegym.com', '$2y$10$Azq/j3Y/WzNhR6Hd.5s2Ve17zLmbbEa8th4tTJ5M9Nghc9IsD3vPq', 'avatar_1_1774429021.png', 'ADMIN', '342423', 'admin', '2026-03-16 07:44:23'),
+	(2, 'user01', 'user@threegym.com', '$2y$10$zDqHCmi3D8v1dlsnglvQ.eyj.jxTAkE5av3bCNjQ6cbnkmcvPyKEq', 'avatar_2_1774429319.jpg', 'gggg', '6969696969', 'user', '2026-03-16 07:44:23'),
 	(4, '0448_Nguyễn Hải Hoàng', 'haihoang15122002@gmail.com', '$2y$10$x4ZjIEqhoiHWr8.eGZUjO.7QNnuoE1YKjdx9PwOvOFe7pnMwMMH76', NULL, '', '', 'user', '2026-03-21 07:02:13'),
 	(5, 'HaiHoan15', 'haihoantamquoc@gmail.com', '$2y$10$DaIWa6VZV1gZ5xGtRZoXneFuwanhafy8T9iHO02sCsM0sf9dD8yLW', 'avatar_5_1774414858.gif', 'srgefwe', '53323423', 'user', '2026-03-24 13:59:39');
 
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table threegym.product_categories: ~0 rows (approximately)
 INSERT INTO `product_categories` (`id`, `name`, `created_at`, `updated_at`) VALUES

@@ -41,6 +41,10 @@ class UserController {
                 return $this->uploadAvatar();
             case 'getUser':
                 return $this->getUser();
+            case 'getAllUsers':
+                return $this->getAllUsers();
+            case 'updateRole':
+                return $this->updateRole();
             default:
                 sendJsonResponse(['success' => false, 'message' => 'Action not found'], 404);
         }
@@ -78,6 +82,51 @@ class UserController {
             'success' => true,
             'user' => $user
         ], 200);
+    }
+
+    /**
+     * ==============================================
+     * GET ALL USERS (FOR ADMIN)
+     * ==============================================
+     */
+    private function getAllUsers() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
+        }
+
+        // Kiểm tra authorization header
+        $authHeader = getallheaders()['Authorization'] ?? null;
+        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader)) {
+            sendJsonResponse(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        // Lấy danh sách tất cả users (không bao gồm password)
+        $query = "SELECT id, username, email, avatar, address, phone, role, created_at FROM accounts ORDER BY created_at DESC";
+        $stmt = $this->conn->prepare($query);
+        
+        try {
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Thêm avatarUrl nếu có avatar
+            foreach ($users as &$user) {
+                if ($user['avatar']) {
+                    $user['avatarUrl'] = '/uploads/avatars/' . $user['avatar'];
+                } else {
+                    $user['avatarUrl'] = '/images/error/user.png';
+                }
+            }
+
+            sendJsonResponse([
+                'success' => true,
+                'users' => $users
+            ], 200);
+        } catch(PDOException $e) {
+            sendJsonResponse([
+                'success' => false,
+                'message' => 'Lỗi khi lấy danh sách users: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -294,6 +343,73 @@ class UserController {
             sendJsonResponse([
                 'success' => false,
                 'message' => 'Failed to update database: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ==============================================
+     * UPDATE USER ROLE (ADMIN ONLY)
+     * ==============================================
+     */
+    private function updateRole() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
+        }
+
+        $input = getJsonInput();
+
+        // Kiểm tra authorization
+        $authHeader = getallheaders()['Authorization'] ?? null;
+        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader)) {
+            sendJsonResponse(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        $userId = $input['userId'] ?? null;
+        $newRole = isset($input['newRole']) ? trim($input['newRole']) : null;
+
+        if (!$userId || !$newRole) {
+            sendJsonResponse(['success' => false, 'message' => 'User ID and new role are required'], 400);
+        }
+
+        // Validate role value
+        if (!in_array($newRole, ['admin', 'user'])) {
+            sendJsonResponse(['success' => false, 'message' => 'Invalid role value'], 400);
+        }
+
+        // Lấy user để update
+        $user = $this->userModel->getUserById($userId);
+        if (!$user) {
+            sendJsonResponse(['success' => false, 'message' => 'User not found'], 404);
+        }
+
+        // Prevent self role change
+        if ($user['role'] === $newRole) {
+            sendJsonResponse(['success' => false, 'message' => 'User role is already ' . $newRole], 400);
+        }
+
+        // Update role in database
+        $query = "UPDATE accounts SET role = :role WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':role', $newRole);
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+
+        try {
+            $stmt->execute();
+
+            // Lấy user updated
+            $updatedUser = $this->userModel->getUserById($userId);
+            unset($updatedUser['password']);
+
+            sendJsonResponse([
+                'success' => true,
+                'message' => 'Role updated successfully',
+                'user' => $updatedUser
+            ], 200);
+        } catch(PDOException $e) {
+            sendJsonResponse([
+                'success' => false,
+                'message' => 'Error updating role: ' . $e->getMessage()
             ], 500);
         }
     }

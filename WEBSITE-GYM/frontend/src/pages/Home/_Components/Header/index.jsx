@@ -31,8 +31,11 @@ const Header = () => {
     };
 
     const userImageSrc = getAvatarUrl();
-    const userProfilePath = "/user";
-    const isUserRouteActive = location.pathname.startsWith(userProfilePath);
+    // Admin redirect vào /admin, user redirect vào /user
+    const profilePath = user?.role === "admin" ? "/admin" : "/user";
+    const isProfileRouteActive = user?.role === "admin" 
+        ? location.pathname.startsWith("/admin")
+        : location.pathname.startsWith("/user");
 
     return (
         <header className="bg-black/75 backdrop-blur sticky top-0 z-50 border-b border-red-900">
@@ -100,9 +103,9 @@ const Header = () => {
                         <div className="flex items-center gap-3">
                             {/* Avatar + tên user */}
                             <NavLink
-                                to={userProfilePath}
+                                to={profilePath}
                                 className={() =>
-                                    `flex items-center gap-2 px-3 py-1.5 rounded-full shadow-sm transition duration-300 min-w-0 ${isUserRouteActive
+                                    `flex items-center gap-2 px-3 py-1.5 rounded-full shadow-sm transition duration-300 min-w-0 ${isProfileRouteActive
                                         ? "bg-gradient-to-r from-red-500 to-yellow-500 text-white shadow-lg hover:bg-yellow-500 hover:shadow-yellow-500/50"
                                         : "bg-gray-700/50 text-gray-300 hover:bg-red-500 hover:text-white hover:shadow-md"
                                     }`

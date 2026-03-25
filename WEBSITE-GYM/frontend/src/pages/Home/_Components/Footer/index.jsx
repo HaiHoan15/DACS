@@ -40,7 +40,7 @@ const socials = [
 ];
 
 const contacts = [
-    { icon: <FaMapMarkerAlt />, text: "69 Nguyễn Hải Hoàng, Quận 69, TP.HCM (địa chỉ fake)" },
+    { icon: <FaMapMarkerAlt />, text: "69 Nguyễn Hải Hoàng, Quận 69, TP.HCM" },
     { icon: <FaPhone />, text: "6969 696 969" },
     { icon: <FaEnvelope />, text: "threegym@gmail.com" },
     { icon: <FaGlobe />, text: "www.threegym.com" },
@@ -168,7 +168,7 @@ export default function Footer() {
 
                     {/* ── COL 4: Contact + Hours ───────────────────────────────────── */}
                     <div className="sm:col-span-2 lg:col-span-1 xl:col-span-1">
-                        <ColHeading>Liên hệ</ColHeading>
+                        <ColHeading>Liên hệ (Địa chỉ fake)</ColHeading>
                         <ul className="space-y-3.5 mb-6">
                             {contacts.map((c, i) => (
                                 <li key={i} className="flex items-start gap-3">

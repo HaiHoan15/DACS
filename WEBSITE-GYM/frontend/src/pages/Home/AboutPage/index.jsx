@@ -13,6 +13,8 @@ import CustomerReviewsSection from "./about-pages/CustomerReviewsSection";
 import CTASection from "./about-pages/CTASection";
 import ContactSection from "./about-pages/ContactSection";
 
+import ScrollToTopButton from "../../../components/ScrollToTopButton";
+
 export default function HomePage() {
   useEffect(() => {
     AOS.init({
@@ -54,6 +56,9 @@ export default function HomePage() {
 
       {/* Thông tin liên hệ */}
       <ContactSection />
+
+      {/* Nút lên trang đầu ngay */}
+      <ScrollToTopButton />
     </div>
   );
 }

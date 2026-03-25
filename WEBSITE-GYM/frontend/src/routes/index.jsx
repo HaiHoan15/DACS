@@ -22,6 +22,15 @@ import UserPage from "../pages/Home/UserPage";
 import Admin from "../pages/Admin";
 import AdminPage from "../pages/Admin/AdminPage";
 
+//trang quản lý các tài khoản
+import UserManagement from "../pages/Admin/UserManagement";
+import UM_Detail from "../pages/Admin/UserManagement/UM_Detail";
+
+//trang quản lý sản phẩm
+import ProductManagement from "../pages/Admin/ProductManagement";
+import AddCategory from "../pages/Admin/ProductManagement/Category/dashboard/add";
+import EditCategory from "../pages/Admin/ProductManagement/Category/dashboard/edit";
+
 //trang giáo viên
 
 const routes = [
@@ -81,6 +90,26 @@ const routes = [
                 index: true,
                 element: AdminPage,
             },
+            {
+                path: "UserManagement",
+                element: UserManagement,
+            },
+            {
+                path: "UserManagement/UM_Detail/:username",
+                element: UM_Detail,
+            },
+            {
+                path: "ProductManagement",
+                element: ProductManagement,
+            },
+            {
+                path: "ProductManagement/dashboard/add",
+                element: AddCategory,
+            },
+            {
+                path: "ProductManagement/dashboard/edit/:categoryId",
+                element: EditCategory,
+            }
         ],
     },
     // {
@@ -92,7 +121,7 @@ const routes = [
 //chặn vào trang admin nếu ko phải là admin
 function AdminRoute({ children }) {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (!user || user.Role !== "admin") {
+    if (!user || user.role !== "admin") {
         return <Navigate to="/login" replace />;
     }
     return children;
@@ -147,6 +176,9 @@ function toSlug(s) {
         .replace(/\s+/g, "-")
         .replace(/-+/g, "-");
 }
+
+// Export toSlug để dùng ở components khác
+export { toSlug };
 
 // hàm tạo routes
 export const generateRoutes = () => {

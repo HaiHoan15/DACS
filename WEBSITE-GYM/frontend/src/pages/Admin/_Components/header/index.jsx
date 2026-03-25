@@ -7,7 +7,8 @@ import AdminDropdown from "../AdminDropdown";
 
 const navItems = [
     { label: "Trang chủ", path: "/admin" },
-
+    { label: "Người dùng", path: "/admin/UserManagement" },
+    { label: "Sản phẩm", path: "/admin/ProductManagement" },
 ];
 
 const Header = () => {
@@ -28,8 +29,8 @@ const Header = () => {
     };
 
     const userImageSrc = getAvatarUrl();
-    const userProfilePath = "/user";
-    const isUserRouteActive = location.pathname.startsWith(userProfilePath);
+    const adminProfilePath = "/admin";
+    const isAdminRouteActive = location.pathname.startsWith(adminProfilePath);
 
     return (
         <header className="bg-black/75 backdrop-blur sticky top-0 z-50 border-b border-red-900">
@@ -44,7 +45,7 @@ const Header = () => {
                     />
 
                     <NavLink
-                        to="/"
+                        to="/admin"
                         className="text-2xl font-bold transition-colors"
                     >
                         <span className="text-red-500 hover:text-red-400">
@@ -53,18 +54,22 @@ const Header = () => {
                         <span className="text-yellow-500 hover:text-yellow-400 ml-1">
                             GYM
                         </span>
+                        <span className="text-gray-300 hover:text-gray-400 ml-1">
+                            ADMIN
+                        </span>
                     </NavLink>
                 </div>
 
                 {/* Menu */}
                 <nav className="
-                    group hidden md:flex items-center gap-8 text-lg font-medium
+                    hidden md:flex items-center gap-8 text-lg font-medium
                     absolute left-1/2 -translate-x-1/2
                 ">
                     {navItems.map((item) => (
                         <NavLink
                             key={item.label}
                             to={item.path}
+                            end
                             className={({ isActive }) =>
                                 `
                                 relative transition-colors duration-300
@@ -78,10 +83,7 @@ const Header = () => {
                                 after:transition-all
                                 after:duration-300
 
-                                after:w-0
-                                hover:after:w-full
-
-                                ${isActive ? "after:w-full group-hover:after:w-0" : ""}
+                                ${isActive ? "after:w-full" : "after:w-0 hover:after:w-full"}
                             `
                             }
                         >
@@ -97,9 +99,9 @@ const Header = () => {
                         <div className="flex items-center gap-3">
                             {/* Avatar + tên user */}
                             <NavLink
-                                to={userProfilePath}
+                                to={adminProfilePath}
                                 className={() =>
-                                    `flex items-center gap-2 px-3 py-1.5 rounded-full shadow-sm transition duration-300 min-w-0 ${isUserRouteActive
+                                    `flex items-center gap-2 px-3 py-1.5 rounded-full shadow-sm transition duration-300 min-w-0 ${isAdminRouteActive
                                         ? "bg-gradient-to-r from-red-500 to-yellow-500 text-white shadow-lg hover:bg-yellow-500 hover:shadow-yellow-500/50"
                                         : "bg-gray-700/50 text-gray-300 hover:bg-red-500 hover:text-white hover:shadow-md"
                                     }`
