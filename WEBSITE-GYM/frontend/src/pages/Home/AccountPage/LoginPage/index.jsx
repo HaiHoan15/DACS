@@ -10,7 +10,7 @@ export default function LoginPage() {
   
   // Lấy loading và error từ Redux store
   const loading = useSelector((state) => state.auth.loading);
-  const error = useSelector((state) => state.auth.error);
+  const _error = useSelector((state) => state.auth.error);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

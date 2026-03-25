@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 import LoginButton from "../../../../components/LoginButton";
 import UserDropdown from "../UserDropdown";
@@ -16,12 +17,12 @@ const Header = () => {
     const user = useSelector((state) => state.auth.user);
     const location = useLocation();
     const defaultUserImage = "/images/error/user.png";
+    const [timestamp] = useState(() => Date.now());
 
-    // Lấy URL avatar từ user.avatarUrl hoặc xây dựng từ avatar filename
     const getAvatarUrl = () => {
         if (user?.avatarUrl) {
             // Thêm timestamp để tránh cache browser
-            return `${user.avatarUrl}?t=${user.avatar ? user.avatar.split('_')[2] || Date.now() : Date.now()}`;
+            return `${user.avatarUrl}?t=${user.avatar ? user.avatar.split('_')[2] || timestamp : timestamp}`;
         }
         if (user?.avatar) {
             return `/backend/public/uploads/avatars/${user.avatar}`;

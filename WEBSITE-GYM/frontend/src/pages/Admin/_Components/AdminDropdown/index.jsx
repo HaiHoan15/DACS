@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../../../../redux/authSlice";
 import MenuButton from "../../../../components/MenuButton";
 
-const UserDropdown = () => {
+const AdminDropdown = () => {
     const [open, setOpen] = useState(false);
     const [timestamp] = useState(() => Date.now());
     const user = useSelector((state) => state.auth.user);
@@ -15,8 +15,8 @@ const UserDropdown = () => {
     const handleLogout = () => {
         dispatch(logout());
         setOpen(false);
-        // quay về trang chủ sau khi đăng xuất
-        navigate("/", { replace: true });
+        // quay về trang login sau khi đăng xuất
+        navigate("/login", { replace: true });
     };
 
     // đóng dropdown khi click ra ngoài
@@ -83,7 +83,7 @@ const UserDropdown = () => {
                     <div className="py-1.5">
                         {/* Thông tin chi tiết */}
                         <NavLink
-                            to="/user"
+                            to="/admin"
                             onClick={() => setOpen(false)}
                             className="group relative flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200"
                         >
@@ -136,4 +136,4 @@ const UserDropdown = () => {
     );
 };
 
-export default UserDropdown;
+export default AdminDropdown;

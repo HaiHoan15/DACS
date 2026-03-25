@@ -58,7 +58,7 @@ class UserController {
 
         // Kiểm tra authorization header
         $authHeader = getallheaders()['Authorization'] ?? null;
-        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
+        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader)) {
             sendJsonResponse(['success' => false, 'message' => 'Unauthorized'], 401);
         }
 
@@ -94,7 +94,7 @@ class UserController {
         
         // Kiểm tra authorization
         $authHeader = getallheaders()['Authorization'] ?? null;
-        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
+        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader)) {
             sendJsonResponse(['success' => false, 'message' => 'Unauthorized'], 401);
         }
 
@@ -217,7 +217,7 @@ class UserController {
 
         // Kiểm tra authorization header
         $authHeader = getallheaders()['Authorization'] ?? null;
-        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
+        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader)) {
             sendJsonResponse(['success' => false, 'message' => 'Unauthorized'], 401);
         }
 

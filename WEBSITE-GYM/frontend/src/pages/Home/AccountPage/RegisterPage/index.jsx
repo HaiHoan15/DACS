@@ -9,7 +9,7 @@ export default function RegisterPage() {
   const dispatch = useDispatch();
 
   const loading = useSelector((state) => state.auth.loading);
-  const error = useSelector((state) => state.auth.error);
+  const _error = useSelector((state) => state.auth.error);
 
   const [formData, setFormData] = useState({
     email: "",
