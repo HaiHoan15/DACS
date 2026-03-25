@@ -19,6 +19,10 @@ export default function AddCategory() {
     }));
   };
 
+  const handleBack = () => {
+    navigate("/admin/ProductManagement");
+  };
+
   const validateForm = () => {
     if (!formData.name.trim()) {
       setNotification({

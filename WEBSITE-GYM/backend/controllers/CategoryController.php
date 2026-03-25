@@ -3,17 +3,20 @@
 require_once(__DIR__ . '/../config/cors.php');
 require_once(__DIR__ . '/../config/database.php');
 require_once(__DIR__ . '/../models/CategoryModel.php');
+require_once(__DIR__ . '/../models/ProductModel.php');
 
 enableCORS();
 
 class CategoryController {
     private $categoryModel;
+    private $productModel;
     private $conn;
 
     public function __construct() {
         $database = new Database();
         $this->conn = $database->connect();
         $this->categoryModel = new CategoryModel($this->conn);
+        $this->productModel = new ProductModel($database);
     }
 
     // Router chính - xử lý các action
@@ -260,6 +263,15 @@ class CategoryController {
         // Kiểm tra danh mục có tồn tại không
         if (!$this->categoryModel->exists($categoryId)) {
             sendJsonResponse(['success' => false, 'message' => 'Danh mục không tồn tại'], 404);
+        }
+
+        // Kiểm tra có sản phẩm trong danh mục không
+        $productCount = $this->productModel->countByCategoryId($categoryId);
+        if ($productCount > 0) {
+            sendJsonResponse([
+                'success' => false,
+                'message' => 'Không thể xóa danh mục vì vẫn còn ' . $productCount . ' sản phẩm trong danh mục này'
+            ], 400);
         }
 
         try {

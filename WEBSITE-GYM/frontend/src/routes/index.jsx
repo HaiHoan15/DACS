@@ -30,6 +30,10 @@ import UM_Detail from "../pages/Admin/UserManagement/UM_Detail";
 import ProductManagement from "../pages/Admin/ProductManagement";
 import AddCategory from "../pages/Admin/ProductManagement/Category/dashboard/add";
 import EditCategory from "../pages/Admin/ProductManagement/Category/dashboard/edit";
+import CategoryDetail from "../pages/Admin/ProductManagement/Category/dashboard/detail";
+import AddProduct from "../pages/Admin/ProductManagement/Product/dashboard/add";
+import EditProduct from "../pages/Admin/ProductManagement/Product/dashboard/edit";
+import ProductDetail from "../pages/Admin/ProductManagement/Product/dashboard/detail";
 
 //trang giáo viên
 
@@ -103,12 +107,28 @@ const routes = [
                 element: ProductManagement,
             },
             {
-                path: "ProductManagement/dashboard/add",
+                path: "ProductManagement/category/dashboard/add",
                 element: AddCategory,
             },
             {
-                path: "ProductManagement/dashboard/edit/:categoryId",
+                path: "ProductManagement/category/dashboard/edit/:categoryId",
                 element: EditCategory,
+            },
+            {
+                path: "ProductManagement/category/dashboard/detail/:categoryId",
+                element: CategoryDetail,
+            },
+            {
+                path: "ProductManagement/product/dashboard/add",
+                element: AddProduct,
+            },
+            {
+                path: "ProductManagement/product/dashboard/edit/:productId",
+                element: EditProduct,
+            },
+            {
+                path: "ProductManagement/product/dashboard/detail/:productId",
+                element: ProductDetail,
             }
         ],
     },

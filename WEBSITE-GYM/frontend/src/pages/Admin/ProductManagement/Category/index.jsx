@@ -45,11 +45,15 @@ export default function Category() {
   }, []);
 
   const handleAddCategory = () => {
-    navigate("dashboard/add");
+    navigate("category/dashboard/add");
+  };
+
+  const handleViewDetail = (categoryId) => {
+    navigate(`category/dashboard/detail/${categoryId}`);
   };
 
   const handleEdit = (categoryId) => {
-    navigate(`dashboard/edit/${categoryId}`);
+    navigate(`category/dashboard/edit/${categoryId}`);
   };
 
   const handleDelete = async (categoryId, categoryName) => {
@@ -185,6 +189,12 @@ export default function Category() {
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleViewDetail(category.id)}
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium text-xs"
+                        >
+                          Chi tiết
+                        </button>
                         <button
                           onClick={() => handleEdit(category.id)}
                           className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition font-medium text-xs"
