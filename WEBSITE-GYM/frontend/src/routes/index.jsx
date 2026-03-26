@@ -35,6 +35,9 @@ import AddProduct from "../pages/Admin/ProductManagement/Product/dashboard/add";
 import EditProduct from "../pages/Admin/ProductManagement/Product/dashboard/edit";
 import ProductDetail from "../pages/Admin/ProductManagement/Product/dashboard/detail";
 
+//trang test
+import test from "../pages/Admin/TEST";
+
 //trang giáo viên
 
 const routes = [
@@ -129,6 +132,10 @@ const routes = [
             {
                 path: "ProductManagement/product/dashboard/detail/:productId",
                 element: ProductDetail,
+            },
+            {
+                path: "test",
+                element: test,
             }
         ],
     },

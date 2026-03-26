@@ -6,16 +6,18 @@ require_once(__DIR__ . '/../models/ProductModel.php');
 
 enableCORS();
 
-class ProductController {
+class ProductController
+{
     private $productModel;
     private $conn;
     private $uploadDir = 'D:/HocDaiHoc/CNTT/NAM 5/DACS/demo/WEBSITE-GYM/frontend/public/uploads/products/';
 
-    public function __construct() {
+    public function __construct()
+    {
         $database = new Database();
         $this->conn = $database->connect();
         $this->productModel = new ProductModel($database);
-        
+
         // Tạo folder products nếu không tồn tại
         if (!is_dir($this->uploadDir)) {
             mkdir($this->uploadDir, 0755, true);
@@ -23,10 +25,11 @@ class ProductController {
     }
 
     // Router chính - xử lý các action
-    public function handleRequest() {
+    public function handleRequest()
+    {
         // Lấy action từ $_POST, $_GET, hoặc JSON body
         $action = $_POST['action'] ?? $_GET['action'] ?? null;
-        
+
         // Nếu không tìm thấy, kiểm tra trong JSON body
         if (!$action) {
             $input = getJsonInput();
@@ -58,7 +61,8 @@ class ProductController {
      * GET ALL PRODUCTS
      * ==============================================
      */
-    private function getAll() {
+    private function getAll()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         }
@@ -71,7 +75,7 @@ class ProductController {
 
         try {
             $products = $this->productModel->getAll();
-            
+
             sendJsonResponse([
                 'success' => true,
                 'products' => $products
@@ -89,7 +93,8 @@ class ProductController {
      * GET PRODUCT BY ID
      * ==============================================
      */
-    private function getById() {
+    private function getById()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         }
@@ -107,7 +112,7 @@ class ProductController {
 
         try {
             $product = $this->productModel->getById($productId);
-            
+
             if (!$product) {
                 sendJsonResponse(['success' => false, 'message' => 'Product not found'], 404);
             }
@@ -129,7 +134,8 @@ class ProductController {
      * GET PRODUCTS BY CATEGORY ID
      * ==============================================
      */
-    private function getByCategoryId() {
+    private function getByCategoryId()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         }
@@ -147,7 +153,7 @@ class ProductController {
 
         try {
             $products = $this->productModel->getByCategoryId($categoryId);
-            
+
             sendJsonResponse([
                 'success' => true,
                 'products' => $products
@@ -165,7 +171,8 @@ class ProductController {
      * ADD PRODUCT
      * ==============================================
      */
-    private function add() {
+    private function add()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         }
@@ -228,7 +235,8 @@ class ProductController {
      * UPDATE PRODUCT
      * ==============================================
      */
-    private function update() {
+    private function update()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         }
@@ -274,7 +282,15 @@ class ProductController {
             sendJsonResponse(['success' => false, 'message' => 'Sản phẩm không tồn tại'], 404);
         }
 
+        // Nếu avatar thay đổi, xóa ảnh cũ
+        $product = $this->productModel->getById($productId);
+        if ($product && $product['avatar'] && $product['avatar'] !== $avatar) {
+            $this->deleteOldAvatar($productId);
+        }
+
         try {
+
+
             if ($this->productModel->update($productId, $name, $description, $price, $avatar, $categoryId)) {
                 sendJsonResponse([
                     'success' => true,
@@ -299,7 +315,8 @@ class ProductController {
      * DELETE PRODUCT
      * ==============================================
      */
-    private function delete() {
+    private function delete()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         }
@@ -349,7 +366,8 @@ class ProductController {
      * UPLOAD PRODUCT IMAGE
      * ==============================================
      */
-    private function uploadProductImage() {
+    private function uploadProductImage()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             sendJsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
         }
@@ -405,6 +423,22 @@ class ProductController {
             'filename' => $filename,
             'imageUrl' => '/uploads/products/' . $filename
         ], 200);
+    }
+    // Xóa ảnh cũ
+    private function deleteOldAvatar($productId)
+    {
+        $query = "SELECT avatar FROM products WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result && $result['avatar']) {
+            $oldFile = $this->uploadDir . $result['avatar'];
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
+            }
+        }
     }
 }
 

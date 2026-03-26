@@ -3,7 +3,7 @@ import Category from "./Category";
 import Product from "./Product";
 
 export default function ProductManagement() {
-  const [activeTab, setActiveTab] = useState("category");
+  const [activeTab, setActiveTab] = useState("product");
 
   return (
     <div className="min-h-screen bg-gray-900 py-8 px-4">
@@ -20,24 +20,22 @@ export default function ProductManagement() {
         {/* Tab Navigation */}
         <div className="flex gap-2 mb-6 border-b border-gray-700">
           <button
-            onClick={() => setActiveTab("category")}
-            className={`px-6 py-3 font-medium transition border-b-2 ${
-              activeTab === "category"
-                ? "text-red-500 border-red-500"
-                : "text-gray-400 border-transparent hover:text-gray-300"
-            }`}
-          >
-            Danh mục
-          </button>
-          <button
             onClick={() => setActiveTab("product")}
-            className={`px-6 py-3 font-medium transition border-b-2 ${
-              activeTab === "product"
+            className={`px-6 py-3 font-medium transition border-b-2 ${activeTab === "product"
                 ? "text-red-500 border-red-500"
                 : "text-gray-400 border-transparent hover:text-gray-300"
-            }`}
+              }`}
           >
             Sản phẩm
+          </button>
+          <button
+            onClick={() => setActiveTab("category")}
+            className={`px-6 py-3 font-medium transition border-b-2 ${activeTab === "category"
+                ? "text-red-500 border-red-500"
+                : "text-gray-400 border-transparent hover:text-gray-300"
+              }`}
+          >
+            Danh mục
           </button>
         </div>
 
