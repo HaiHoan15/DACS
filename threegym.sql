@@ -34,10 +34,10 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.accounts: ~4 rows (approximately)
+-- Dumping data for table threegym.accounts: ~3 rows (approximately)
 INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `avatar`, `address`, `phone`, `role`, `created_at`) VALUES
-	(1, 'admin01', 'admin@threegym.com', '$2y$10$Azq/j3Y/WzNhR6Hd.5s2Ve17zLmbbEa8th4tTJ5M9Nghc9IsD3vPq', 'avatar_1_1774429021.png', 'ADMIN', '342423', 'admin', '2026-03-16 07:44:23'),
-	(2, 'user01', 'user@threegym.com', '$2y$10$zDqHCmi3D8v1dlsnglvQ.eyj.jxTAkE5av3bCNjQ6cbnkmcvPyKEq', 'avatar_2_1774429319.jpg', 'gggg', '6969696969', 'user', '2026-03-16 07:44:23'),
+	(1, 'admin01', 'admin@threegym.com', '$2y$10$Azq/j3Y/WzNhR6Hd.5s2Ve17zLmbbEa8th4tTJ5M9Nghc9IsD3vPq', 'avatar_1_1774558046.png', 'ADMINgg', '342423', 'admin', '2026-03-16 07:44:23'),
+	(2, 'user01', 'user@threegym.com', '$2y$10$zDqHCmi3D8v1dlsnglvQ.eyj.jxTAkE5av3bCNjQ6cbnkmcvPyKEq', 'avatar_2_1774591322.gif', 'gggg', '6969696969', 'user', '2026-03-16 07:44:23'),
 	(4, '0448_Nguyễn Hải Hoàng', 'haihoang15122002@gmail.com', '$2y$10$x4ZjIEqhoiHWr8.eGZUjO.7QNnuoE1YKjdx9PwOvOFe7pnMwMMH76', NULL, '', '', 'user', '2026-03-21 07:02:13'),
 	(5, 'HaiHoan15', 'haihoantamquoc@gmail.com', '$2y$10$DaIWa6VZV1gZ5xGtRZoXneFuwanhafy8T9iHO02sCsM0sf9dD8yLW', 'avatar_5_1774414858.gif', 'srgefwe', '53323423', 'user', '2026-03-24 13:59:39');
 
@@ -54,12 +54,12 @@ CREATE TABLE IF NOT EXISTS `products` (
   PRIMARY KEY (`id`),
   KEY `fk_category` (`category_id`),
   CONSTRAINT `fk_category` FOREIGN KEY (`category_id`) REFERENCES `product_categories` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.products: ~0 rows (approximately)
+-- Dumping data for table threegym.products: ~20 rows (approximately)
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `avatar`, `created_at`, `updated_at`, `category_id`) VALUES
-	(1, 'Dumbbell 5kg', 'Tạ tay 5kg phù hợp tập cơ bản', 150000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
-	(2, 'Dumbbell 10kg', 'Tạ tay 10kg cho người tập trung cấp', 250000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
+	(1, 'Dumbbell 5kg', 'Tạ tay 5kg phù hợp tập cơ bản', 150000.00, 'product_1774560016_20be1c36.jpg', '2026-03-25 04:48:01', '2026-03-26 21:20:17', 1),
+	(2, 'Dumbbell 10kg', 'Tạ tay 10kg cho người tập trung cấp', 250000.00, 'product_1774559753_3551081b.jpg', '2026-03-25 04:48:01', '2026-03-26 21:15:54', 1),
 	(3, 'Barbell 20kg', 'Thanh đòn + tạ 20kg', 600000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
 	(4, 'Treadmill', 'Máy chạy bộ tại nhà', 7500000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
 	(5, 'Stationary Bike', 'Xe đạp tập thể dục', 4200000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
@@ -86,13 +86,13 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.product_categories: ~0 rows (approximately)
+-- Dumping data for table threegym.product_categories: ~4 rows (approximately)
 INSERT INTO `product_categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
-	(1, 'Equipment', '2026-03-25 04:46:19', '2026-03-25 04:46:19'),
-	(2, 'Accessory', '2026-03-25 04:46:19', '2026-03-25 04:46:19'),
-	(3, 'Supplement', '2026-03-25 04:46:19', '2026-03-25 04:46:19');
+	(1, 'Thiết bị', '2026-03-25 04:46:19', '2026-04-08 08:28:54'),
+	(2, 'Phụ kiện', '2026-03-25 04:46:19', '2026-04-08 08:29:13'),
+	(3, 'Bổ sung', '2026-03-25 04:46:19', '2026-04-08 08:29:25');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

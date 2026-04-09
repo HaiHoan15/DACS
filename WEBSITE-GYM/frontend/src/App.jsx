@@ -26,6 +26,22 @@ function App() {
     }
   }, []); // Chỉ chạy một lần khi app mount
 
+  // Kiểm tra role và redirect tự động
+  useEffect(() => {
+    if (user && user.role) {
+      const currentPath = window.location.pathname;
+      
+      // Nếu là Admin, redirect sang trang admin
+      if (user.role === "admin" && !currentPath.startsWith("/admin")) {
+        window.location.href = "/admin";
+      }
+      // Nếu là User, không redirect, cho phép duyệt trang chính
+      else if (user.role === "user" && currentPath.startsWith("/admin")) {
+        window.location.href = "/";
+      }
+    }
+  }, [user]);
+
   return (
     <BrowserRouter>
       <Routes>

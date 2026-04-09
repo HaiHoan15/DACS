@@ -54,6 +54,11 @@ class AuthController {
             $user['avatarUrl'] = '/images/error/user.png'; // Default avatar
         }
         
+        // Đảm bảo role được trả về (mặc định là 'user' nếu không có)
+        if (!isset($user['role'])) {
+            $user['role'] = 'user';
+        }
+        
         sendJsonResponse([
             'success' => true,
             'message' => 'Đăng nhập thành công, đang chuyển hướng...',

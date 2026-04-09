@@ -148,9 +148,16 @@ const routes = [
 //chặn vào trang admin nếu ko phải là admin
 function AdminRoute({ children }) {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (!user || user.role !== "admin") {
+    
+    // Kiểm tra nếu không có user hoặc role không phải admin
+    if (!user) {
         return <Navigate to="/login" replace />;
     }
+    
+    if (user.role !== "admin") {
+        return <Navigate to="/" replace />;
+    }
+    
     return children;
 }
 function AdminRouteWrapper(Component) {
@@ -166,9 +173,17 @@ function AdminRouteWrapper(Component) {
 //chặn vào trang user nếu chưa đăng nhập
 function ProtectedUserRoute({ children }) {
     const user = JSON.parse(localStorage.getItem("user"));
+    
+    // Kiểm tra nếu không có user
     if (!user) {
         return <Navigate to="/login" replace />;
     }
+    
+    // Kiểm tra nếu role là admin thì redirect về trang admin
+    if (user.role === "admin") {
+        return <Navigate to="/admin" replace />;
+    }
+    
     return children;
 }
 function ProtectedUserRouteWrapper(Component) {

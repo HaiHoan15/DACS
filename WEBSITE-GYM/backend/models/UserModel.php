@@ -42,10 +42,17 @@ class UserModel {
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        if ($user && $user['avatar']) {
-            $user['avatarUrl'] = '/uploads/avatars/' . $user['avatar'];
-        } else {
-            $user['avatarUrl'] = '/images/error/user.png'; // Default avatar
+        if ($user) {
+            if ($user['avatar']) {
+                $user['avatarUrl'] = '/uploads/avatars/' . $user['avatar'];
+            } else {
+                $user['avatarUrl'] = '/images/error/user.png'; // Default avatar
+            }
+            
+            // Đảm bảo role được trả về (mặc định là 'user' nếu không có)
+            if (!isset($user['role'])) {
+                $user['role'] = 'user';
+            }
         }
 
         return $user;

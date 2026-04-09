@@ -151,6 +151,7 @@ export const fetchUserAsync = createAsyncThunk(
   }
 );
 
+// Khởi tạo state ban đầu
 const initialState = {
   user: getUser(),
   loading: false,
