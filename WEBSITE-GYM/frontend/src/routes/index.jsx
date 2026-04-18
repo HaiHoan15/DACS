@@ -6,17 +6,23 @@ import { Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import HomePage from "../pages/Home/HomePage";
 
+//trang tài khoản
 import AccountPage from "../pages/Home/AccountPage";
 import LoginPage from "../pages/Home/AccountPage/LoginPage";
 import RegisterPage from "../pages/Home/AccountPage/RegisterPage";
 
+//trang giao diện người dùng
 import AboutPage from "../pages/Home/AboutPage";
 import ServicePage from "../pages/Home/ServicePage";
-import ProductPage from "../pages/Home/ProductPage";
 import NewsPage from "../pages/Home/NewsPage";
+
+//trang sản phẩm cho người dùng
+import ProductPage from "../pages/Home/ProductPage";
+import ProductDetailPage from "../pages/Home/ProductDetailPage";
 
 //trang người dùng
 import UserPage from "../pages/Home/UserPage";
+import WishlistPage from "../pages/Home/WishlistPage";
 
 //trang quản lý
 import Admin from "../pages/Admin";
@@ -74,9 +80,12 @@ const routes = [
                 element: ProductPage,
             },
             {
+                path: "ProductDetail/:productId",
+                element: ProtectedUserRouteWrapper(ProductDetailPage),
+            },
+            {
                 path: "news",
                 element: NewsPage,
-
             },
             {
                 path: "user",
@@ -85,6 +94,10 @@ const routes = [
             {
                 path: "user/:username",
                 element: ProtectedUserRouteWrapper(UserPage),
+            },
+            {
+                path: "wishlist",
+                element: ProtectedUserRouteWrapper(WishlistPage),
             }
         ],
     },

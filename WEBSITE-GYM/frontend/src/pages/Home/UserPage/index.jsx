@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Notification from "../../../components/Notification";
 import UserProfile from "./UserProfile";
 import UserPassword from "./UserPassword";
+import UserWishlist from "./UserWishlist";
 
 export default function UserPage() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function UserPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 py-8 px-4">
+      {/* Hiển thị thông báo nếu có */}
       {notification && (
         <Notification
           message={notification.message}
@@ -63,6 +65,15 @@ export default function UserPage() {
           >
             Đổi mật khẩu
           </button>
+          <button
+            onClick={() => setActiveTab("wishlist")}
+            className={`px-6 py-3 font-medium transition border-b-2 ${activeTab === "wishlist"
+              ? "text-red-500 border-red-500"
+              : "text-gray-400 border-transparent hover:text-gray-300"
+              }`}
+          >
+            Giỏ hàng
+          </button>
         </div>
 
         {/* Tab Content */}
@@ -72,6 +83,10 @@ export default function UserPage() {
 
         {activeTab === "password" && (
           <UserPassword user={user} onNotification={setNotification} />
+        )}
+
+        {activeTab === "wishlist" && (
+          <UserWishlist user={user} />
         )}
       </div>
     </div>

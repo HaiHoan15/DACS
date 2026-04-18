@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProductCard from "../_Components/ProductCard";
+import Footer from "../_Components/Footer";
 import Pagination from "../../../components/Pagination";
 import api from "../../../API/api";
 
@@ -7,11 +8,11 @@ export default function ProductPage() {
   const [sortOption, setSortOption] = useState("Mặc định");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-
+  
   // Trạng thái lưu trữ các bộ lọc đã chọn
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedPrices, setSelectedPrices] = useState([]);
-
+  
   // Trạng thái cho dữ liệu từ backend
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -27,7 +28,7 @@ export default function ProductPage() {
 
   // Hàm xử lý khi tick/bỏ tick một Mức Giá
   const handlePriceChange = (priceOpt) => {
-    setSelectedPrices(prev =>
+    setSelectedPrices(prev => 
       prev.includes(priceOpt) ? prev.filter(p => p !== priceOpt) : [...prev, priceOpt]
     );
   };
@@ -124,7 +125,7 @@ export default function ProductPage() {
 
   return (
     <>
-      <div
+      <div 
         className="min-h-screen bg-slate-50 py-16 px-4 relative flex flex-col items-center"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='30' height='30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 14V0h2v14h14v2H16v14h-2V16H0v-2h14z' fill='rgba(0,0,0,0.03)'/%3E%3C/svg%3E")`
@@ -138,10 +139,10 @@ export default function ProductPage() {
         </div>
 
         <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 relative z-10">
-
+          
           {/* CỘT TRÁI: SIDEBAR LỌC (Filter) */}
           <aside className="w-full lg:w-1/4 bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col gap-8 h-fit">
-
+            
             {/* Mục Danh Mục Sản Phẩm */}
             <div>
               <h3 className="font-bold text-gray-900 mb-4 uppercase tracking-wider text-sm border-b pb-2">Danh mục</h3>
@@ -149,15 +150,15 @@ export default function ProductPage() {
                 {categories.length > 0 ? (
                   categories.map(cat => (
                     <label key={cat.id} className="flex items-center space-x-3 cursor-pointer group">
-                      <input
-                        type="checkbox"
+                      <input 
+                        type="checkbox" 
                         checked={selectedCategories.includes(cat.name)}
                         onChange={() => {
-                          setSelectedCategories(prev =>
+                          setSelectedCategories(prev => 
                             prev.includes(cat.name) ? prev.filter(c => c !== cat.name) : [...prev, cat.name]
                           );
                         }}
-                        className="w-5 h-5 text-red-500 rounded border-gray-300 focus:ring-red-500 cursor-pointer transition-all"
+                        className="w-5 h-5 text-red-500 rounded border-gray-300 focus:ring-red-500 cursor-pointer transition-all" 
                       />
                       <span className={`transition-colors font-medium ${selectedCategories.includes(cat.name) ? "text-red-600 font-bold" : "text-gray-600 group-hover:text-red-500"}`}>
                         {cat.name}
@@ -176,11 +177,11 @@ export default function ProductPage() {
               <div className="space-y-3">
                 {["Dưới 500.000đ", "500.000đ - 1.000.000đ", "1.000.000đ - 2.000.000đ", "Trên 2.000.000đ"].map(price => (
                   <label key={price} className="flex items-center space-x-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
+                    <input 
+                      type="checkbox" 
                       checked={selectedPrices.includes(price)}
                       onChange={() => handlePriceChange(price)}
-                      className="w-5 h-5 text-red-500 rounded border-gray-300 focus:ring-red-500 cursor-pointer transition-all"
+                      className="w-5 h-5 text-red-500 rounded border-gray-300 focus:ring-red-500 cursor-pointer transition-all" 
                     />
                     <span className={`transition-colors font-medium ${selectedPrices.includes(price) ? "text-red-600 font-bold" : "text-gray-600 group-hover:text-red-500"}`}>
                       {price}
@@ -194,7 +195,7 @@ export default function ProductPage() {
 
           {/* CỘT PHẢI: DANH SÁCH (Sắp xếp + Grid Thẻ) */}
           <main className="w-full lg:w-3/4 flex flex-col gap-6">
-
+            
             {/* Loading state */}
             {loading && (
               <div className="flex items-center justify-center py-24 bg-white/50 backdrop-blur-md rounded-2xl border border-gray-200 shadow-sm">
@@ -202,8 +203,8 @@ export default function ProductPage() {
                   <p className="text-gray-600 text-lg mb-4">Đang tải dữ liệu sản phẩm...</p>
                   <div className="flex justify-center items-center gap-2">
                     <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></div>
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{animationDelay: "0.2s"}}></div>
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{animationDelay: "0.4s"}}></div>
                   </div>
                 </div>
               </div>
@@ -220,62 +221,63 @@ export default function ProductPage() {
 
             {!loading && !error && (
               <>
+            
+            <div className="bg-white/80 backdrop-blur-md px-6 py-4 rounded-xl shadow-sm border border-gray-200 flex flex-wrap items-center justify-between gap-4">
+              <span className="text-gray-600 font-medium">Hiển thị {sortedProducts.length} kết quả</span>
+              <div className="flex flex-wrap items-center gap-4 text-sm">
+                <span className="font-bold text-gray-800">Sắp xếp theo:</span>
+                {["Mặc định", "Giá tăng dần", "Giá giảm dần"].map(opt => (
+                  <button 
+                    key={opt}
+                    onClick={() => setSortOption(opt)}
+                    className={`px-3 py-1 rounded-md transition-all ${
+                      sortOption === opt 
+                      ? "bg-red-50 text-red-600 font-bold border border-red-200" 
+                      : "text-gray-600 hover:bg-gray-100 font-medium"
+                    }`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-                <div className="bg-white/80 backdrop-blur-md px-6 py-4 rounded-xl shadow-sm border border-gray-200 flex flex-wrap items-center justify-between gap-4">
-                  <span className="text-gray-600 font-medium">Hiển thị {sortedProducts.length} kết quả</span>
-                  <div className="flex flex-wrap items-center gap-4 text-sm">
-                    <span className="font-bold text-gray-800">Sắp xếp theo:</span>
-                    {["Mặc định", "Giá tăng dần", "Giá giảm dần"].map(opt => (
-                      <button
-                        key={opt}
-                        onClick={() => setSortOption(opt)}
-                        className={`px-3 py-1 rounded-md transition-all ${sortOption === opt
-                          ? "bg-red-50 text-red-600 font-bold border border-red-200"
-                          : "text-gray-600 hover:bg-gray-100 font-medium"
-                          }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+            {/* Grid Sản Phẩm */}
+            {displayedProducts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                 {displayedProducts.map(product => {
+                   // Transform dữ liệu từ backend để tương thích với ProductCard
+                   const transformedProduct = {
+                     ...product,
+                     category: product.category_name,
+                     image: product.avatar?.startsWith('http') ? product.avatar : `/uploads/products/${product.avatar}`
+                   };
+                   return <ProductCard key={product.id} product={transformedProduct} />;
+                 })}
+              </div>
+            ) : (
+              // Bổ sung màn hình Empty State tuyệt đẹp khi lọc không ra kết quả
+              <div className="flex flex-col items-center justify-center py-24 bg-white/50 backdrop-blur-md rounded-2xl border border-gray-200 shadow-sm">
+                <div className="text-5xl mb-4 opacity-50">🔍</div>
+                <h3 className="text-xl font-bold text-gray-700 mb-2">Không tìm thấy gói tập nào</h3>
+                <p className="text-gray-500 text-center max-w-sm">Rất tiếc bộ lọc của bạn quá khắt khe. Vui lòng thử chọn lại tiêu chí khác nhé!</p>
+                <button 
+                  onClick={() => { setSelectedCategories([]); setSelectedPrices([]); }}
+                  className="mt-6 px-6 py-2 bg-gradient-to-r from-red-500 to-yellow-500 hover:opacity-90 text-white rounded-full font-bold shadow-md transition-all active:scale-95"
+                >
+                  Xóa tất cả bộ lọc
+                </button>
+              </div>
+            )}
 
-                {/* Grid Sản Phẩm */}
-                {displayedProducts.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {displayedProducts.map(product => {
-                      // Transform dữ liệu từ backend để tương thích với ProductCard
-                      const transformedProduct = {
-                        ...product,
-                        category: product.category_name,
-                        image: product.avatar?.startsWith('http') ? product.avatar : `/uploads/products/${product.avatar}`
-                      };
-                      return <ProductCard key={product.id} product={transformedProduct} />;
-                    })}
-                  </div>
-                ) : (
-                  // Bổ sung màn hình Empty State tuyệt đẹp khi lọc không ra kết quả
-                  <div className="flex flex-col items-center justify-center py-24 bg-white/50 backdrop-blur-md rounded-2xl border border-gray-200 shadow-sm">
-                    <div className="text-5xl mb-4 opacity-50">🔍</div>
-                    <h3 className="text-xl font-bold text-gray-700 mb-2">Không tìm thấy gói tập nào</h3>
-                    <p className="text-gray-500 text-center max-w-sm">Rất tiếc bộ lọc của bạn quá khắt khe. Vui lòng thử chọn lại tiêu chí khác nhé!</p>
-                    <button
-                      onClick={() => { setSelectedCategories([]); setSelectedPrices([]); }}
-                      className="mt-6 px-6 py-2 bg-gradient-to-r from-red-500 to-yellow-500 hover:opacity-90 text-white rounded-full font-bold shadow-md transition-all active:scale-95"
-                    >
-                      Xóa tất cả bộ lọc
-                    </button>
-                  </div>
-                )}
-
-                {/* Pagination */}
-                {sortedProducts.length > 0 && (
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                  />
-                )}
+            {/* Pagination */}
+            {sortedProducts.length > 0 && (
+              <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            )}
 
               </>
             )}
@@ -283,6 +285,8 @@ export default function ProductPage() {
           </main>
         </div>
       </div>
+
+      <Footer />
     </>
   );
 }

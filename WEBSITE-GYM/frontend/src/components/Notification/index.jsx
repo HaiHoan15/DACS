@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const Notification = ({ message, type = "success", onClose, duration = 3000 }) => {
+const Notification = ({ message, type = "success", onClose, duration = 3000, showIcon = true }) => {
   const isSuccess = type === "success";
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const Notification = ({ message, type = "success", onClose, duration = 3000 }) =
       }`}
     >
       <span className="flex items-center gap-2">
-        {isSuccess ? (
+        {showIcon && (isSuccess ? (
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
@@ -31,7 +31,7 @@ const Notification = ({ message, type = "success", onClose, duration = 3000 }) =
               clipRule="evenodd"
             />
           </svg>
-        )}
+        ))}
         {message}
       </span>
     </div>
