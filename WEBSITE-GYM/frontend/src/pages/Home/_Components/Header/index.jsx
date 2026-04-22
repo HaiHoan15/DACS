@@ -128,6 +128,11 @@ const Header = () => {
                                 </span>
                             </NavLink>
 
+                            {/* nút giỏ hàng */}
+                            {/* <NavLink to="/cart">
+                                <CartButton />
+                            </NavLink> */}
+
                             <UserDropdown />
                         </div>
                     ) : (

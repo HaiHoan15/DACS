@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import api from "../../../../API/api";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, onAddToCartSuccess }) {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
   const { name, category, price, image, description } = product;
+  const [isAdding, setIsAdding] = useState(false);
 
   // Hàm format giá với dấu chấm và VND
   const formatPrice = (priceValue) => {
     return Math.floor(priceValue).toLocaleString('vi-VN') + ' VND';
+  };
+
+  // Hàm xử lý thêm vào giỏ hàng
+  const handleAddToCart = async (e) => {
+    e.stopPropagation();
+    
+    if (isAdding) return;
+    
+    try {
+      setIsAdding(true);
+      const response = await api.post("WishlistController.php", 
+        { productId: product.id, quantity: 1, userId: user?.id || 1 },
+        { params: { action: "add" } }
+      );
+      
+      if (response.data.success && onAddToCartSuccess) {
+        onAddToCartSuccess(name, 1);
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -46,10 +73,11 @@ export default function ProductCard({ product }) {
              <span className="text-xl font-bold text-red-600">{formatPrice(price)}</span>
           </div>
           <button 
-            onClick={(e) => e.stopPropagation()}
-            className="bg-gradient-to-r from-red-500 to-yellow-500 text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap text-center cursor-pointer border-none"
+            onClick={handleAddToCart}
+            disabled={isAdding}
+            className="bg-gradient-to-r from-red-500 to-yellow-500 text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap text-center cursor-pointer border-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Mua ngay
+            {isAdding ? "Đang thêm..." : "Mua ngay"}
           </button>
         </div>
       </div>
@@ -61,7 +89,6 @@ export default function ProductCard({ product }) {
           <p className="text-gray-700 text-base leading-relaxed">{description}</p>
         </div>
       </div>
-
     </div>
   );
 }

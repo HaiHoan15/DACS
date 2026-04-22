@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ProductCard from "../_Components/ProductCard";
 import Pagination from "../../../components/Pagination";
+import Notification from "../../../components/Notification";
 import api from "../../../API/api";
 
 export default function ProductPage() {
   const [sortOption, setSortOption] = useState("Mặc định");
   const [currentPage, setCurrentPage] = useState(1);
+  const [notification, setNotification] = useState(null);
   const itemsPerPage = 6;
 
   // Trạng thái lưu trữ các bộ lọc đã chọn
@@ -116,6 +118,14 @@ export default function ProductPage() {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategories, selectedPrices, sortOption]);
+
+  // Callback để ProductCard gọi khi thêm sản phẩm thành công
+  const handleAddToCartSuccess = (productName, quantity) => {
+    setNotification({
+      message: `Đã thêm ${quantity} sản phẩm '${productName}' vào giỏ hàng`,
+      type: "success"
+    });
+  };
 
   // 4. Tính toán phân trang
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
@@ -250,7 +260,7 @@ export default function ProductPage() {
                         category: product.category_name,
                         image: product.avatar?.startsWith('http') ? product.avatar : `/uploads/products/${product.avatar}`
                       };
-                      return <ProductCard key={product.id} product={transformedProduct} />;
+                      return <ProductCard key={product.id} product={transformedProduct} onAddToCartSuccess={handleAddToCartSuccess} />;
                     })}
                   </div>
                 ) : (
@@ -283,6 +293,7 @@ export default function ProductPage() {
           </main>
         </div>
       </div>
+      {notification && <Notification message={notification.message} type={notification.type} onClose={() => setNotification(null)} />}
     </>
   );
 }

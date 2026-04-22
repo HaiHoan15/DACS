@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import api from "../../../API/api";
 import Notification from "../../../components/Notification";
 
 export default function ProductDetailPage() {
   const { productId } = useParams();
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [notification, setNotification] = useState(null);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -56,13 +59,37 @@ export default function ProductDetailPage() {
     }
   };
 
-  const handleBuyNow = () => {
-    // Add to cart logic or navigate to checkout
-    // Currently just a notification as a placeholder
-    setNotification({
-      message: `Đã thêm ${quantity} sản phẩm '${product.name}' vào giỏ hàng với tổng tiền: ${(product.price * quantity).toLocaleString('vi-VN')}đ`,
-      type: "success"
-    });
+  const handleBuyNow = async () => {
+    if (isAddingToCart) return;
+    
+    try {
+      setIsAddingToCart(true);
+      const response = await api.post("WishlistController.php",
+        { productId: product.id, quantity: quantity, userId: user?.id || 1 },
+        { params: { action: "add" } }
+      );
+      
+      if (response.data.success) {
+        setNotification({
+          message: `Đã thêm ${quantity} sản phẩm '${product.name}' vào giỏ hàng với tổng tiền: ${(product.price * quantity).toLocaleString('vi-VN')}đ`,
+          type: "success"
+        });
+        setQuantity(1);
+      } else {
+        setNotification({
+          message: response.data.message || "Không thể thêm vào giỏ hàng",
+          type: "error"
+        });
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      setNotification({
+        message: "Lỗi kết nối server",
+        type: "error"
+      });
+    } finally {
+      setIsAddingToCart(false);
+    }
   };
 
   if (loading) {
@@ -181,12 +208,13 @@ export default function ProductDetailPage() {
             {/* Buy Button */}
             <button 
               onClick={handleBuyNow}
-              className="w-full bg-[#5252e6] hover:bg-[#3d3dcc] text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-colors shadow-lg shadow-blue-200"
+              disabled={isAddingToCart}
+              className="w-full bg-[#5252e6] hover:bg-[#3d3dcc] disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-colors shadow-lg shadow-blue-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              Mua ngay
+              {isAddingToCart ? "Đang thêm..." : "Mua ngay"}
             </button>
 
           </div>

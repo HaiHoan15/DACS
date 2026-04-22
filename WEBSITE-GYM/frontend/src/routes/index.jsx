@@ -15,6 +15,7 @@ import RegisterPage from "../pages/Home/AccountPage/RegisterPage";
 import AboutPage from "../pages/Home/AboutPage";
 import ServicePage from "../pages/Home/ServicePage";
 import NewsPage from "../pages/Home/NewsPage";
+import NewsDetail from "../pages/Home/NewsPage/NewsDetail";
 
 //trang sản phẩm cho người dùng
 import ProductPage from "../pages/Home/ProductPage";
@@ -22,7 +23,7 @@ import ProductDetailPage from "../pages/Home/ProductDetailPage";
 
 //trang người dùng
 import UserPage from "../pages/Home/UserPage";
-import WishlistPage from "../pages/Home/WishlistPage";
+import PaymentCallback from "../pages/Home/UserPage/PaymentCallback";
 
 //trang quản lý
 import Admin from "../pages/Admin";
@@ -41,10 +42,9 @@ import AddProduct from "../pages/Admin/ProductManagement/Product/dashboard/add";
 import EditProduct from "../pages/Admin/ProductManagement/Product/dashboard/edit";
 import ProductDetail from "../pages/Admin/ProductManagement/Product/dashboard/detail";
 
-//trang test
-import test from "../pages/Admin/TEST";
-
-//trang giáo viên
+//trang quản lý đơn hàng
+import OrderManagement from "../pages/Admin/OrderManagement";
+import OrderDetail from "../pages/Admin/OrderManagement/dashboard/detail";
 
 const routes = [
     {
@@ -88,6 +88,10 @@ const routes = [
                 element: NewsPage,
             },
             {
+                path: "news/:newsId",
+                element: NewsDetail,
+            },
+            {
                 path: "user",
                 element: RedirectToUser,
             },
@@ -96,8 +100,8 @@ const routes = [
                 element: ProtectedUserRouteWrapper(UserPage),
             },
             {
-                path: "wishlist",
-                element: ProtectedUserRouteWrapper(WishlistPage),
+                path: "payment-callback",
+                element: PaymentCallback,
             }
         ],
     },
@@ -147,9 +151,13 @@ const routes = [
                 element: ProductDetail,
             },
             {
-                path: "test",
-                element: test,
-            }
+                path: "OrderManagement",
+                element: OrderManagement,
+            },
+            {
+                path: "OrderManagement/dashboard/detail/:orderId",
+                element: OrderDetail,
+            },
         ],
     },
     // {

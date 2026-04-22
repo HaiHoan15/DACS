@@ -1,17 +1,27 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Notification from "../../../components/Notification";
 import UserProfile from "./UserProfile";
 import UserPassword from "./UserPassword";
 import UserWishlist from "./UserWishlist";
+import UserOrder from "./UserOrder";
 
 export default function UserPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const user = useSelector((state) => state.auth.user);
 
   const [notification, setNotification] = useState(null);
-  const [activeTab, setActiveTab] = useState("info");
+  
+  // Initialize activeTab từ query parameter, hoặc mặc định là "info"
+  const [activeTab, setActiveTab] = useState(() => {
+    const tabFromUrl = searchParams.get("tab");
+    if (tabFromUrl && ["info", "password", "wishlist", "order"].includes(tabFromUrl)) {
+      return tabFromUrl;
+    }
+    return "info";
+  });
 
   // Check user - redirect nếu không có user
   useEffect(() => {
@@ -74,6 +84,15 @@ export default function UserPage() {
           >
             Giỏ hàng
           </button>
+          <button
+            onClick={() => setActiveTab("order")}
+            className={`px-6 py-3 font-medium transition border-b-2 ${activeTab === "order"
+              ? "text-red-500 border-red-500"
+              : "text-gray-400 border-transparent hover:text-gray-300"
+              }`}
+          >
+            Lịch sử đơn hàng
+          </button>
         </div>
 
         {/* Tab Content */}
@@ -87,6 +106,10 @@ export default function UserPage() {
 
         {activeTab === "wishlist" && (
           <UserWishlist user={user} />
+        )}
+
+        {activeTab === "order" && (
+          <UserOrder />
         )}
       </div>
     </div>

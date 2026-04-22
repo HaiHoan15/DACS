@@ -89,17 +89,7 @@ const UserDropdown = () => {
                         >
                             <div className="absolute left-0 top-0 h-full w-1 bg-blue-500 rounded-r opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-y-100 scale-y-80" />
                             <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors duration-200">
-                                <svg
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    className="h-5 w-5 text-blue-600 group-hover:text-[#2b6cb0]"
-                                >
-                                    <path
-                                        clipRule="evenodd"
-                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                        fillRule="evenodd"
-                                    />
-                                </svg>
+                                <img src="/images/icon/user.png" alt="user" className="h-5 w-5" />
                             </div>
                             <span className="font-medium text-gray-700 group-hover:text-[#1a365d]">
                                 Thông tin chi tiết
