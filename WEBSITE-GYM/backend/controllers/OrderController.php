@@ -18,12 +18,6 @@ use Models\OrderModel;
 
 $action = $_GET['action'] ?? '';
 
-$debugFile = __DIR__ . '/../../debug_order.log';
-file_put_contents($debugFile, "\n=== REQUEST AT " . date('Y-m-d H:i:s') . " ===\n", FILE_APPEND);
-file_put_contents($debugFile, "Action: " . $action . "\n", FILE_APPEND);
-file_put_contents($debugFile, "Method: " . $_SERVER['REQUEST_METHOD'] . "\n", FILE_APPEND);
-file_put_contents($debugFile, "Body: " . file_get_contents("php://input") . "\n", FILE_APPEND);
-
 try {
     // Create database connection
     $database = new Database();
@@ -47,18 +41,13 @@ try {
         updateStatus();
     } elseif ($action === 'delete') {
         deleteOrder();
+    } elseif ($action === 'cleanupPending') {
+        cleanupPendingOrders();
     } else {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Invalid action']);
     }
 } catch (Exception $e) {
-    $debugFile = __DIR__ . '/../../debug_order.log';
-    file_put_contents($debugFile, "\n=== EXCEPTION ===\n", FILE_APPEND);
-    file_put_contents($debugFile, "Message: " . $e->getMessage() . "\n", FILE_APPEND);
-    file_put_contents($debugFile, "File: " . $e->getFile() . "\n", FILE_APPEND);
-    file_put_contents($debugFile, "Line: " . $e->getLine() . "\n", FILE_APPEND);
-    file_put_contents($debugFile, "Trace: " . $e->getTraceAsString() . "\n", FILE_APPEND);
-    
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine()]);
 }
@@ -225,6 +214,20 @@ function deleteOrder() {
         http_response_code(500);
         echo json_encode(['success' => false, 'message' => 'Không thể xóa đơn hàng']);
     }
+}
+
+function cleanupPendingOrders() {
+    // DISABLED: This was deleting all pending orders > 15 minutes, causing wrong deletions
+    // Orders should only be deleted:
+    // 1. When user closes payment modal (handleClose)
+    // 2. When PaymentCallback processes MoMo result (cancel = delete, success = confirm)
+    // 3. When MoMo API fails (momo.php)
+    
+    echo json_encode([
+        'success' => true,
+        'message' => 'Cleanup disabled - orders deleted on close/callback',
+        'deleted' => 0
+    ]);
 }
 
 // function createMomo()

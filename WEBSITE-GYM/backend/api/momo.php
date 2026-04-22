@@ -84,7 +84,7 @@ $secretKey = "at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa";
 $requestId = time();
 $momoOrderId = "MOMO_" . $orderId . "_" . $requestId;
 $orderInfo = "Thanh toán đơn hàng #" . $orderId;
-$redirectUrl = "http://localhost:5173/payment-callback?status=success&orderId=" . $orderId;
+$redirectUrl = "http://localhost:5173/payment-callback?orderId=" . $orderId;
 $ipnUrl = "http://localhost/backend/api/momo_callback.php";
 $requestType = "payWithATM";
 
@@ -154,12 +154,16 @@ if ($httpCode === 200 && isset($parsedResponse['resultCode']) && $parsedResponse
             "message" => "Tạo link thanh toán thành công"
         ]);
     } else {
+        // No payUrl found - delete the order we just created
+        $orderModel->delete($orderId);
         echo json_encode([
             "success" => false,
             "message" => "Không tìm thấy payUrl"
         ]);
     }
 } else {
+    // MoMo API Error - delete the order we just created to avoid orphaned pending orders
+    $orderModel->delete($orderId);
     echo json_encode([
         "success" => false,
         "message" => "MoMo API Error",

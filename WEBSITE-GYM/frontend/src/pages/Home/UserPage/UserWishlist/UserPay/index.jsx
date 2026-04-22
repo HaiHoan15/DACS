@@ -12,13 +12,13 @@ export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymen
     recipient_name: "",
     recipient_phone: "",
     recipient_address: "",
-    payment_method: "direct" // direct: Trực tiếp, momo: Ví MoMo
+    payment_method: "direct" 
   });
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [notification, setNotification] = useState(null);
 
-  // Khởi tạo dữ liệu từ userInfo
+  // Khởi tạo dữ liệu từ userInfo khi modal mở
   useEffect(() => {
     if (userInfo && isOpen) {
       setFormData(prev => ({
@@ -29,6 +29,53 @@ export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymen
       }));
     }
   }, [userInfo, isOpen]);
+
+  // Cleanup pending order when component unmounts (if user navigated away)
+  useEffect(() => {
+    return () => {
+      // When component unmounts and there's still a pending order in sessionStorage
+      // it means user either closed the page or navigated away without completing payment
+      const pendingId = sessionStorage.getItem("pendingMomoOrderId");
+      
+      if (pendingId) {
+        console.log("🗑️ UserPay component unmounting with pending order, cleaning up:", pendingId);
+        // Use fetch with keepalive to ensure request completes even if page unloads
+        fetch("http://localhost/backend/controllers/OrderController.php?action=delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId: parseInt(pendingId) }),
+          keepalive: true
+        }).then(() => {
+          sessionStorage.removeItem("pendingMomoOrderId");
+        }).catch(err => {
+          console.error("❌ Error in cleanup on unmount:", err);
+        });
+      }
+    };
+  }, []);
+
+  // Handle modal close - delete pending order if not completed
+  // When user closes modal without completing MoMo payment
+  const handleClose = async () => {
+    const pendingId = sessionStorage.getItem("pendingMomoOrderId");
+    
+    if (pendingId) {
+      console.log("🗑️ User closed payment modal without completing, deleting order:", pendingId);
+      try {
+        await api.post(
+          "OrderController.php",
+          { orderId: parseInt(pendingId) },
+          { params: { action: "delete" } }
+        );
+        console.log("✅ Deleted pending order on modal close");
+      } catch (err) {
+        console.error("❌ Error deleting pending order on close:", err);
+      }
+      sessionStorage.removeItem("pendingMomoOrderId");
+    }
+    
+    onClose();
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -91,7 +138,11 @@ export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymen
 
       console.log("MoMo:", data);
 
-      if (data.payUrl) {
+      if (data.payUrl && data.orderId) {
+        // Store orderId in sessionStorage only
+        // This will be cleared when user completes payment in PaymentCallback
+        sessionStorage.setItem("pendingMomoOrderId", data.orderId.toString());
+        console.log("🔗 Redirecting to MoMo with orderId:", data.orderId);
         window.location.href = data.payUrl;
         return;
       } else {
@@ -150,7 +201,7 @@ export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymen
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 flex justify-between items-center sticky top-0">
           <h2 className="text-2xl font-bold">Thông tin thanh toán</h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-2xl hover:bg-blue-800 p-2 rounded transition"
           >
             ✕
@@ -313,7 +364,7 @@ export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymen
 
             <div className="flex gap-3 w-full md:w-auto">
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="flex-1 md:flex-none px-6 py-3 bg-gray-400 hover:bg-gray-500 text-white font-bold rounded-lg transition-colors"
               >
                 Hủy
@@ -342,7 +393,9 @@ export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymen
       <ConfirmDialog
         isOpen={showConfirmDialog}
         title="Xác nhận thanh toán"
-        message="Xác nhận thanh toán trực tiếp?"
+        message={formData.payment_method === "momo" 
+          ? "Xác nhận thanh toán MoMo?" 
+          : "Xác nhận thanh toán trực tiếp?"}
         onConfirm={handleConfirmPayment}
         onCancel={() => setShowConfirmDialog(false)}
         confirmText="OK"

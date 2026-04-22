@@ -1,54 +1,18 @@
 <?php
-require_once "../config/database.php";
+// Server-to-server callback from MoMo (IPN)
+// This just validates and logs - actual order status update happens in frontend PaymentCallback
 
-$resultCode = $_GET['resultCode'] ?? null;
-$extraData = $_GET['extraData'] ?? null;
+$resultCode = $_GET['resultCode'] ?? $_POST['resultCode'] ?? null;
+$extraData = $_GET['extraData'] ?? $_POST['extraData'] ?? null;
+$orderId = $_GET['orderId'] ?? $_POST['orderId'] ?? null;
 
-if (!$extraData) {
-    die("Không có dữ liệu");
-}
+// Return 200 OK to MoMo to confirm callback received
+http_response_code(200);
+echo json_encode(['status' => 'ok']);
 
-$data = json_decode(base64_decode($extraData), true);
-
-if ($resultCode == 0) {
-
-    $db = (new Database())->connect();
-
-    // 🔥 1. tạo order
-    $query = "INSERT INTO orders 
-    (account_id, customer_name, phone, address, total_amount, payment_method, payment_status, status)
-    VALUES (:userId, :name, :phone, :address, :total, 'momo', 'paid', 'confirmed')";
-
-    $stmt = $db->prepare($query);
-    $stmt->execute([
-        ":userId" => $data['userId'],
-        ":name" => $data['name'],
-        ":phone" => $data['phone'],
-        ":address" => $data['address'],
-        ":total" => $data['amount']
-    ]);
-
-    $orderId = $db->lastInsertId();
-
-    // 🔥 2. tạo order details
-    foreach ($data['cartItems'] as $item) {
-
-        $detailQuery = "INSERT INTO order_details 
-        (order_id, product_id, quantity, price)
-        VALUES (:order_id, :product_id, :quantity, :price)";
-
-        $detailStmt = $db->prepare($detailQuery);
-        $detailStmt->execute([
-            ":order_id" => $orderId,
-            ":product_id" => $item['id'],
-            ":quantity" => $item['quantity'],
-            ":price" => $item['price']
-        ]);
-    }
-
-    header("Location: http://localhost:5173/payment-callback?status=success");
-
-} else {
-
-    header("Location: http://localhost:5173/payment-callback?status=fail");
+// Optional: Log for debugging
+if (getenv('DEBUG_MOMO')) {
+    $logFile = __DIR__ . "/../../momo_callback.log";
+    $log = "\n=== CALLBACK " . date('Y-m-d H:i:s') . " | Code:" . $resultCode . " | OrderId:" . $orderId . " ===\n";
+    file_put_contents($logFile, $log, FILE_APPEND);
 }
