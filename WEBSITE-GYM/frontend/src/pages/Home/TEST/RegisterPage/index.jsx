@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUserAsync } from "../../../../redux/authSlice";
-import Notification from "../../../../components/Notification";
+import { registerUserAsync } from "../../../../../redux/authSlice";
+import Notification from "../../../components/Notification";
 import {
   HiOutlineMail,
   HiOutlineLockClosed,
@@ -128,9 +128,63 @@ export default function RegisterPage() {
       )}
 
       <div className="register-wrapper">
-        {/* ======= FORM PANEL (full width) ======= */}
-        <div className="register-form-panel register-form-panel--full">
-          <div className="register-card register-card--wide">
+        {/* ======= LEFT — Branding ======= */}
+        <div className="register-branding">
+          <img
+            src="/images/logo/logo.png"
+            alt="Three GYM Logo"
+            className="register-branding-logo"
+          />
+
+          <h2 className="register-branding-title">
+            <span className="text-red">THREE</span>{" "}
+            <span className="text-yellow">GYM</span>
+            <br />
+            <span style={{ color: "#1f2937", fontSize: "0.6em", fontWeight: 600 }}>
+              Vượt Qua Giới Hạn
+            </span>
+          </h2>
+
+          <p className="register-branding-tagline">
+            Tham gia cộng đồng ThreeGym để bắt đầu hành trình tập luyện
+            và chinh phục phiên bản tốt nhất của chính bạn.
+          </p>
+
+          {/* Feature highlights */}
+          <div className="register-features">
+            <div className="register-feature-item">
+              <span className="register-feature-icon">
+                <HiOutlineLightningBolt />
+              </span>
+              Chương trình tập luyện chuyên nghiệp
+            </div>
+            <div className="register-feature-item">
+              <span className="register-feature-icon">
+                <HiOutlineUserGroup />
+              </span>
+              Cộng đồng fitness năng động
+            </div>
+            <div className="register-feature-item">
+              <span className="register-feature-icon">
+                <HiOutlineShieldCheck />
+              </span>
+              Huấn luyện viên giàu kinh nghiệm
+            </div>
+            <div className="register-feature-item">
+              <span className="register-feature-icon">
+                <HiOutlineStar />
+              </span>
+              Ưu đãi dành riêng cho thành viên
+            </div>
+          </div>
+        </div>
+
+        {/* ======= DIVIDER ======= */}
+        <div className="register-divider" />
+
+        {/* ======= RIGHT — Register Form ======= */}
+        <div className="register-form-panel">
+          <div className="register-card">
             {/* Card Header */}
             <div className="register-card-header">
               <p className="register-card-welcome">Chào mừng bạn đến với ThreeGym</p>
@@ -142,30 +196,110 @@ export default function RegisterPage() {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="register-form">
-              {/* Row 1: Email (left) | divider | Address (right) */}
-              <div className="register-row">
-                <div className="register-input-group">
-                  <label className="register-label" htmlFor="register-email">
-                    Email <span className="required">*</span>
-                  </label>
-                  <div className="register-input-wrapper">
-                    <HiOutlineMail className="register-input-icon" />
-                    <input
-                      id="register-email"
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="you@example.com"
-                      required
-                      className="register-input"
-                      autoComplete="email"
-                    />
-                  </div>
+              {/* Email */}
+              <div className="register-input-group">
+                <label className="register-label" htmlFor="register-email">
+                  Email <span className="required">*</span>
+                </label>
+                <div className="register-input-wrapper">
+                  <HiOutlineMail className="register-input-icon" />
+                  <input
+                    id="register-email"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    required
+                    className="register-input"
+                    autoComplete="email"
+                  />
                 </div>
+              </div>
 
-                <div className="register-col-divider" />
+              {/* Username */}
+              <div className="register-input-group">
+                <label className="register-label" htmlFor="register-username">
+                  Tên người dùng <span className="required">*</span>
+                </label>
+                <div className="register-input-wrapper">
+                  <HiOutlineUser className="register-input-icon" />
+                  <input
+                    id="register-username"
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    placeholder="Nhập tên người dùng"
+                    required
+                    className="register-input"
+                    autoComplete="username"
+                  />
+                </div>
+                <span className="register-input-hint">Từ 3 đến 30 ký tự</span>
+              </div>
 
+              {/* Password */}
+              <div className="register-input-group">
+                <label className="register-label" htmlFor="register-password">
+                  Mật khẩu <span className="required">*</span>
+                </label>
+                <div className="register-input-wrapper">
+                  <HiOutlineLockClosed className="register-input-icon" />
+                  <input
+                    id="register-password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="••••••••"
+                    required
+                    className="register-input register-input-password"
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="register-toggle-password"
+                    aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                  >
+                    {showPassword ? <HiOutlineEyeOff /> : <HiOutlineEye />}
+                  </button>
+                </div>
+                <span className="register-input-hint">Tối thiểu 6 ký tự</span>
+              </div>
+
+              {/* Confirm Password */}
+              <div className="register-input-group">
+                <label className="register-label" htmlFor="register-confirm-password">
+                  Xác nhận mật khẩu <span className="required">*</span>
+                </label>
+                <div className="register-input-wrapper">
+                  <HiOutlineLockClosed className="register-input-icon" />
+                  <input
+                    id="register-confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="••••••••"
+                    required
+                    className="register-input register-input-password"
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="register-toggle-password"
+                    aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                  >
+                    {showConfirmPassword ? <HiOutlineEyeOff /> : <HiOutlineEye />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Address + Phone — side by side */}
+              <div className="register-row">
                 <div className="register-input-group">
                   <label className="register-label" htmlFor="register-address">
                     Địa chỉ
@@ -185,32 +319,6 @@ export default function RegisterPage() {
                     />
                   </div>
                 </div>
-              </div>
-
-              {/* Row 2: Username (left) | divider | Phone (right) */}
-              <div className="register-row">
-                <div className="register-input-group">
-                  <label className="register-label" htmlFor="register-username">
-                    Tên người dùng <span className="required">*</span>
-                  </label>
-                  <div className="register-input-wrapper">
-                    <HiOutlineUser className="register-input-icon" />
-                    <input
-                      id="register-username"
-                      type="text"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleChange}
-                      placeholder="Nhập tên người dùng"
-                      required
-                      className="register-input"
-                      autoComplete="username"
-                    />
-                  </div>
-                  <span className="register-input-hint">Từ 3 đến 30 ký tự</span>
-                </div>
-
-                <div className="register-col-divider" />
 
                 <div className="register-input-group">
                   <label className="register-label" htmlFor="register-phone">
@@ -229,68 +337,6 @@ export default function RegisterPage() {
                       className="register-input"
                       autoComplete="tel"
                     />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 3: Password (left) | divider | Confirm Password (right) */}
-              <div className="register-row">
-                <div className="register-input-group">
-                  <label className="register-label" htmlFor="register-password">
-                    Mật khẩu <span className="required">*</span>
-                  </label>
-                  <div className="register-input-wrapper">
-                    <HiOutlineLockClosed className="register-input-icon" />
-                    <input
-                      id="register-password"
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="••••••••"
-                      required
-                      className="register-input register-input-password"
-                      autoComplete="new-password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="register-toggle-password"
-                      aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                    >
-                      {showPassword ? <HiOutlineEyeOff /> : <HiOutlineEye />}
-                    </button>
-                  </div>
-                  <span className="register-input-hint">Tối thiểu 6 ký tự</span>
-                </div>
-
-                <div className="register-col-divider" />
-
-                <div className="register-input-group">
-                  <label className="register-label" htmlFor="register-confirm-password">
-                    Xác nhận mật khẩu <span className="required">*</span>
-                  </label>
-                  <div className="register-input-wrapper">
-                    <HiOutlineLockClosed className="register-input-icon" />
-                    <input
-                      id="register-confirm-password"
-                      type={showConfirmPassword ? "text" : "password"}
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      placeholder="••••••••"
-                      required
-                      className="register-input register-input-password"
-                      autoComplete="new-password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="register-toggle-password"
-                      aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                    >
-                      {showConfirmPassword ? <HiOutlineEyeOff /> : <HiOutlineEye />}
-                    </button>
                   </div>
                 </div>
               </div>

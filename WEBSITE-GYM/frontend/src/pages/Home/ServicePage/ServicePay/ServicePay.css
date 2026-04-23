@@ -1,0 +1,194 @@
+/* ─── Overlay ─── */
+.svcpay-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* ─── Modal ─── */
+.svcpay-modal {
+  background: #1a1a2e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  padding: 28px 28px 24px;
+  color: #e2e8f0;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  animation: svcpay-slide-in 0.22s ease;
+}
+
+@keyframes svcpay-slide-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)  scale(1); }
+}
+
+/* ─── Header ─── */
+.svcpay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.svcpay-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+}
+.svcpay-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.svcpay-close:hover { color: #f87171; }
+
+/* ─── Warning ─── */
+.svcpay-warning {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 0.85rem;
+  color: #fde68a;
+  line-height: 1.5;
+}
+.svcpay-warning-icon { font-size: 1rem; flex-shrink: 0; }
+
+/* ─── Package card ─── */
+.svcpay-pkg {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.svcpay-pkg-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.svcpay-pkg-info { flex: 1; }
+.svcpay-pkg-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  margin: 0 0 4px;
+}
+.svcpay-pkg-dur {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+}
+.svcpay-pkg-price { text-align: right; flex-shrink: 0; }
+.svcpay-pkg-amount {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #f97316;
+}
+.svcpay-pkg-unit {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* ─── User info ─── */
+.svcpay-section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin: 0 0 10px;
+}
+.svcpay-user { margin-bottom: 18px; }
+.svcpay-field { margin-bottom: 10px; }
+.svcpay-field label {
+  display: block;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+.svcpay-field input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  outline: none;
+  cursor: default;
+  box-sizing: border-box;
+}
+
+/* ─── Payment notice ─── */
+.svcpay-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(167, 139, 250, 0.07);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  color: #c4b5fd;
+}
+.svcpay-momo-logo {
+  height: 28px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* ─── Error ─── */
+.svcpay-error {
+  color: #f87171;
+  font-size: 0.82rem;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ─── Actions ─── */
+.svcpay-actions {
+  display: flex;
+  gap: 12px;
+}
+.svcpay-btn-cancel,
+.svcpay-btn-pay {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.svcpay-btn-cancel:hover:not(:disabled) { opacity: 0.8; }
+.svcpay-btn-pay:hover:not(:disabled)    { transform: translateY(-1px); }
+.svcpay-btn-cancel:disabled,
+.svcpay-btn-pay:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.svcpay-btn-cancel {
+  background: rgba(255, 255, 255, 0.07);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.svcpay-btn-pay {
+  background: linear-gradient(135deg, #a21caf, #7c3aed);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+}

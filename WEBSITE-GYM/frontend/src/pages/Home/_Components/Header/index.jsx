@@ -11,6 +11,7 @@ const navItems = [
     { label: "Dịch vụ", path: "/service" },
     { label: "Sản phẩm", path: "/product" },
     { label: "Tin tức", path: "/news" },
+    { label: "TEST", path: "/test" },
 ];
 
 const Header = () => {

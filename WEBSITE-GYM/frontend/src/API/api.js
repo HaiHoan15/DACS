@@ -9,4 +9,13 @@ const api = axios.create({
   withCredentials: false,
 });
 
+// API instance for /backend/api/ folder (MoMo, etc)
+export const apiGateway = axios.create({
+  baseURL: "http://localhost/backend/api/",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: false,
+});
+
 export default api;

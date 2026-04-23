@@ -3,6 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserAsync } from "../../../../redux/authSlice";
 import Notification from "../../../../components/Notification";
+import {
+  HiOutlineMail,
+  HiOutlineLockClosed,
+  HiOutlineEye,
+  HiOutlineEyeOff,
+  HiOutlineLightningBolt,
+  HiOutlineUserGroup,
+  HiOutlineShieldCheck,
+} from "react-icons/hi";
+import "./LoginPage.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -48,7 +58,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 px-4">
+    <div className="login-page">
+      {/* Background grid */}
+      <div className="login-bg-grid" />
+
+      {/* Floating decorative shapes */}
+      <div className="login-deco-shape login-deco-shape-1" />
+      <div className="login-deco-shape login-deco-shape-2" />
+      <div className="login-deco-shape login-deco-shape-3" />
+      <div className="login-deco-shape login-deco-shape-4" />
+
+      {/* Notification */}
       {notification && (
         <Notification
           message={notification.message}
@@ -57,89 +77,158 @@ export default function LoginPage() {
         />
       )}
 
-      <div className="w-full max-w-md">
-        <div className="bg-gray-800 rounded-lg shadow-2xl p-8 border border-gray-700">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              <span className="text-red-500">ĐĂNG</span>
-              <span className="text-yellow-500 ml-2">NHẬP</span>
-            </h1>
-            <p className="text-gray-400">Chào mừng bạn trở lại THREE GYM</p>
+      <div className="login-wrapper">
+        {/* ======= LEFT — Branding ======= */}
+        <div className="login-branding">
+          <img
+            src="/images/logo/logo.png"
+            alt="Three GYM Logo"
+            className="login-branding-logo"
+          />
+
+          <h2 className="login-branding-title">
+            <span className="text-red">THREE</span>{" "}
+            <span className="text-yellow">GYM</span>
+            <br />
+            <span style={{ color: "#1f2937", fontSize: "0.6em", fontWeight: 600 }}>
+              Vượt Qua Giới Hạn
+            </span>
+          </h2>
+
+          <p className="login-branding-tagline">
+            Nơi sức mạnh được rèn luyện, tinh thần được nâng tầm.
+            Hãy đăng nhập để bắt đầu hành trình chinh phục bản thân.
+          </p>
+
+          {/* Feature highlights */}
+          <div className="login-features">
+            <div className="login-feature-item">
+              <span className="login-feature-icon">
+                <HiOutlineLightningBolt />
+              </span>
+              Chương trình tập luyện chuyên nghiệp
+            </div>
+            <div className="login-feature-item">
+              <span className="login-feature-icon">
+                <HiOutlineUserGroup />
+              </span>
+              Cộng đồng fitness năng động
+            </div>
+            <div className="login-feature-item">
+              <span className="login-feature-icon">
+                <HiOutlineShieldCheck />
+              </span>
+              Huấn luyện viên giàu kinh nghiệm
+            </div>
           </div>
+        </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@email.com"
-                required
-                className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
-              />
+        {/* ======= DIVIDER ======= */}
+        <div className="login-divider" />
+
+        {/* ======= RIGHT — Login Form ======= */}
+        <div className="login-form-panel">
+          <div className="login-card">
+            {/* Card Header */}
+            <div className="login-card-header">
+              <p className="login-card-welcome">Chào mừng trở lại</p>
+              <h1 className="login-card-title">Đăng nhập</h1>
+              <p className="login-card-subtitle">
+                Nhập thông tin tài khoản của bạn
+              </p>
             </div>
 
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Mật khẩu
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition pr-12"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition"
-                >
-                  {showPassword ? "Ẩn" : "Hiện"}
-                </button>
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="login-form">
+              {/* Email */}
+              <div className="login-input-group">
+                <label className="login-label" htmlFor="login-email">
+                  Email
+                </label>
+                <div className="login-input-wrapper">
+                  <HiOutlineMail className="login-input-icon" />
+                  <input
+                    id="login-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    required
+                    className="login-input"
+                    autoComplete="email"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 mt-6 bg-gradient-to-r from-red-500 to-yellow-500 text-white font-bold rounded-lg hover:from-red-600 hover:to-yellow-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.3" />
-                    <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Đang đăng nhập...
-                </>
-              ) : (
-                "Đăng nhập"
-              )}
-            </button>
-          </form>
+              {/* Password */}
+              <div className="login-input-group">
+                <label className="login-label" htmlFor="login-password">
+                  Mật khẩu
+                </label>
+                <div className="login-input-wrapper">
+                  <HiOutlineLockClosed className="login-input-icon" />
+                  <input
+                    id="login-password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    className="login-input login-input-password"
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="login-toggle-password"
+                    aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                  >
+                    {showPassword ? <HiOutlineEyeOff /> : <HiOutlineEye />}
+                  </button>
+                </div>
+              </div>
 
-          {/* link đăng ký */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-400 text-sm">
-              Chưa có tài khoản?{" "}
-              <a
-                href="/register"
-                className="text-red-500 hover:text-red-400 font-medium transition"
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="login-submit-btn"
               >
-                Đăng ký ngay
-              </a>
-            </p>
+                {loading ? (
+                  <>
+                    <svg
+                      className="login-spinner"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        opacity="0.25"
+                      />
+                      <path
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Đang đăng nhập...
+                  </>
+                ) : (
+                  "Đăng nhập"
+                )}
+              </button>
+            </form>
+
+            {/* Register link */}
+            <div className="login-register-link">
+              Chưa có tài khoản?{" "}
+              <a href="/register">Đăng ký ngay</a>
+            </div>
           </div>
         </div>
       </div>

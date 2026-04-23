@@ -84,8 +84,8 @@ $secretKey = "at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa";
 $requestId = time();
 $momoOrderId = "MOMO_" . $orderId . "_" . $requestId;
 $orderInfo = "Thanh toán đơn hàng #" . $orderId;
-$redirectUrl = "http://localhost:5173/payment-callback?orderId=" . $orderId;
-$ipnUrl = "http://localhost/backend/api/momo_callback.php";
+$redirectUrl = "http://localhost:5173/payment-callback?orderId=" . $orderId; //frontend callback URL
+$ipnUrl = "http://localhost/backend/api/momo_callback.php"; //backend callback URL
 $requestType = "payWithATM";
 
 $extraData = base64_encode(json_encode([

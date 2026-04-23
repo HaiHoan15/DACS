@@ -16,6 +16,7 @@ import AboutPage from "../pages/Home/AboutPage";
 import ServicePage from "../pages/Home/ServicePage";
 import NewsPage from "../pages/Home/NewsPage";
 import NewsDetail from "../pages/Home/NewsPage/NewsDetail";
+import TEST from "../pages/Home/TEST";
 
 //trang sản phẩm cho người dùng
 import ProductPage from "../pages/Home/ProductPage";
@@ -24,6 +25,7 @@ import ProductDetailPage from "../pages/Home/ProductDetailPage";
 //trang người dùng
 import UserPage from "../pages/Home/UserPage";
 import PaymentCallback from "../pages/Home/UserPage/PaymentCallback";
+import ServicePaymentCallback from "../pages/Home/ServicePage/PaymentCallback";
 
 //trang quản lý
 import Admin from "../pages/Admin";
@@ -102,7 +104,16 @@ const routes = [
             {
                 path: "payment-callback",
                 element: PaymentCallback,
+            },
+            {
+                path: "service-payment-callback",
+                element: ServicePaymentCallback,
+            },
+            {
+                path: "test",
+                element: TEST,
             }
+
         ],
     },
     {

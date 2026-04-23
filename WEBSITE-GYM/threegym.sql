@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS `orders` (
   KEY `idx_orders_status` (`status`),
   KEY `idx_orders_created_at` (`created_at`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.orders: ~0 rows (approximately)
+-- Dumping data for table threegym.orders: ~13 rows (approximately)
 INSERT INTO `orders` (`id`, `account_id`, `total_amount`, `status`, `payment_method`, `recipient_name`, `recipient_phone`, `recipient_address`, `notes`, `created_at`, `updated_at`) VALUES
 	(2, 2, 150000.00, 'shipped', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 03:40:52', '2026-04-22 04:00:53'),
 	(3, 2, 2800000.00, 'cancelled', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 03:44:03', '2026-04-22 04:02:17'),
@@ -69,7 +69,13 @@ INSERT INTO `orders` (`id`, `account_id`, `total_amount`, `status`, `payment_met
 	(22, 2, 400000.00, 'confirmed', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 05:04:44', '2026-04-22 05:46:25'),
 	(23, 2, 10000.00, 'confirmed', 'momo', 'Test', '0901234567', 'HN', '', '2026-04-22 06:29:21', '2026-04-22 06:35:00'),
 	(24, 2, 1000000.00, 'delivered', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 06:30:17', '2026-04-22 06:35:02'),
-	(25, 2, 400000.00, 'delivered', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 06:33:38', '2026-04-22 06:35:04');
+	(25, 2, 400000.00, 'delivered', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 06:33:38', '2026-04-22 06:35:04'),
+	(53, 2, 600000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 10:31:15', '2026-04-22 10:31:37'),
+	(62, 2, 250000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 11:01:16', '2026-04-22 11:02:02'),
+	(67, 2, 4450000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 11:09:25', '2026-04-22 11:09:52'),
+	(71, 2, 600000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-23 06:46:18', '2026-04-23 06:46:41'),
+	(75, 2, 300000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-23 06:50:18', '2026-04-23 06:50:40'),
+	(78, 2, 150000.00, 'pending', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-23 07:02:31', '2026-04-23 07:02:31');
 
 -- Dumping structure for table threegym.order_items
 CREATE TABLE IF NOT EXISTS `order_items` (
@@ -86,9 +92,9 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   KEY `idx_order_items_product_id` (`product_id`),
   CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.order_items: ~0 rows (approximately)
+-- Dumping data for table threegym.order_items: ~21 rows (approximately)
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `quantity`, `price`, `subtotal`, `created_at`) VALUES
 	(9, 2, 1, 'Dumbbell 5kg', 1, 150000.00, 150000.00, '2026-04-22 03:40:52'),
 	(10, 3, 3, 'Barbell 20kg', 3, 600000.00, 1800000.00, '2026-04-22 03:44:03'),
@@ -103,7 +109,14 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `quan
 	(60, 24, 3, 'Barbell 20kg', 1, 600000.00, 600000.00, '2026-04-22 06:30:17'),
 	(61, 24, 2, 'Dumbbell 10kg', 1, 250000.00, 250000.00, '2026-04-22 06:30:17'),
 	(62, 25, 2, 'Dumbbell 10kg', 1, 250000.00, 250000.00, '2026-04-22 06:33:38'),
-	(63, 25, 1, 'Dumbbell 5kg', 1, 150000.00, 150000.00, '2026-04-22 06:33:38');
+	(63, 25, 1, 'Dumbbell 5kg', 1, 150000.00, 150000.00, '2026-04-22 06:33:38'),
+	(96, 53, 3, 'Barbell 20kg', 1, 600000.00, 600000.00, '2026-04-22 10:31:15'),
+	(106, 62, 2, 'Dumbbell 10kg', 1, 250000.00, 250000.00, '2026-04-22 11:01:16'),
+	(113, 67, 5, 'Stationary Bike', 1, 4200000.00, 4200000.00, '2026-04-22 11:09:25'),
+	(114, 67, 2, 'Dumbbell 10kg', 1, 250000.00, 250000.00, '2026-04-22 11:09:25'),
+	(118, 71, 3, 'Barbell 20kg', 1, 600000.00, 600000.00, '2026-04-23 06:46:18'),
+	(122, 75, 6, 'Pull-up Bar', 1, 300000.00, 300000.00, '2026-04-23 06:50:18'),
+	(125, 78, 1, 'Dumbbell 5kg', 1, 150000.00, 150000.00, '2026-04-23 07:02:31');
 
 -- Dumping structure for table threegym.products
 CREATE TABLE IF NOT EXISTS `products` (
@@ -152,11 +165,49 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.product_categories: ~4 rows (approximately)
+-- Dumping data for table threegym.product_categories: ~3 rows (approximately)
 INSERT INTO `product_categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
 	(1, 'Thiết bị', '2026-03-25 04:46:19', '2026-04-08 08:28:54'),
 	(2, 'Phụ kiện', '2026-03-25 04:46:19', '2026-04-08 08:29:13'),
 	(3, 'Bổ sung', '2026-03-25 04:46:19', '2026-04-08 08:29:25');
+
+-- Dumping structure for table threegym.service_packages
+CREATE TABLE IF NOT EXISTS `service_packages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `duration_days` int NOT NULL DEFAULT '30' COMMENT 'Số ngày hiệu lực của gói',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table threegym.service_packages: ~3 rows (approximately)
+INSERT INTO `service_packages` (`id`, `name`, `price`, `duration_days`, `created_at`) VALUES
+	(1, 'NORMAL', 250000.00, 30, '2026-04-23 10:01:54'),
+	(2, 'PRO', 350000.00, 30, '2026-04-23 10:01:54'),
+	(3, 'VIP', 500000.00, 30, '2026-04-23 10:01:54');
+
+-- Dumping structure for table threegym.user_services
+CREATE TABLE IF NOT EXISTS `user_services` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL COMMENT 'FK → accounts.id',
+  `package_id` int NOT NULL COMMENT 'FK → service_packages.id',
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `status` enum('active','expired') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_user_active` (`user_id`,`status`),
+  KEY `idx_us_user_id` (`user_id`),
+  KEY `idx_us_package_id` (`package_id`),
+  KEY `idx_us_status` (`status`),
+  CONSTRAINT `us_fk_package` FOREIGN KEY (`package_id`) REFERENCES `service_packages` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `us_fk_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table threegym.user_services: ~1 rows (approximately)
+INSERT INTO `user_services` (`id`, `user_id`, `package_id`, `start_date`, `end_date`, `status`, `created_at`) VALUES
+	(36, 2, 2, '2026-04-23', '2026-05-23', 'active', '2026-04-23 11:23:01');
 
 -- Dumping structure for table threegym.wishlists
 CREATE TABLE IF NOT EXISTS `wishlists` (
@@ -173,9 +224,9 @@ CREATE TABLE IF NOT EXISTS `wishlists` (
   KEY `idx_added_at` (`added_at`),
   CONSTRAINT `fk_wishlists_account` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_wishlists_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.wishlists: ~12 rows (approximately)
+-- Dumping data for table threegym.wishlists: ~23 rows (approximately)
 INSERT INTO `wishlists` (`id`, `account_id`, `product_id`, `quantity`, `added_at`, `updated_at`) VALUES
 	(11, 1, 1, 19, '2026-04-18 13:11:52', '2026-04-22 02:30:00'),
 	(12, 1, 2, 26, '2026-04-18 13:11:52', '2026-04-22 02:28:44'),
@@ -197,9 +248,9 @@ INSERT INTO `wishlists` (`id`, `account_id`, `product_id`, `quantity`, `added_at
 	(29, 1, 12, 1, '2026-04-22 02:09:54', '2026-04-22 02:09:54'),
 	(30, 1, 11, 1, '2026-04-22 02:09:54', '2026-04-22 02:09:54'),
 	(31, 1, 16, 7, '2026-04-22 02:10:01', '2026-04-22 02:10:35'),
-	(74, 2, 2, 1, '2026-04-22 06:34:31', '2026-04-22 06:34:31'),
-	(75, 2, 3, 1, '2026-04-22 06:34:31', '2026-04-22 06:34:31'),
-	(76, 2, 1, 1, '2026-04-22 06:34:32', '2026-04-22 06:34:32');
+	(139, 2, 1, 1, '2026-04-23 07:03:03', '2026-04-23 07:03:03'),
+	(140, 2, 2, 1, '2026-04-23 07:03:04', '2026-04-23 07:03:04'),
+	(141, 2, 3, 1, '2026-04-23 07:03:04', '2026-04-23 07:03:04');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

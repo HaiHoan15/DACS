@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ConfirmDialog from "../../../../../components/ConfirmDialog";
 import Notification from "../../../../../components/Notification";
-import api from "../../../../../API/api";
+import api, { apiGateway } from "../../../../../API/api";
 
 export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymentSuccess }) {
   const navigate = useNavigate();
@@ -40,18 +40,17 @@ export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymen
       if (pendingId) {
         console.log("🗑️ UserPay component unmounting with pending order, cleaning up:", pendingId);
         // Use fetch with keepalive to ensure request completes even if page unloads
-        fetch("http://localhost/backend/controllers/OrderController.php?action=delete", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ orderId: parseInt(pendingId) }),
-          keepalive: true
-        }).then(() => {
+        api.post(
+          "OrderController.php",
+          { orderId: parseInt(pendingId) },
+          { params: { action: "delete" }, timeout: 5000 }
+        ).then(() => {
           sessionStorage.removeItem("pendingMomoOrderId");
         }).catch(err => {
           console.error("❌ Error in cleanup on unmount:", err);
         });
       }
-    };
+    }; 
   }, []);
 
   // Handle modal close - delete pending order if not completed
@@ -118,23 +117,16 @@ export default function UserPay({ isOpen, onClose, cartItems, userInfo, onPaymen
 
     // Nếu chọn MoMo
     if (formData.payment_method === "momo") {
-
-      const res = await fetch("http://localhost/backend/api/momo.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const response = await apiGateway.post("momo.php", {
         amount: totalAmount,
         userId: user?.id,
         cartItems: cartItems,
         address: formData.recipient_address,
         phone: formData.recipient_phone,
         name: formData.recipient_name
-        }),
       });
 
-      const data = await res.json();
+      const data = response.data;
 
       console.log("MoMo:", data);
 
