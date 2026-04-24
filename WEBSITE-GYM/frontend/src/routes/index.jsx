@@ -27,6 +27,9 @@ import UserPage from "../pages/Home/UserPage";
 import PaymentCallback from "../pages/Home/UserPage/PaymentCallback";
 import ServicePaymentCallback from "../pages/Home/ServicePage/PaymentCallback";
 
+//trang giỏ hàng
+import WishlistPage from "../pages/Home/WishlistPage";
+
 //trang quản lý
 import Admin from "../pages/Admin";
 import AdminPage from "../pages/Admin/AdminPage";
@@ -50,6 +53,18 @@ import OrderDetail from "../pages/Admin/OrderManagement/dashboard/detail";
 
 //trang quản lý dịch vụ
 import ServiceManagement from "../pages/Admin/ServiceManagement";
+
+//trang quản lý kho
+import WarehouseManagement from "../pages/Admin/WarehouseManagement";
+import AddWarehouseItem from "../pages/Admin/WarehouseManagement/dashboard/add";
+import EditWarehouseItem from "../pages/Admin/WarehouseManagement/dashboard/edit";
+import WarehouseDetail from "../pages/Admin/WarehouseManagement/dashboard/detail";
+
+//trang quản lý phòng tập
+import RoomManagement from "../pages/Admin/RoomManagement";
+import AddRoom from "../pages/Admin/RoomManagement/dashboard/add";
+import EditRoom from "../pages/Admin/RoomManagement/dashboard/edit";
+import RoomDetail from "../pages/Admin/RoomManagement/dashboard/detail";
 
 const routes = [
     {
@@ -111,6 +126,10 @@ const routes = [
             {
                 path: "service-payment-callback",
                 element: ServicePaymentCallback,
+            },
+            {
+                path: "wishlist",
+                element: ProtectedUserRouteWrapper(WishlistPage),
             },
             {
                 path: "test",
@@ -176,6 +195,39 @@ const routes = [
                 path: "ServiceManagement",
                 element: ServiceManagement,
             },
+            {
+                path: "WarehouseManagement",
+                element: WarehouseManagement,
+            },
+            {
+                path: "WarehouseManagement/dashboard/add",
+                element: AddWarehouseItem,
+            },
+            {
+                path: "WarehouseManagement/dashboard/edit/:itemId",
+                element: EditWarehouseItem,
+            },
+            {
+                path: "WarehouseManagement/dashboard/detail/:itemId",
+                element: WarehouseDetail,
+            },
+            {
+                path: "RoomManagement",
+                element: RoomManagement,
+            },
+            {
+                path: "RoomManagement/dashboard/add",
+                element: AddRoom,
+            },
+            {
+                path: "RoomManagement/dashboard/edit/:roomId",
+                element: EditRoom,
+            },
+            {
+                path: "RoomManagement/dashboard/detail/:roomId",
+                element: RoomDetail,
+            },
+
         ],
     },
     // {

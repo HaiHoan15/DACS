@@ -6,11 +6,12 @@ import LoginButton from "../../../../components/LoginButton";
 import AdminDropdown from "../AdminDropdown";
 
 const navItems = [
-    { label: "Trang chủ", path: "/admin" },
     { label: "Người dùng", path: "/admin/UserManagement" },
     { label: "Sản phẩm", path: "/admin/ProductManagement" },
     { label: "Đơn hàng", path: "/admin/OrderManagement" },
     { label: "Dịch vụ", path: "/admin/ServiceManagement" },
+    { label: "Kho", path: "/admin/WarehouseManagement" },
+    { label: "Phòng", path: "/admin/RoomManagement" },
 ];
 
 const Header = () => {

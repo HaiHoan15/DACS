@@ -171,6 +171,53 @@ INSERT INTO `product_categories` (`id`, `name`, `created_at`, `updated_at`) VALU
 	(2, 'Phụ kiện', '2026-03-25 04:46:19', '2026-04-08 08:29:13'),
 	(3, 'Bổ sung', '2026-03-25 04:46:19', '2026-04-08 08:29:25');
 
+-- Dumping structure for table threegym.rooms
+CREATE TABLE IF NOT EXISTS `rooms` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table threegym.rooms: ~4 rows (approximately)
+INSERT INTO `rooms` (`id`, `name`, `description`, `avatar`, `created_at`, `updated_at`) VALUES
+	(1, 'Phòng Cardio', 'ở trời', '', '2026-04-24 02:00:00', '2026-04-24 02:20:04'),
+	(2, 'Phòng Free Weight', 'tphcm', '', '2026-04-24 02:05:00', '2026-04-24 02:19:50'),
+	(3, 'Phòng Functional', 'ggg 1234', '', '2026-04-24 02:10:00', '2026-04-24 02:24:19'),
+	(4, 'bter', 'feefww', '', '2026-04-24 01:59:36', '2026-04-24 02:20:11');
+
+-- Dumping structure for table threegym.room_equipments
+CREATE TABLE IF NOT EXISTS `room_equipments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `room_id` int NOT NULL,
+  `warehouse_item_id` int NOT NULL,
+  `quantity` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_room_item` (`room_id`,`warehouse_item_id`),
+  KEY `idx_room_item_room` (`room_id`),
+  KEY `idx_room_item_warehouse` (`warehouse_item_id`),
+  CONSTRAINT `fk_room_equipments_room` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_room_equipments_warehouse_item` FOREIGN KEY (`warehouse_item_id`) REFERENCES `warehouse_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table threegym.room_equipments: ~10 rows (approximately)
+INSERT INTO `room_equipments` (`id`, `room_id`, `warehouse_item_id`, `quantity`, `created_at`, `updated_at`) VALUES
+	(19, 2, 2, 4, '2026-04-24 02:19:50', '2026-04-24 02:21:13'),
+	(20, 2, 1, 6, '2026-04-24 02:19:50', '2026-04-24 02:21:17'),
+	(21, 2, 4, 2, '2026-04-24 02:19:50', '2026-04-24 02:21:04'),
+	(22, 1, 5, 2, '2026-04-24 02:20:04', '2026-04-24 02:21:00'),
+	(23, 1, 3, 2, '2026-04-24 02:20:04', '2026-04-24 02:21:08'),
+	(24, 4, 1, 1, '2026-04-24 02:20:11', '2026-04-24 02:21:17'),
+	(35, 3, 1, 5, '2026-04-24 02:24:19', '2026-04-24 02:24:19'),
+	(36, 3, 4, 1, '2026-04-24 02:24:19', '2026-04-24 02:24:19'),
+	(37, 3, 5, 8, '2026-04-24 02:24:19', '2026-04-24 02:24:19'),
+	(38, 3, 3, 3, '2026-04-24 02:24:19', '2026-04-24 02:24:19');
+
 -- Dumping structure for table threegym.service_packages
 CREATE TABLE IF NOT EXISTS `service_packages` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -203,11 +250,34 @@ CREATE TABLE IF NOT EXISTS `user_services` (
   KEY `idx_us_status` (`status`),
   CONSTRAINT `us_fk_package` FOREIGN KEY (`package_id`) REFERENCES `service_packages` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `us_fk_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.user_services: ~0 rows (approximately)
+-- Dumping data for table threegym.user_services: ~1 rows (approximately)
 INSERT INTO `user_services` (`id`, `user_id`, `package_id`, `start_date`, `end_date`, `status`, `created_at`) VALUES
-	(56, 2, 3, '2026-04-23', '2026-05-23', 'active', '2026-04-23 17:40:30');
+	(59, 2, 1, '2026-04-24', '2026-05-24', 'active', '2026-04-24 02:33:03');
+
+-- Dumping structure for table threegym.warehouse_items
+CREATE TABLE IF NOT EXISTS `warehouse_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `quantity` int NOT NULL DEFAULT '0',
+  `status` enum('available','out_of_stock','maintenance') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'available',
+  `location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_warehouse_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table threegym.warehouse_items: ~5 rows (approximately)
+INSERT INTO `warehouse_items` (`id`, `name`, `description`, `quantity`, `status`, `location`, `avatar`, `created_at`, `updated_at`) VALUES
+	(1, 'Dumbbell Rack', 'Kệ đựng tạ tay khu free-weight', 16, 'available', 'Khu tạ tay', NULL, '2026-04-24 01:00:00', '2026-04-24 02:21:17'),
+	(2, 'Barbell 20kg', 'Thanh đòn tiêu chuẩn Olympic', 11, 'available', 'Khu squat', NULL, '2026-04-24 01:01:00', '2026-04-24 02:21:13'),
+	(3, 'Treadmill', 'Máy chạy bộ điện', 5, 'maintenance', 'Khu cardio', NULL, '2026-04-24 01:02:00', '2026-04-24 02:21:08'),
+	(4, 'Kettlebell 12kg', 'Tạ ấm dùng tập functional', 7, 'out_of_stock', 'Kho tầng 1', NULL, '2026-04-24 01:03:00', '2026-04-24 02:21:04'),
+	(5, 'Resistance Bands Set', 'Bộ dây kháng lực đa mức gg', 14, 'out_of_stock', 'Khu lớp nhóm', '', '2026-04-24 01:04:00', '2026-04-24 02:21:00');
 
 -- Dumping structure for table threegym.wishlists
 CREATE TABLE IF NOT EXISTS `wishlists` (
