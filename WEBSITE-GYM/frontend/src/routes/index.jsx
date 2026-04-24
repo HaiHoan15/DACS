@@ -48,6 +48,9 @@ import ProductDetail from "../pages/Admin/ProductManagement/Product/dashboard/de
 import OrderManagement from "../pages/Admin/OrderManagement";
 import OrderDetail from "../pages/Admin/OrderManagement/dashboard/detail";
 
+//trang quản lý dịch vụ
+import ServiceManagement from "../pages/Admin/ServiceManagement";
+
 const routes = [
     {
         path: "/",
@@ -112,7 +115,7 @@ const routes = [
             {
                 path: "test",
                 element: TEST,
-            }
+            },
 
         ],
     },
@@ -168,6 +171,10 @@ const routes = [
             {
                 path: "OrderManagement/dashboard/detail/:orderId",
                 element: OrderDetail,
+            },
+            {
+                path: "ServiceManagement",
+                element: ServiceManagement,
             },
         ],
     },

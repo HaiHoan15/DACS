@@ -1,9 +1,12 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import LoginButton from "../../../../components/LoginButton";
 import UserDropdown from "../UserDropdown";
+import api from "../../../../API/api";
+
+const PACKAGE_LABEL = { 1: "Member", 2: "Pro", 3: "VIP" };
 
 const navItems = [
     { label: "Trang chủ", path: "/" },
@@ -19,6 +22,20 @@ const Header = () => {
     const location = useLocation();
     const defaultUserImage = "/images/error/user.png";
     const [timestamp] = useState(() => Date.now());
+    const [memberLabel, setMemberLabel] = useState(null);
+
+    useEffect(() => {
+        if (!user?.id) return;
+        api.get("ServiceController.php", { params: { action: "getUserService", userId: user.id } })
+            .then((res) => {
+                if (res.data?.success && res.data.service) {
+                    setMemberLabel(PACKAGE_LABEL[res.data.service.package_id] ?? null);
+                } else {
+                    setMemberLabel(null);
+                }
+            })
+            .catch(() => setMemberLabel(null));
+    }, [user?.id]);
 
     const getAvatarUrl = () => {
         if (user?.avatarUrl) {
@@ -34,7 +51,7 @@ const Header = () => {
     const userImageSrc = getAvatarUrl();
     // Admin redirect vào /admin, user redirect vào /user
     const profilePath = user?.role === "admin" ? "/admin" : "/user";
-    const isProfileRouteActive = user?.role === "admin" 
+    const isProfileRouteActive = user?.role === "admin"
         ? location.pathname.startsWith("/admin")
         : location.pathname.startsWith("/user");
 
@@ -127,6 +144,11 @@ const Header = () => {
                                 >
                                     {user.username}
                                 </span>
+                                {memberLabel && (
+                                    <span className="text-xs font-semibold opacity-80 shrink-0">
+                                        ({memberLabel})
+                                    </span>
+                                )}
                             </NavLink>
 
                             {/* nút giỏ hàng */}

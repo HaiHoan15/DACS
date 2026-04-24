@@ -10,6 +10,7 @@ const navItems = [
     { label: "Người dùng", path: "/admin/UserManagement" },
     { label: "Sản phẩm", path: "/admin/ProductManagement" },
     { label: "Đơn hàng", path: "/admin/OrderManagement" },
+    { label: "Dịch vụ", path: "/admin/ServiceManagement" },
 ];
 
 const Header = () => {

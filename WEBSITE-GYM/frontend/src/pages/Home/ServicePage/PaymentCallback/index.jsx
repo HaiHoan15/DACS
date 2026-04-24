@@ -10,6 +10,8 @@ export default function ServicePaymentCallback() {
   const [messageType, setMessageType] = useState("loading"); // loading | success | error | warning
 
   useEffect(() => {
+    let mounted = true;
+
     const handleCallback = async () => {
       try {
         const query      = new URLSearchParams(location.search);
@@ -18,10 +20,12 @@ export default function ServicePaymentCallback() {
         const packageId  = query.get("packageId") || sessionStorage.getItem("pendingMomoPackageId");
 
         if (!userId || !packageId) {
-          setMessage("Không tìm thấy thông tin đăng ký dịch vụ.");
-          setMessageType("error");
-          setLoading(false);
-          setTimeout(() => navigate("/service"), 2500);
+          if (mounted) {
+            setMessage("Không tìm thấy thông tin đăng ký dịch vụ.");
+            setMessageType("error");
+            setLoading(false);
+          }
+          setTimeout(() => { if (mounted) navigate("/service"); }, 2500);
           return;
         }
 
@@ -33,30 +37,38 @@ export default function ServicePaymentCallback() {
             { params: { action: "createActive" } }
           );
 
-          if (res.data?.success) {
-            setMessage("Đăng ký thành công! Gói dịch vụ của bạn đã được kích hoạt.");
-            setMessageType("success");
-          } else {
-            setMessage("Thanh toán xong nhưng không thể kích hoạt gói. Vui lòng liên hệ hỗ trợ.");
-            setMessageType("warning");
+          if (mounted) {
+            if (res.data?.success) {
+              setMessage("Đăng ký thành công! Gói dịch vụ của bạn đã được kích hoạt.");
+              setMessageType("success");
+            } else {
+              setMessage("Thanh toán xong nhưng không thể kích hoạt gói. Vui lòng liên hệ hỗ trợ.");
+              setMessageType("warning");
+            }
           }
         } else {
           // Hủy hoặc lỗi → không ghi DB gì cả
-          setMessage("Thanh toán bị hủy. Gói dịch vụ chưa được đăng ký.");
+          if (mounted) {
+            setMessage("Thanh toán bị hủy. Gói dịch vụ chưa được đăng ký.");
+            setMessageType("error");
+          }
+        }
+      } catch (err) {
+        console.error("ServicePaymentCallback error:", err);
+        if (mounted) {
+          setMessage("Lỗi xử lý. Vui lòng thử lại sau.");
           setMessageType("error");
         }
-      } catch {
-        setMessage("Lỗi xử lý. Vui lòng thử lại sau.");
-        setMessageType("error");
       } finally {
         sessionStorage.removeItem("pendingMomoUserId");
         sessionStorage.removeItem("pendingMomoPackageId");
-        setLoading(false);
-        setTimeout(() => navigate("/service"), 2500);
+        if (mounted) setLoading(false);
+        setTimeout(() => { if (mounted) navigate("/service"); }, 2500);
       }
     };
 
     handleCallback();
+    return () => { mounted = false; };
   }, [location, navigate]);
 
   // ─── Styles (inline, mirrors the order PaymentCallback) ───────────────────

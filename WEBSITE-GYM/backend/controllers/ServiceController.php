@@ -28,6 +28,10 @@ try {
         case 'getPackages':    getPackages();    break;
         case 'getUserService': getUserService(); break;
         case 'createActive':   createActive();   break;
+        case 'getAll':               getAll();               break;
+        case 'updateService':        updateService();        break;
+        case 'getUsersWithoutService': getUsersWithoutService(); break;
+        case 'deleteService':           deleteService();           break;
         default:
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid action']);
@@ -82,4 +86,53 @@ function createActive() {
 
     $newId = $serviceModel->createActive($userId, $packageId, (int)$package['duration_days']);
     echo json_encode(['success' => (bool)$newId]);
+}
+
+function getUsersWithoutService() {
+    global $serviceModel;
+    $users = $serviceModel->getUsersWithoutService();
+    echo json_encode(['success' => true, 'users' => $users]);
+}
+
+function deleteService() {
+    global $serviceModel;
+    $data   = json_decode(file_get_contents('php://input'), true) ?? [];
+    $userId = isset($data['userId']) ? (int)$data['userId'] : 0;
+    if (!$userId) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Thiếu userId']);
+        return;
+    }
+    $rows = $serviceModel->deleteUserService($userId);
+    echo json_encode(['success' => true, 'deleted' => $rows]);
+}
+
+function getAll() {
+    global $serviceModel;
+    $services = $serviceModel->getAllForAdmin();
+    echo json_encode(['success' => true, 'services' => $services]);
+}
+
+function updateService() {
+    global $serviceModel;
+
+    $data = json_decode(file_get_contents("php://input"), true) ?? [];
+    $userServiceId = isset($data['userServiceId']) ? (int)$data['userServiceId'] : 0;
+    $packageId = isset($data['packageId']) ? (int)$data['packageId'] : null;
+    $status = isset($data['status']) ? trim((string)$data['status']) : null;
+
+    if (!$userServiceId) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Thiếu userServiceId']);
+        return;
+    }
+
+    if ($packageId === null && $status === null) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Thiếu dữ liệu cập nhật']);
+        return;
+    }
+
+    [$ok, $message] = $serviceModel->updateService($userServiceId, $packageId, $status);
+    echo json_encode(['success' => $ok, 'message' => $message]);
 }

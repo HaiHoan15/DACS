@@ -67,14 +67,14 @@ INSERT INTO `orders` (`id`, `account_id`, `total_amount`, `status`, `payment_met
 	(3, 2, 2800000.00, 'cancelled', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 03:44:03', '2026-04-22 04:02:17'),
 	(15, 2, 11900000.00, 'pending', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 04:57:55', '2026-04-22 04:57:55'),
 	(22, 2, 400000.00, 'confirmed', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 05:04:44', '2026-04-22 05:46:25'),
-	(23, 2, 10000.00, 'confirmed', 'momo', 'Test', '0901234567', 'HN', '', '2026-04-22 06:29:21', '2026-04-22 06:35:00'),
+	(23, 2, 10000.00, 'delivered', 'momo', 'Test', '0901234567', 'HN', '', '2026-04-22 06:29:21', '2026-04-23 15:50:42'),
 	(24, 2, 1000000.00, 'delivered', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 06:30:17', '2026-04-22 06:35:02'),
 	(25, 2, 400000.00, 'delivered', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 06:33:38', '2026-04-22 06:35:04'),
 	(53, 2, 600000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 10:31:15', '2026-04-22 10:31:37'),
-	(62, 2, 250000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 11:01:16', '2026-04-22 11:02:02'),
-	(67, 2, 4450000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 11:09:25', '2026-04-22 11:09:52'),
+	(62, 2, 250000.00, 'cancelled', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 11:01:16', '2026-04-23 15:50:44'),
+	(67, 2, 4450000.00, 'shipped', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 11:09:25', '2026-04-23 15:50:35'),
 	(71, 2, 600000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-23 06:46:18', '2026-04-23 06:46:41'),
-	(75, 2, 300000.00, 'confirmed', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-23 06:50:18', '2026-04-23 06:50:40'),
+	(75, 2, 300000.00, 'shipped', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-23 06:50:18', '2026-04-23 15:50:32'),
 	(78, 2, 150000.00, 'pending', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-23 07:02:31', '2026-04-23 07:02:31');
 
 -- Dumping structure for table threegym.order_items
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.product_categories: ~3 rows (approximately)
+-- Dumping data for table threegym.product_categories: ~4 rows (approximately)
 INSERT INTO `product_categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
 	(1, 'Thiết bị', '2026-03-25 04:46:19', '2026-04-08 08:28:54'),
 	(2, 'Phụ kiện', '2026-03-25 04:46:19', '2026-04-08 08:29:13'),
@@ -203,11 +203,11 @@ CREATE TABLE IF NOT EXISTS `user_services` (
   KEY `idx_us_status` (`status`),
   CONSTRAINT `us_fk_package` FOREIGN KEY (`package_id`) REFERENCES `service_packages` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `us_fk_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.user_services: ~1 rows (approximately)
+-- Dumping data for table threegym.user_services: ~0 rows (approximately)
 INSERT INTO `user_services` (`id`, `user_id`, `package_id`, `start_date`, `end_date`, `status`, `created_at`) VALUES
-	(36, 2, 2, '2026-04-23', '2026-05-23', 'active', '2026-04-23 11:23:01');
+	(56, 2, 3, '2026-04-23', '2026-05-23', 'active', '2026-04-23 17:40:30');
 
 -- Dumping structure for table threegym.wishlists
 CREATE TABLE IF NOT EXISTS `wishlists` (
