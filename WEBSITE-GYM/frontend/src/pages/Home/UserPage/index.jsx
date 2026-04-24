@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Notification from "../../../components/Notification";
 import UserProfile from "./UserProfile";
@@ -9,6 +9,7 @@ import UserOrder from "./UserOrder";
 import UserAI from "./UserAI";
 import UserRoom from "./UserRoom";
 import UserClass from "./UserClass";
+import UserDashboard from "./UserDashboard";
 import api from "../../../API/api";
 
 // Mức gói tối thiểu để mở tab
@@ -77,6 +78,7 @@ function LockedOverlay({ tab }) {
 
 export default function UserPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const user = useSelector((state) => state.auth.user);
 
@@ -104,14 +106,33 @@ export default function UserPage() {
     return (activePackageId ?? 0) < required;
   }
   
-  // Initialize activeTab từ query parameter, hoặc mặc định là "info"
+  const userBasePath = `/user/${(user?.username || "")
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9\s-]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")}`;
+
+  // Tabs chỉ dành cho trang Tài khoản
   const [activeTab, setActiveTab] = useState(() => {
     const tabFromUrl = searchParams.get("tab");
-    if (tabFromUrl && ["info", "password", "wishlist", "order", "room", "class", "ai"].includes(tabFromUrl)) {
+    if (tabFromUrl && ["info", "password"].includes(tabFromUrl)) {
       return tabFromUrl;
     }
     return "info";
   });
+
+  const section = (() => {
+    if (location.pathname === `${userBasePath}/wishlist`) return "wishlist";
+    if (location.pathname === `${userBasePath}/orders`) return "order";
+    if (location.pathname === `${userBasePath}/room`) return "room";
+    if (location.pathname === `${userBasePath}/class`) return "class";
+    if (location.pathname === `${userBasePath}/ai`) return "ai";
+    return "account";
+  })();
 
   // Check user - redirect nếu không có user
   useEffect(() => {
@@ -125,7 +146,7 @@ export default function UserPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8 px-4">
+    <div className="min-h-screen bg-gray-900">
       {/* Hiển thị thông báo nếu có */}
       {notification && (
         <Notification
@@ -135,17 +156,28 @@ export default function UserPage() {
         />
       )}
 
-      <div className="max-w-4xl mx-auto">
+      <div className="flex">
+        <UserDashboard />
+
+        <div className="flex-1 py-8 px-4">
+          <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
             <span className="text-red-500">QUẢN LÝ</span>
             <span className="text-yellow-500 ml-2">TÀI KHOẢN</span>
           </h1>
-          <p className="text-gray-400">Cập nhật thông tin cá nhân của bạn</p>
+          <p className="text-gray-400">
+            {section === "account" && "Cập nhật thông tin cá nhân của bạn"}
+            {section === "wishlist" && "Quản lý giỏ hàng của bạn"}
+            {section === "order" && "Theo dõi lịch sử đơn hàng"}
+            {section === "room" && "Khám phá danh sách phòng tập"}
+            {section === "class" && "Theo dõi thông tin lớp học"}
+            {section === "ai" && "Trợ lý AI sức khỏe của bạn"}
+          </p>
         </div>
 
-        {/* Tab Navigation */}
+        {section === "account" && (
         <div className="flex gap-2 mb-6 border-b border-gray-700">
           <button
             onClick={() => setActiveTab("info")}
@@ -165,91 +197,39 @@ export default function UserPage() {
           >
             Đổi mật khẩu
           </button>
-          <button
-            onClick={() => setActiveTab("wishlist")}
-            className={`px-6 py-3 font-medium transition border-b-2 ${activeTab === "wishlist"
-              ? "text-red-500 border-red-500"
-              : "text-gray-400 border-transparent hover:text-gray-300"
-              }`}
-          >
-            Giỏ hàng
-          </button>
-          <button
-            onClick={() => setActiveTab("order")}
-            className={`px-6 py-3 font-medium transition border-b-2 ${activeTab === "order"
-              ? "text-red-500 border-red-500"
-              : "text-gray-400 border-transparent hover:text-gray-300"
-              }`}
-          >
-            Lịch sử đơn hàng
-          </button>
-          <button
-            onClick={() => setActiveTab("room")}
-            className={`px-6 py-3 font-medium transition border-b-2 flex items-center gap-1
-              ${isLocked("room") ? "opacity-40" : ""}
-              ${activeTab === "room"
-                ? "text-red-500 border-red-500"
-                : "text-gray-400 border-transparent hover:text-gray-300"}
-            `}
-          >
-            {isLocked("room") && <span className="text-xs">🔒</span>}
-            Phòng tập
-          </button>
-          <button
-            onClick={() => setActiveTab("class")}
-            className={`px-6 py-3 font-medium transition border-b-2 flex items-center gap-1
-              ${isLocked("class") ? "opacity-40" : ""}
-              ${activeTab === "class"
-                ? "text-red-500 border-red-500"
-                : "text-gray-400 border-transparent hover:text-gray-300"}
-            `}
-          >
-            {isLocked("class") && <span className="text-xs">🔒</span>}
-            Lớp học
-          </button>
-          <button
-            onClick={() => setActiveTab("ai")}
-            className={`px-6 py-3 font-medium transition border-b-2 flex items-center gap-1
-              ${isLocked("ai") ? "opacity-40" : ""}
-              ${activeTab === "ai"
-                ? "text-red-500 border-red-500"
-                : "text-gray-400 border-transparent hover:text-gray-300"}
-            `}
-          >
-            {isLocked("ai") && <span className="text-xs">🔒</span>}
-            AI sức khỏe
-          </button>
         </div>
+        )}
 
-        {/* Tab Content */}
-        {activeTab === "info" && (
+        {section === "account" && activeTab === "info" && (
           <UserProfile user={user} onNotification={setNotification} />
         )}
 
-        {activeTab === "password" && (
+        {section === "account" && activeTab === "password" && (
           <UserPassword user={user} onNotification={setNotification} />
         )}
 
-        {activeTab === "wishlist" && (
+        {section === "wishlist" && (
           <UserWishlist user={user} />
         )}
 
-        {activeTab === "order" && (
+        {section === "order" && (
           <UserOrder />
         )}
 
-        {activeTab === "room" && (
+        {section === "room" && (
           isLocked("room") ? <LockedOverlay tab="room" /> : <UserRoom />
         )}
 
-        {activeTab === "class" && (
+        {section === "class" && (
           isLocked("class") ? <LockedOverlay tab="class" /> : <UserClass />
         )}
 
-        {activeTab === "ai" && (
+        {section === "ai" && (
           isLocked("ai") ? <LockedOverlay tab="ai" /> : <UserAI />
         )}
 
+          </div>
+        </div>
       </div>
     </div>
   );

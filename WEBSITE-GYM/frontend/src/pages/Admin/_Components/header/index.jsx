@@ -12,6 +12,7 @@ const navItems = [
     { label: "Dịch vụ", path: "/admin/ServiceManagement" },
     { label: "Kho", path: "/admin/WarehouseManagement" },
     { label: "Phòng", path: "/admin/RoomManagement" },
+    { label: "Xác nhận", path: "/admin/MemberConfirmationManagement" },
 ];
 
 const Header = () => {
@@ -65,7 +66,7 @@ const Header = () => {
 
                 {/* Menu */}
                 <nav className="
-                    hidden md:flex items-center gap-8 text-lg font-medium
+                    hidden md:flex items-center gap-5 text-lg font-medium
                     absolute left-1/2 -translate-x-1/2
                 ">
                     {navItems.map((item) => (

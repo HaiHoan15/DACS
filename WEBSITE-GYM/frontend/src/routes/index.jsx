@@ -27,8 +27,20 @@ import UserPage from "../pages/Home/UserPage";
 import PaymentCallback from "../pages/Home/UserPage/PaymentCallback";
 import ServicePaymentCallback from "../pages/Home/ServicePage/PaymentCallback";
 
-//trang giỏ hàng
-import WishlistPage from "../pages/Home/WishlistPage";
+//trang giỏ hàng người dùng
+import UserWishlist from "../pages/Home/UserPage/UserWishlist";
+
+//trang đơn hàng người dùng
+import UserOrder from "../pages/Home/UserPage/UserOrder";
+
+//trang phòng tập người dùng
+import UserRoom from "../pages/Home/UserPage/UserRoom";
+
+//trang lớp học người dùng
+import UserClass from "../pages/Home/UserPage/UserClass";
+
+//trang AI người dùng
+import UserAI from "../pages/Home/UserPage/UserAI";
 
 //trang quản lý
 import Admin from "../pages/Admin";
@@ -65,6 +77,9 @@ import RoomManagement from "../pages/Admin/RoomManagement";
 import AddRoom from "../pages/Admin/RoomManagement/dashboard/add";
 import EditRoom from "../pages/Admin/RoomManagement/dashboard/edit";
 import RoomDetail from "../pages/Admin/RoomManagement/dashboard/detail";
+
+//trang xác nhận thành viên
+import MemberConfirmationManagement from "../pages/Admin/MemberConfirmationManagement";
 
 const routes = [
     {
@@ -128,8 +143,24 @@ const routes = [
                 element: ServicePaymentCallback,
             },
             {
-                path: "wishlist",
-                element: ProtectedUserRouteWrapper(WishlistPage),
+                path: "user/:username/wishlist",
+                element: ProtectedUserRouteWrapper(UserPage),
+            },
+            {
+                path: "user/:username/orders",
+                element: ProtectedUserRouteWrapper(UserPage),
+            },
+            {
+                path: "user/:username/room",
+                element: ProtectedUserRouteWrapper(UserPage),
+            },
+            {
+                path: "user/:username/class",
+                element: ProtectedUserRouteWrapper(UserPage),
+            },
+            {
+                path: "user/:username/ai",
+                element: ProtectedUserRouteWrapper(UserPage),
             },
             {
                 path: "test",
@@ -226,6 +257,10 @@ const routes = [
             {
                 path: "RoomManagement/dashboard/detail/:roomId",
                 element: RoomDetail,
+            },
+            {
+                path: "MemberConfirmationManagement",
+                element: MemberConfirmationManagement,
             },
 
         ],

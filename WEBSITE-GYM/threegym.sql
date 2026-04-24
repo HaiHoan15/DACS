@@ -41,6 +41,28 @@ INSERT INTO `accounts` (`id`, `username`, `email`, `password`, `avatar`, `addres
 	(4, '0448_Nguyễn Hải Hoàng', 'haihoang15122002@gmail.com', '$2y$10$x4ZjIEqhoiHWr8.eGZUjO.7QNnuoE1YKjdx9PwOvOFe7pnMwMMH76', NULL, '', '', 'user', '2026-03-21 07:02:13'),
 	(5, 'HaiHoan15', 'haihoantamquoc@gmail.com', '$2y$10$DaIWa6VZV1gZ5xGtRZoXneFuwanhafy8T9iHO02sCsM0sf9dD8yLW', 'avatar_5_1774414858.gif', 'srgefwe', '53323423', 'user', '2026-03-24 13:59:39');
 
+-- Dumping structure for table threegym.member_confirmations
+CREATE TABLE IF NOT EXISTS `member_confirmations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `username` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `room_id` int DEFAULT NULL,
+  `room_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `confirmation_code` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `confirmed_by_admin_id` int DEFAULT NULL,
+  `confirmed_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_confirmation_code` (`confirmation_code`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_room_id` (`room_id`),
+  KEY `idx_confirmed_at` (`confirmed_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table threegym.member_confirmations: ~0 rows (approximately)
+INSERT INTO `member_confirmations` (`id`, `user_id`, `username`, `email`, `room_id`, `room_name`, `confirmation_code`, `confirmed_by_admin_id`, `confirmed_at`) VALUES
+	(1, 2, 'user01', 'user@threegym.com', 1, 'Phòng Cardio', 'MEM-1-883059-3972', 1, '2026-04-24 04:28:33');
+
 -- Dumping structure for table threegym.orders
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -252,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `user_services` (
   CONSTRAINT `us_fk_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.user_services: ~1 rows (approximately)
+-- Dumping data for table threegym.user_services: ~0 rows (approximately)
 INSERT INTO `user_services` (`id`, `user_id`, `package_id`, `start_date`, `end_date`, `status`, `created_at`) VALUES
 	(59, 2, 1, '2026-04-24', '2026-05-24', 'active', '2026-04-24 02:33:03');
 
@@ -294,7 +316,7 @@ CREATE TABLE IF NOT EXISTS `wishlists` (
   KEY `idx_added_at` (`added_at`),
   CONSTRAINT `fk_wishlists_account` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_wishlists_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table threegym.wishlists: ~23 rows (approximately)
 INSERT INTO `wishlists` (`id`, `account_id`, `product_id`, `quantity`, `added_at`, `updated_at`) VALUES
@@ -320,7 +342,10 @@ INSERT INTO `wishlists` (`id`, `account_id`, `product_id`, `quantity`, `added_at
 	(31, 1, 16, 7, '2026-04-22 02:10:01', '2026-04-22 02:10:35'),
 	(139, 2, 1, 1, '2026-04-23 07:03:03', '2026-04-23 07:03:03'),
 	(140, 2, 2, 1, '2026-04-23 07:03:04', '2026-04-23 07:03:04'),
-	(141, 2, 3, 1, '2026-04-23 07:03:04', '2026-04-23 07:03:04');
+	(141, 2, 3, 1, '2026-04-23 07:03:04', '2026-04-23 07:03:04'),
+	(142, 2, 16, 1, '2026-04-24 02:54:34', '2026-04-24 02:54:34'),
+	(143, 2, 17, 1, '2026-04-24 02:54:34', '2026-04-24 02:54:34'),
+	(144, 2, 12, 1, '2026-04-24 02:54:37', '2026-04-24 02:54:37');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
