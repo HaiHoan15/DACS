@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../../../redux/authSlice";
 
 function toSlug(s) {
 	return (s || "")
@@ -17,7 +18,14 @@ function toSlug(s) {
 export default function UserDashboard() {
 	const user = useSelector((state) => state.auth.user);
 	const location = useLocation();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [isCollapsed, setIsCollapsed] = useState(false);
+
+	const handleLogout = () => {
+		dispatch(logout());
+		navigate("/");
+	};
 	const userSlug = toSlug(user?.username || "");
 	const basePath = userSlug ? `/user/${userSlug}` : "/user";
 
@@ -82,16 +90,35 @@ export default function UserDashboard() {
 				<nav className="p-3 space-y-1 flex-1 overflow-y-auto">
 					{menuItems.map((item) => {
 						const isActive = item.href !== "#" && location.pathname === item.href;
+						if (item.key === "logout") {
+							return (
+							<button
+								key={item.key}
+								type="button"
+								onClick={handleLogout}
+								className="group flex items-center w-full rounded-lg px-3 py-2.5 transition-all duration-200 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+							>
+								<span className="w-7 h-7 flex items-center justify-center rounded-md bg-gray-800 text-xs font-bold text-gray-300 group-hover:bg-gray-700 transition-colors">
+									{item.label.slice(0, 1)}
+								</span>
+								<span
+									className={`ml-3 whitespace-nowrap transition-all duration-300 overflow-hidden ${
+										isCollapsed ? "max-w-0 opacity-0" : "max-w-[180px] opacity-100"
+									}`}
+								>
+									{item.label}
+								</span>
+							</button>
+							);
+						}
 						return (
 						<Link
 							key={item.key}
 							to={item.href}
 							className={`group flex items-center rounded-lg px-3 py-2.5 transition-all duration-200 ${
-								item.danger
-									? "text-red-400 hover:bg-red-500/10 hover:text-red-300"
-									: isActive
-										? "text-white bg-gray-800"
-										: "text-gray-200 hover:bg-gray-800 hover:text-white"
+								isActive
+									? "text-white bg-gray-800"
+									: "text-gray-200 hover:bg-gray-800 hover:text-white"
 							}`}
 						>
 							<span className="w-7 h-7 flex items-center justify-center rounded-md bg-gray-800 text-xs font-bold text-gray-300 group-hover:bg-gray-700 transition-colors">

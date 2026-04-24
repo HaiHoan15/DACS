@@ -45,6 +45,8 @@ import UserAI from "../pages/Home/UserPage/UserAI";
 //trang quản lý
 import Admin from "../pages/Admin";
 import AdminPage from "../pages/Admin/AdminPage";
+import AdminProfilePage from "../pages/Admin/AdminPage/ProfilePage";
+import AdminPasswordPage from "../pages/Admin/AdminPage/PasswordPage";
 
 //trang quản lý các tài khoản
 import UserManagement from "../pages/Admin/UserManagement";
@@ -177,6 +179,14 @@ const routes = [
             {
                 index: true,
                 element: AdminPage,
+            },
+            {
+                path: "profile",
+                element: AdminProfilePage,
+            },
+            {
+                path: "password",
+                element: AdminPasswordPage,
             },
             {
                 path: "UserManagement",

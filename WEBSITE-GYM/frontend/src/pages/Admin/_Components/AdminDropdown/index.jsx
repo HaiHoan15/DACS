@@ -83,7 +83,7 @@ const AdminDropdown = () => {
                     <div className="py-1.5">
                         {/* Thông tin chi tiết */}
                         <NavLink
-                            to="/admin"
+                            to="/admin/profile"
                             onClick={() => setOpen(false)}
                             className="group relative flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200"
                         >
@@ -103,6 +103,32 @@ const AdminDropdown = () => {
                             </div>
                             <span className="font-medium text-gray-700 group-hover:text-[#1a365d]">
                                 Thông tin chi tiết
+                            </span>
+                        </NavLink>
+
+                        <NavLink
+                            to="/admin/password"
+                            onClick={() => setOpen(false)}
+                            className="group relative flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-yellow-50 transition-all duration-200"
+                        >
+                            <div className="absolute left-0 top-0 h-full w-1 bg-yellow-500 rounded-r opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-y-100 scale-y-80" />
+                            <div className="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center mr-3 group-hover:bg-yellow-200 transition-colors duration-200">
+                                <svg
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    className="h-5 w-5 text-yellow-700"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 11c0 .73-.2 1.41-.55 2m1.8-6.6A5.002 5.002 0 0012 6a5 5 0 00-5 5v1a2 2 0 00-2 2v3a2 2 0 002 2h10a2 2 0 002-2v-3a2 2 0 00-2-2v-1a5 5 0 00-3.75-4.6z"
+                                    />
+                                </svg>
+                            </div>
+                            <span className="font-medium text-gray-700 group-hover:text-yellow-700">
+                                Đổi mật khẩu
                             </span>
                         </NavLink>
 

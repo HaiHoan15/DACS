@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../../../API/api";
 import Pagination2 from "../../../components/Pagination2";
+import { useSelector } from "react-redux";
 
 const PAGE_SIZE = 5;
 
@@ -8,6 +9,7 @@ const PKG_LABEL = { 1: "NORMAL", 2: "PRO", 3: "VIP" };
 const STATUS_LABEL = { active: "Đang hoạt động", expired: "Đã hết hạn" };
 
 export default function DeleteServiceModal({ isOpen, onClose, onDeleted }) {
+  const currentUser = useSelector((state) => state.auth.user);
   const [allUsers,    setAllUsers]    = useState([]);
   const [loading,     setLoading]     = useState(false);
   const [deleting,    setDeleting]    = useState(null);   // userId being deleted
@@ -61,7 +63,11 @@ export default function DeleteServiceModal({ isOpen, onClose, onDeleted }) {
     try {
       const res = await api.post(
         "ServiceController.php",
-        { userId: user.user_id },
+        {
+          userId: user.user_id,
+          adminId: currentUser?.id || null,
+          note: "Admin xóa gói từ ServiceManagement",
+        },
         { params: { action: "deleteService" } }
       );
       if (res.data.success) {

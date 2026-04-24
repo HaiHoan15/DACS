@@ -32,6 +32,7 @@ try {
         case 'updateService':        updateService();        break;
         case 'getUsersWithoutService': getUsersWithoutService(); break;
         case 'deleteService':           deleteService();           break;
+        case 'getPaymentHistory':      getPaymentHistory();        break;
         default:
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid action']);
@@ -65,10 +66,21 @@ function createActive() {
     $data      = json_decode(file_get_contents("php://input"), true) ?? [];
     $userId    = isset($data['userId'])    ? (int)$data['userId']    : 0;
     $packageId = isset($data['packageId']) ? (int)$data['packageId'] : 0;
+    $source    = isset($data['source']) ? trim((string)$data['source']) : 'user_purchase';
+    $adminId   = isset($data['adminId']) ? (int)$data['adminId'] : null;
+    $amount    = isset($data['amount']) ? (float)$data['amount'] : null;
+    $paymentMethod = isset($data['paymentMethod']) ? trim((string)$data['paymentMethod']) : 'momo';
+    $note = isset($data['note']) ? trim((string)$data['note']) : null;
 
     if (!$userId || !$packageId) {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Thiếu userId hoặc packageId']);
+        return;
+    }
+
+    if (!in_array($source, ['user_purchase', 'admin_grant'], true)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Nguồn giao dịch không hợp lệ']);
         return;
     }
 
@@ -84,7 +96,16 @@ function createActive() {
         return;
     }
 
-    $newId = $serviceModel->createActive($userId, $packageId, (int)$package['duration_days']);
+    $newId = $serviceModel->createActive(
+        $userId,
+        $packageId,
+        (int)$package['duration_days'],
+        $source,
+        $adminId,
+        $amount,
+        $paymentMethod,
+        $note
+    );
     echo json_encode(['success' => (bool)$newId]);
 }
 
@@ -98,12 +119,14 @@ function deleteService() {
     global $serviceModel;
     $data   = json_decode(file_get_contents('php://input'), true) ?? [];
     $userId = isset($data['userId']) ? (int)$data['userId'] : 0;
+    $adminId = isset($data['adminId']) ? (int)$data['adminId'] : null;
+    $note = isset($data['note']) ? trim((string)$data['note']) : null;
     if (!$userId) {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Thiếu userId']);
         return;
     }
-    $rows = $serviceModel->deleteUserService($userId);
+    $rows = $serviceModel->deleteUserService($userId, $adminId, $note);
     echo json_encode(['success' => true, 'deleted' => $rows]);
 }
 
@@ -120,6 +143,7 @@ function updateService() {
     $userServiceId = isset($data['userServiceId']) ? (int)$data['userServiceId'] : 0;
     $packageId = isset($data['packageId']) ? (int)$data['packageId'] : null;
     $status = isset($data['status']) ? trim((string)$data['status']) : null;
+    $adminId = isset($data['adminId']) ? (int)$data['adminId'] : null;
 
     if (!$userServiceId) {
         http_response_code(400);
@@ -133,6 +157,18 @@ function updateService() {
         return;
     }
 
-    [$ok, $message] = $serviceModel->updateService($userServiceId, $packageId, $status);
+    [$ok, $message] = $serviceModel->updateService($userServiceId, $packageId, $status, $adminId);
     echo json_encode(['success' => $ok, 'message' => $message]);
+}
+
+function getPaymentHistory() {
+    global $serviceModel;
+
+    $onlyRevenue = isset($_GET['onlyRevenue'])
+        ? filter_var($_GET['onlyRevenue'], FILTER_VALIDATE_BOOLEAN)
+        : false;
+    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 200;
+
+    $history = $serviceModel->getServicePaymentHistory($onlyRevenue, $limit);
+    echo json_encode(['success' => true, 'history' => $history]);
 }

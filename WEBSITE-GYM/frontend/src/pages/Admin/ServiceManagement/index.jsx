@@ -3,6 +3,7 @@ import Notification from "../../../components/Notification";
 import api from "../../../API/api";
 import GrantServiceModal from "./add";
 import DeleteServiceModal from "./delete";
+import { useSelector } from "react-redux";
 
 const PACKAGES = [
   { value: 1, label: "NORMAL" },
@@ -27,6 +28,7 @@ const STATUS_BADGE = {
 };
 
 export default function ServiceManagement() {
+  const currentUser = useSelector((state) => state.auth.user);
   const [services,     setServices]     = useState([]);
   const [loading,      setLoading]      = useState(true);
   const [notification, setNotification] = useState(null);
@@ -69,7 +71,11 @@ export default function ServiceManagement() {
     try {
       const res = await api.post(
         "ServiceController.php",
-        { userServiceId: svc.id, packageId: pid },
+        {
+          userServiceId: svc.id,
+          packageId: pid,
+          adminId: currentUser?.id || null,
+        },
         { params: { action: "updateService" } }
       );
       if (res.data.success) {
@@ -90,7 +96,11 @@ export default function ServiceManagement() {
     try {
       const res = await api.post(
         "ServiceController.php",
-        { userServiceId: svc.id, status: newStatus },
+        {
+          userServiceId: svc.id,
+          status: newStatus,
+          adminId: currentUser?.id || null,
+        },
         { params: { action: "updateService" } }
       );
       if (res.data.success) {

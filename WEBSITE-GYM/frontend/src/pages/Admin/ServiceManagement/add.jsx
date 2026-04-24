@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../../../API/api";
 import Pagination2 from "../../../components/Pagination2";
+import { useSelector } from "react-redux";
 
 const PACKAGES = [
   { value: 1, label: "NORMAL" },
@@ -11,6 +12,7 @@ const PACKAGES = [
 const PAGE_SIZE = 5;
 
 export default function GrantServiceModal({ isOpen, onClose, onGranted }) {
+  const currentUser = useSelector((state) => state.auth.user);
   const [allUsers,     setAllUsers]     = useState([]);
   const [loading,      setLoading]      = useState(false);
   const [granting,     setGranting]     = useState(null); // userId being granted
@@ -73,7 +75,13 @@ export default function GrantServiceModal({ isOpen, onClose, onGranted }) {
     try {
       const res = await api.post(
         "ServiceController.php",
-        { userId: user.id, packageId },
+        {
+          userId: user.id,
+          packageId,
+          source: "admin_grant",
+          adminId: currentUser?.id || null,
+          paymentMethod: "admin_action",
+        },
         { params: { action: "createActive" } }
       );
       if (res.data.success) {

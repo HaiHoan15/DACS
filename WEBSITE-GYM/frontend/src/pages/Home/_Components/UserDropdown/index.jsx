@@ -96,6 +96,82 @@ const UserDropdown = () => {
                             </span>
                         </NavLink>
 
+                        {/* giỏ hàng */}
+                        <NavLink
+                            to={`/user/${user?.username}/wishlist`}
+                            onClick={() => setOpen(false)}
+                            className="group relative flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200"
+                        >
+                            <div className="absolute left-0 top-0 h-full w-1 bg-blue-500 rounded-r opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-y-100 scale-y-80" />
+                            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors duration-200">
+                                <img src="/images/icon/cart.png" alt="cart" className="h-5 w-5" />
+                            </div>
+                            <span className="font-medium text-gray-700 group-hover:text-[#1a365d]">
+                                Giỏ hàng
+                            </span>
+                        </NavLink>
+
+                        {/* Đơn hàng */}
+                        <NavLink
+                            to={`/user/${user?.username}/orders`}
+                            onClick={() => setOpen(false)}
+                            className="group relative flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200"
+                        >
+                            <div className="absolute left-0 top-0 h-full w-1 bg-blue-500 rounded-r opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-y-100 scale-y-80" />
+                            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors duration-200">
+                                <img src="/images/icon/order.png" alt="orders" className="h-5 w-5" />
+                            </div>
+                            <span className="font-medium text-gray-700 group-hover:text-[#1a365d]">
+                                Đơn hàng
+                            </span>
+                        </NavLink>
+
+                        {/* Các phòng gym */}
+                        <NavLink
+                            to={`/user/${user?.username}/room`}
+                            onClick={() => setOpen(false)}
+                            className="group relative flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200"
+                        >
+                            <div className="absolute left-0 top-0 h-full w-1 bg-blue-500 rounded-r opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-y-100 scale-y-80" />
+                            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors duration-200">
+                                <img src="/images/icon/gym.png" alt="gym" className="h-5 w-5" />
+                            </div>
+                            <span className="font-medium text-gray-700 group-hover:text-[#1a365d]">
+                                Các phòng gym
+                            </span>
+                        </NavLink>
+
+                        {/* Các lớp học */}
+                        <NavLink
+                            to={`/user/${user?.username}/class`}
+                            onClick={() => setOpen(false)}
+                            className="group relative flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200"
+                        >
+                            <div className="absolute left-0 top-0 h-full w-1 bg-blue-500 rounded-r opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-y-100 scale-y-80" />
+                            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors duration-200">
+                                <img src="/images/icon/class.png" alt="class" className="h-5 w-5" />
+                            </div>
+                            <span className="font-medium text-gray-700 group-hover:text-[#1a365d]">
+                                Các lớp học
+                            </span>
+                        </NavLink>
+
+                        {/* AI chắm sóc sức khỏe */}
+                        <NavLink
+                            to={`/user/${user?.username}/ai`}
+                            onClick={() => setOpen(false)}
+                            className="group relative flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-all duration-200"
+                        >
+                            <div className="absolute left-0 top-0 h-full w-1 bg-blue-500 rounded-r opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:scale-y-100 scale-y-80" />
+                            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors duration-200">
+                                <img src="/images/icon/AI.png" alt="ai" className="h-5 w-5" />
+                            </div>
+                            <span className="font-medium text-gray-700 group-hover:text-[#1a365d]">
+                                AI chăm sóc sức khỏe
+                            </span>
+                        </NavLink>
+
+
                         {/* Đăng xuất */}
                         <button
                             onClick={handleLogout}

@@ -57,11 +57,12 @@ CREATE TABLE IF NOT EXISTS `member_confirmations` (
   KEY `idx_user_id` (`user_id`),
   KEY `idx_room_id` (`room_id`),
   KEY `idx_confirmed_at` (`confirmed_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table threegym.member_confirmations: ~0 rows (approximately)
 INSERT INTO `member_confirmations` (`id`, `user_id`, `username`, `email`, `room_id`, `room_name`, `confirmation_code`, `confirmed_by_admin_id`, `confirmed_at`) VALUES
-	(1, 2, 'user01', 'user@threegym.com', 1, 'Phòng Cardio', 'MEM-1-883059-3972', 1, '2026-04-24 04:28:33');
+	(1, 2, 'user01', 'user@threegym.com', 1, 'Phòng Cardio', 'MEM-1-883059-3972', 1, '2026-04-24 04:28:33'),
+	(2, 2, 'user01', 'user@threegym.com', 1, 'Phòng Cardio', 'MEM-1-880501-2344', 1, '2026-04-24 05:19:16');
 
 -- Dumping structure for table threegym.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -225,19 +226,17 @@ CREATE TABLE IF NOT EXISTS `room_equipments` (
   KEY `idx_room_item_warehouse` (`warehouse_item_id`),
   CONSTRAINT `fk_room_equipments_room` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_room_equipments_warehouse_item` FOREIGN KEY (`warehouse_item_id`) REFERENCES `warehouse_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table threegym.room_equipments: ~10 rows (approximately)
 INSERT INTO `room_equipments` (`id`, `room_id`, `warehouse_item_id`, `quantity`, `created_at`, `updated_at`) VALUES
 	(19, 2, 2, 4, '2026-04-24 02:19:50', '2026-04-24 02:21:13'),
 	(20, 2, 1, 6, '2026-04-24 02:19:50', '2026-04-24 02:21:17'),
 	(21, 2, 4, 2, '2026-04-24 02:19:50', '2026-04-24 02:21:04'),
-	(22, 1, 5, 2, '2026-04-24 02:20:04', '2026-04-24 02:21:00'),
 	(23, 1, 3, 2, '2026-04-24 02:20:04', '2026-04-24 02:21:08'),
 	(24, 4, 1, 1, '2026-04-24 02:20:11', '2026-04-24 02:21:17'),
 	(35, 3, 1, 5, '2026-04-24 02:24:19', '2026-04-24 02:24:19'),
 	(36, 3, 4, 1, '2026-04-24 02:24:19', '2026-04-24 02:24:19'),
-	(37, 3, 5, 8, '2026-04-24 02:24:19', '2026-04-24 02:24:19'),
 	(38, 3, 3, 3, '2026-04-24 02:24:19', '2026-04-24 02:24:19');
 
 -- Dumping structure for table threegym.service_packages
@@ -272,11 +271,41 @@ CREATE TABLE IF NOT EXISTS `user_services` (
   KEY `idx_us_status` (`status`),
   CONSTRAINT `us_fk_package` FOREIGN KEY (`package_id`) REFERENCES `service_packages` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `us_fk_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table threegym.user_services: ~0 rows (approximately)
 INSERT INTO `user_services` (`id`, `user_id`, `package_id`, `start_date`, `end_date`, `status`, `created_at`) VALUES
-	(59, 2, 1, '2026-04-24', '2026-05-24', 'active', '2026-04-24 02:33:03');
+	(67, 2, 3, '2026-04-24', '2026-05-24', 'active', '2026-04-24 07:54:53');
+
+-- Dumping structure for table threegym.service_payment_history
+CREATE TABLE IF NOT EXISTS `service_payment_history` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `user_service_id` int DEFAULT NULL,
+  `package_id` int DEFAULT NULL,
+  `package_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `event_type` enum('user_purchase','admin_grant','admin_remove','admin_update') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payment_method` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amount` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `is_revenue` tinyint(1) NOT NULL DEFAULT '0',
+  `performed_by_admin_id` int DEFAULT NULL,
+  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_sph_user_id` (`user_id`),
+  KEY `idx_sph_package_id` (`package_id`),
+  KEY `idx_sph_event_type` (`event_type`),
+  KEY `idx_sph_is_revenue` (`is_revenue`),
+  KEY `idx_sph_created_at` (`created_at`),
+  KEY `idx_sph_user_service_id` (`user_service_id`),
+  KEY `idx_sph_admin_id` (`performed_by_admin_id`),
+  CONSTRAINT `fk_sph_admin` FOREIGN KEY (`performed_by_admin_id`) REFERENCES `accounts` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_sph_package` FOREIGN KEY (`package_id`) REFERENCES `service_packages` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_sph_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_sph_user_service` FOREIGN KEY (`user_service_id`) REFERENCES `user_services` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table threegym.service_payment_history: ~0 rows (approximately)
 
 -- Dumping structure for table threegym.warehouse_items
 CREATE TABLE IF NOT EXISTS `warehouse_items` (
@@ -298,8 +327,7 @@ INSERT INTO `warehouse_items` (`id`, `name`, `description`, `quantity`, `status`
 	(1, 'Dumbbell Rack', 'Kệ đựng tạ tay khu free-weight', 16, 'available', 'Khu tạ tay', NULL, '2026-04-24 01:00:00', '2026-04-24 02:21:17'),
 	(2, 'Barbell 20kg', 'Thanh đòn tiêu chuẩn Olympic', 11, 'available', 'Khu squat', NULL, '2026-04-24 01:01:00', '2026-04-24 02:21:13'),
 	(3, 'Treadmill', 'Máy chạy bộ điện', 5, 'maintenance', 'Khu cardio', NULL, '2026-04-24 01:02:00', '2026-04-24 02:21:08'),
-	(4, 'Kettlebell 12kg', 'Tạ ấm dùng tập functional', 7, 'out_of_stock', 'Kho tầng 1', NULL, '2026-04-24 01:03:00', '2026-04-24 02:21:04'),
-	(5, 'Resistance Bands Set', 'Bộ dây kháng lực đa mức gg', 14, 'out_of_stock', 'Khu lớp nhóm', '', '2026-04-24 01:04:00', '2026-04-24 02:21:00');
+	(4, 'Kettlebell 12kg', 'Tạ ấm dùng tập functional', 7, 'out_of_stock', 'Kho tầng 1', NULL, '2026-04-24 01:03:00', '2026-04-24 02:21:04');
 
 -- Dumping structure for table threegym.wishlists
 CREATE TABLE IF NOT EXISTS `wishlists` (
@@ -340,8 +368,8 @@ INSERT INTO `wishlists` (`id`, `account_id`, `product_id`, `quantity`, `added_at
 	(29, 1, 12, 1, '2026-04-22 02:09:54', '2026-04-22 02:09:54'),
 	(30, 1, 11, 1, '2026-04-22 02:09:54', '2026-04-22 02:09:54'),
 	(31, 1, 16, 7, '2026-04-22 02:10:01', '2026-04-22 02:10:35'),
-	(139, 2, 1, 1, '2026-04-23 07:03:03', '2026-04-23 07:03:03'),
-	(140, 2, 2, 1, '2026-04-23 07:03:04', '2026-04-23 07:03:04'),
+	(139, 2, 1, 2, '2026-04-23 07:03:03', '2026-04-24 05:16:47'),
+	(140, 2, 2, 2, '2026-04-23 07:03:04', '2026-04-24 05:16:48'),
 	(141, 2, 3, 1, '2026-04-23 07:03:04', '2026-04-23 07:03:04'),
 	(142, 2, 16, 1, '2026-04-24 02:54:34', '2026-04-24 02:54:34'),
 	(143, 2, 17, 1, '2026-04-24 02:54:34', '2026-04-24 02:54:34'),

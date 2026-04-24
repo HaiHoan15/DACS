@@ -33,7 +33,12 @@ export default function ServicePaymentCallback() {
           // Thanh toán thành công → ghi DB active
           const res = await api.post(
             "ServiceController.php",
-            { userId: parseInt(userId), packageId: parseInt(packageId) },
+            {
+              userId: parseInt(userId),
+              packageId: parseInt(packageId),
+              source: "user_purchase",
+              paymentMethod: "momo",
+            },
             { params: { action: "createActive" } }
           );
 
