@@ -169,7 +169,6 @@ class WarehouseController {
         $itemId = $input['itemId'] ?? null;
         $name = $input['name'] ?? null;
         $description = $input['description'] ?? '';
-        $quantity = isset($input['quantity']) ? (int)$input['quantity'] : 0;
         $avatar = $input['avatar'] ?? '';
 
         if (!$itemId) {
@@ -184,10 +183,6 @@ class WarehouseController {
             sendJsonResponse(['success' => false, 'message' => 'Tên dụng cụ không được vượt quá 255 ký tự'], 400);
         }
 
-        if ($quantity < 0) {
-            sendJsonResponse(['success' => false, 'message' => 'Số lượng không được âm'], 400);
-        }
-
         if (!$this->warehouseModel->exists($itemId)) {
             sendJsonResponse(['success' => false, 'message' => 'Dụng cụ không tồn tại'], 404);
         }
@@ -198,7 +193,7 @@ class WarehouseController {
         }
 
         try {
-            if ($this->warehouseModel->update($itemId, $name, $description, $quantity, $avatar)) {
+            if ($this->warehouseModel->update($itemId, $name, $description, $avatar)) {
                 sendJsonResponse(['success' => true, 'message' => 'Cập nhật dụng cụ thành công'], 200);
             }
             sendJsonResponse(['success' => false, 'message' => 'Lỗi khi cập nhật dụng cụ'], 400);

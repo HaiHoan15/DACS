@@ -109,108 +109,97 @@ export default function UM_Detail() {
         </div>
 
         {/* Main Container */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="bg-gray-800 rounded-lg p-8 border border-gray-700">
           {/* Avatar Section */}
-          <div className="md:col-span-1">
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 sticky top-8">
-              <h3 className="text-white font-bold mb-4">Ảnh đại diện</h3>
-
-              {/* Avatar Preview */}
-              <div className="flex justify-center">
-                <img
-                  src={user.avatarUrl}
-                  alt={user.username}
-                  className="w-40 h-40 rounded-full object-cover border-4 border-red-500"
-                  onError={(e) => {
-                    e.target.src = defaultUserImage;
-                  }}
-                />
-              </div>
-            </div>
+          <div className="flex justify-center mb-8 pb-8 border-b border-gray-700">
+            <img
+              src={user.avatarUrl}
+              alt={user.username}
+              className="w-32 h-32 rounded-full object-cover border-4 border-red-500"
+              onError={(e) => {
+                e.target.src = defaultUserImage;
+              }}
+            />
           </div>
 
-          {/* Info Section */}
-          <div className="md:col-span-3">
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-              <div className="space-y-5">
-                {/* User ID */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    ID người dùng
-                  </label>
-                  <p className="text-lg text-white font-semibold">{user.id}</p>
-                </div>
-
-                {/* Username */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Tên người dùng
-                  </label>
-                  <p className="text-lg text-white font-semibold">{user.username}</p>
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Email
-                  </label>
-                  <p className="text-lg text-white font-semibold">{user.email}</p>
-                </div>
-
-                {/* Address */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Địa chỉ
-                  </label>
-                  <p className="text-lg text-white font-semibold">
-                    {user.address || "Chưa cập nhật"}
-                  </p>
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Số điện thoại
-                  </label>
-                  <p className="text-lg text-white font-semibold">
-                    {user.phone || "Chưa cập nhật"}
-                  </p>
-                </div>
-
-                {/* Role */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Quyền hạn
-                  </label>
-                  <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
-                    user.role === "admin"
-                      ? "bg-red-500/20 text-red-400"
-                      : "bg-blue-500/20 text-blue-400"
-                  }`}>
-                    {user.role === "admin" ? "Admin" : "User"}
-                  </span>
-                </div>
-
-                {/* Created At */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Ngày tạo tài khoản
-                  </label>
-                  <p className="text-lg text-white font-semibold">
-                    {user.created_at ? new Date(user.created_at).toLocaleDateString("vi-VN") : "Không rõ"}
-                  </p>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-3 mt-8 pt-6 border-t border-gray-700">
-                  <button
-                    onClick={() => navigate("/admin/UserManagement")}
-                    className="flex-1 py-3 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg transition"
-                  >
-                    Quay lại
-                  </button>
-                </div>
+          {/* Info Section - 2 Column Grid */}
+          <div className="space-y-6">
+            {/* Row 1: ID - Tên */}
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">
+                  ID người dùng
+                </label>
+                <p className="text-lg text-white font-semibold">{user.id}</p>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">
+                  Tên người dùng
+                </label>
+                <p className="text-lg text-white font-semibold">{user.username}</p>
+              </div>
+            </div>
+
+            {/* Row 2: Email - SĐT */}
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">
+                  Email
+                </label>
+                <p className="text-lg text-white font-semibold">{user.email}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">
+                  Số điện thoại
+                </label>
+                <p className="text-lg text-white font-semibold">
+                  {user.phone || "Chưa cập nhật"}
+                </p>
+              </div>
+            </div>
+
+            {/* Row 3: Địa chỉ */}
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                Địa chỉ
+              </label>
+              <p className="text-lg text-white font-semibold">
+                {user.address || "Chưa cập nhật"}
+              </p>
+            </div>
+
+            {/* Row 4: Quyền hạn - Ngày tạo */}
+            <div className="grid grid-cols-2 gap-6 pt-4 border-t border-gray-700">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">
+                  Quyền hạn
+                </label>
+                <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
+                  user.role === "admin"
+                    ? "bg-red-500/20 text-red-400"
+                    : "bg-blue-500/20 text-blue-400"
+                }`}>
+                  {user.role === "admin" ? "Admin" : "User"}
+                </span>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">
+                  Ngày tạo tài khoản
+                </label>
+                <p className="text-lg text-white font-semibold">
+                  {user.created_at ? new Date(user.created_at).toLocaleDateString("vi-VN") : "Không rõ"}
+                </p>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 mt-8 pt-6 border-t border-gray-700">
+              <button
+                onClick={() => navigate("/admin/UserManagement")}
+                className="flex-1 py-3 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg transition"
+              >
+                Quay lại
+              </button>
             </div>
           </div>
         </div>

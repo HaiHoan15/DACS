@@ -125,17 +125,40 @@ export default function CategoryDetail() {
     });
   };
 
+  const formatPrice = (price) => {
+    const value = Number(price);
+    if (Number.isNaN(value)) return "0";
+    return value.toLocaleString("vi-VN", { maximumFractionDigits: 0 });
+  };
+
   if (loading) {
     return (
-      <div className="text-center text-gray-400 py-12">
-        <p>Đang tải dữ liệu...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white text-xl">
+          <svg className="animate-spin h-8 w-8 mb-4 mx-auto" viewBox="0 0 24 24">
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+              fill="none"
+              opacity="0.3"
+            />
+            <path
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+          Đang tải dữ liệu...
+        </div>
       </div>
     );
   }
 
   if (!category) {
     return (
-      <div className="space-y-6">
+      <div className="min-h-screen bg-gray-900 py-8 px-4">
         {notification && (
           <Notification
             message={notification.message}
@@ -143,21 +166,27 @@ export default function CategoryDetail() {
             onClose={() => setNotification(null)}
           />
         )}
-        <button
-          onClick={() => navigate("/admin/ProductManagement")}
-          className="text-gray-400 hover:text-white transition"
-        >
-          ← Quay lại
-        </button>
-        <div className="text-center text-gray-400 py-12">
-          <p>Không tìm thấy danh mục</p>
+
+        <div className="max-w-7xl mx-auto">
+          <button
+            onClick={() => navigate("/admin/ProductManagement")}
+            className="mb-4 text-gray-400 hover:text-gray-300 transition flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Quay lại
+          </button>
+          <div className="text-center text-gray-400 py-12 bg-gray-800 rounded-xl border border-gray-700">
+            <p>Không tìm thấy danh mục</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gray-900 py-8 px-4">
       {notification && (
         <Notification
           message={notification.message}
@@ -166,18 +195,25 @@ export default function CategoryDetail() {
         />
       )}
 
-      <div className="flex items-center gap-4">
-        <button
-          onClick={() => navigate("/admin/ProductManagement")}
-          className="text-gray-400 hover:text-white transition"
-        >
-          ← Quay lại
-        </button>
-        <h2 className="text-2xl font-bold text-white">Chi tiết danh mục</h2>
-      </div>
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="mb-2">
+          <button
+            onClick={() => navigate("/admin/ProductManagement")}
+            className="mb-4 text-gray-400 hover:text-gray-300 transition flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Quay lại
+          </button>
+          <h1 className="text-4xl font-bold text-white mb-2">
+            <span className="text-red-500">CHI TIẾT</span>
+            <span className="text-yellow-500 ml-2">DANH MỤC</span>
+          </h1>
+        </div>
 
       {/* Category Info Card */}
-      <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+      <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-400 mb-2">
             Tên danh mục
@@ -220,26 +256,26 @@ export default function CategoryDetail() {
         </h3>
 
         {products.length === 0 ? (
-          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center text-gray-400">
+          <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 text-center text-gray-400">
             <p>Không có sản phẩm nào trong danh mục này</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto bg-gray-800 rounded-xl border border-gray-700 shadow">
             <table className="w-full text-sm text-left text-gray-300">
-              <thead className="bg-gray-800 text-gray-200 border-b border-gray-700">
+              <thead className="bg-gray-700 border-b-2 border-gray-600">
                 <tr>
-                  <th className="px-4 py-3">ID</th>
-                  <th className="px-4 py-3">Hình</th>
-                  <th className="px-4 py-3">Tên sản phẩm</th>
-                  <th className="px-4 py-3">Giá</th>
-                  <th className="px-4 py-3">Thao tác</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">ID</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Hình</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Tên sản phẩm</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Giá</th>
+                  <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Thao tác</th>
                 </tr>
               </thead>
               <tbody>
                 {products.map((product) => (
                   <tr
                     key={product.id}
-                    className="border-b border-gray-700 hover:bg-gray-800 transition"
+                    className="border-b border-gray-700 hover:bg-gray-700/50 transition"
                   >
                     <td className="px-4 py-3">{product.id}</td>
                     <td className="px-4 py-3">
@@ -253,7 +289,7 @@ export default function CategoryDetail() {
                       />
                     </td>
                     <td className="px-4 py-3">{product.name}</td>
-                    <td className="px-4 py-3">{product.price?.toLocaleString("vi-VN")} đ</td>
+                    <td className="px-4 py-3">{formatPrice(product.price)} đ</td>
                     <td className="px-4 py-3 flex gap-2">
                       <button
                         onClick={() => handleViewProductDetail(product.id)}
@@ -280,6 +316,7 @@ export default function CategoryDetail() {
             </table>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

@@ -166,10 +166,8 @@ export default function UserWishlist() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 rounded-xl">
       <div className="w-full max-w-7xl mx-auto px-4 py-8 flex-grow">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Giỏ hàng của bạn</h1>
-
         {/* Filter Section */}
         <div className="mb-6 flex flex-col md:flex-row gap-4">
           {/* Search Input */}
@@ -195,17 +193,18 @@ export default function UserWishlist() {
         </div>
 
         {/* Cart Table */}
-        <div className="bg-white rounded-lg shadow overflow-x-auto">
+        <div className="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
           {currentItems.length > 0 ? (
             <table className="w-full text-left">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-6 py-3 font-semibold text-gray-700">Hình ảnh</th>
-                <th className="px-6 py-3 font-semibold text-gray-700">Tên sản phẩm</th>
-                <th className="px-6 py-3 font-semibold text-gray-700">Giá</th>
-                <th className="px-6 py-3 font-semibold text-gray-700">Số lượng</th>
-                <th className="px-6 py-3 font-semibold text-gray-700">Thành tiền</th>
-                <th className="px-6 py-3 font-semibold text-gray-700">Thao tác</th>
+              <tr className="bg-gray-100 border-b-2 border-gray-200">
+                <th className="px-6 py-3 font-bold text-gray-800 uppercase tracking-wide text-sm">Hình ảnh</th>
+                <th className="px-6 py-3 font-bold text-gray-800 uppercase tracking-wide text-sm">Tên sản phẩm</th>
+                <th className="px-6 py-3 font-bold text-gray-800 uppercase tracking-wide text-sm">Giá</th>
+                <th className="px-6 py-3 font-bold text-gray-800 uppercase tracking-wide text-sm">Số lượng</th>
+                <th className="px-6 py-3 font-bold text-gray-800 uppercase tracking-wide text-sm">Thành tiền</th>
+                <th className="px-6 py-3 font-bold text-gray-800 uppercase tracking-wide text-sm">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -250,6 +249,7 @@ export default function UserWishlist() {
               <p className="text-gray-500 text-lg">Không tìm thấy sản phẩm nào phù hợp với bộ lọc</p>
             </div>
           )}
+          </div>
         </div>
 
         {/* Pagination */}

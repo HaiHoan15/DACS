@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import Notification from "../../../components/Notification";
+import Pagination2 from "../../../components/Pagination2";
 import api from "../../../API/api";
 import GrantServiceModal from "./add";
 import DeleteServiceModal from "./delete";
@@ -37,6 +38,10 @@ export default function ServiceManagement() {
   const [search,       setSearch]       = useState("");
   const [pkgFilter,    setPkgFilter]    = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
 
   // Tặng gói modal
   const [showGrant,    setShowGrant]    = useState(false);
@@ -116,6 +121,9 @@ export default function ServiceManagement() {
     }
   };
 
+  // ─── Reset page on filter change ────────────────────────────────────────────
+  useEffect(() => { setCurrentPage(1); }, [search, pkgFilter, statusFilter]);
+
   // ─── Filter ───────────────────────────────────────────────────────────────
   const filtered = services.filter(s => {
     const q         = search.toLowerCase();
@@ -125,18 +133,21 @@ export default function ServiceManagement() {
     return textMatch && pkgMatch && stMatch;
   });
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const currentServices = filtered.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
   // ─── Loading ──────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <p className="text-gray-500 dark:text-gray-400">Đang tải dữ liệu dịch vụ...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <p className="text-gray-400">Đang tải dữ liệu dịch vụ...</p>
       </div>
     );
   }
 
   // ─── Main render ──────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-900">
       {notification && (
         <Notification
           message={notification.message}
@@ -146,16 +157,21 @@ export default function ServiceManagement() {
       )}
 
       <div className="p-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-          Quản lý dịch vụ
+        <h1 className="text-4xl font-bold text-white mb-2">
+          <span className="text-red-500">QUẢN LÝ</span>
+          <span className="text-yellow-500 ml-2">DỊCH VỤ</span>
         </h1>
+        <p className="text-sm text-gray-400 mb-6">
+          Xem, chỉnh sửa gói dịch vụ của người dùng hoặc TẶNG / XÓA gói dịch vụ cho họ.
+        </p>
 
         {/* ── Toolbar ── */}
-        <div className="mb-5 flex flex-col md:flex-row gap-4 items-start md:items-end">
+        <div className="mb-5 bg-gray-800 rounded-xl border border-gray-700 p-4">
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
 
           {/* Tìm kiếm — trái */}
           <div className="flex-1 min-w-0">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-semibold text-gray-300 mb-1">
               Tìm kiếm theo tên hoặc email
             </label>
             <input
@@ -163,20 +179,20 @@ export default function ServiceManagement() {
               placeholder="Nhập tên hoặc email..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* Bộ lọc — phải */}
           <div className="flex gap-3 flex-shrink-0">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-semibold text-gray-300 mb-1">
                 Gói dịch vụ
               </label>
               <select
                 value={pkgFilter}
                 onChange={e => setPkgFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 border border-gray-600 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Tất cả</option>
                 {PACKAGES.map(p => (
@@ -186,13 +202,13 @@ export default function ServiceManagement() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-semibold text-gray-300 mb-1">
                 Tình trạng
               </label>
               <select
                 value={statusFilter}
                 onChange={e => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 border border-gray-600 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Tất cả</option>
                 {STATUSES.map(s => (
@@ -220,46 +236,47 @@ export default function ServiceManagement() {
             </div>
           </div>
         </div>
+        </div>
 
         {/* Số lượng kết quả */}
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-          Hiển thị <strong>{filtered.length}</strong> / {services.length} bản ghi
-        </p>
+        {/* <p className="text-sm text-gray-400 mb-3">
+          Hiển thị <strong className="text-white">{filtered.length}</strong> / {services.length} bản ghi
+        </p> */}
 
         {/* ── Bảng ── */}
-        <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div className="overflow-x-auto bg-gray-800 rounded-xl border border-gray-700 shadow">
           {filtered.length === 0 ? (
-            <div className="py-16 text-center text-gray-400 dark:text-gray-500">
+            <div className="py-16 text-center text-gray-500">
               Không có dữ liệu phù hợp.
             </div>
           ) : (
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600">
-                  <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">#</th>
-                  <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Tên</th>
-                  <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Email</th>
-                  <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Gói dịch vụ</th>
-                  <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Ngày bắt đầu</th>
-                  <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Ngày kết thúc</th>
-                  <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Tình trạng</th>
+                <tr className="bg-gray-700 border-b-2 border-gray-600">
+                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">#</th>
+                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Tên</th>
+                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Email</th>
+                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Gói dịch vụ</th>
+                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Ngày bắt đầu</th>
+                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Ngày kết thúc</th>
+                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Tình trạng</th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((svc, idx) => (
+                {currentServices.map((svc, idx) => (
                   <tr
                     key={svc.id ?? `user-${svc.user_id}`}
-                    className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                    className="border-b border-gray-700 hover:bg-gray-700/50 transition-colors"
                   >
-                    <td className="px-5 py-3 text-gray-400 dark:text-gray-500">{idx + 1}</td>
+                    <td className="px-5 py-3 text-gray-500">{(currentPage - 1) * ITEMS_PER_PAGE + idx + 1}</td>
 
                     {/* Tên */}
-                    <td className="px-5 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                    <td className="px-5 py-3 font-medium text-white whitespace-nowrap">
                       {svc.username}
                     </td>
 
                     {/* Email */}
-                    <td className="px-5 py-3 text-gray-600 dark:text-gray-300">
+                    <td className="px-5 py-3 text-gray-300">
                       {svc.email}
                     </td>
 
@@ -281,12 +298,12 @@ export default function ServiceManagement() {
                     </td>
 
                     {/* Ngày bắt đầu */}
-                    <td className="px-5 py-3 text-gray-600 dark:text-gray-300 whitespace-nowrap">
+                    <td className="px-5 py-3 text-gray-300 whitespace-nowrap">
                       {svc.start_date || "-"}
                     </td>
 
                     {/* Ngày kết thúc */}
-                    <td className="px-5 py-3 text-gray-600 dark:text-gray-300 whitespace-nowrap">
+                    <td className="px-5 py-3 text-gray-300 whitespace-nowrap">
                       {svc.end_date || "-"}
                     </td>
 
@@ -312,6 +329,17 @@ export default function ServiceManagement() {
             </table>
           )}
         </div>
+
+        {/* ── Pagination ── */}
+        {totalPages > 1 && (
+          <div className="mt-4">
+            <Pagination2
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
       </div>
 
       {/* ── Tặng gói modal ── */}

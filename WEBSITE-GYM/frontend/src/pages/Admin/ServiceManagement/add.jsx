@@ -107,7 +107,7 @@ export default function GrantServiceModal({ isOpen, onClose, onGranted }) {
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col"
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col"
         style={{ maxHeight: "90vh" }}
         onClick={(e) => e.stopPropagation()}
       >

@@ -74,12 +74,11 @@ class WarehouseModel {
         return false;
     }
 
-    public function update($id, $name, $description, $quantity, $avatar) {
+    public function update($id, $name, $description, $avatar) {
         $query = "
             UPDATE " . $this->table . "
             SET name = :name,
                 description = :description,
-                quantity = :quantity,
                 avatar = :avatar,
                 updated_at = NOW()
             WHERE id = :id
@@ -88,7 +87,6 @@ class WarehouseModel {
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':quantity', $quantity);
         $stmt->bindParam(':avatar', $avatar);
         return $stmt->execute();
     }

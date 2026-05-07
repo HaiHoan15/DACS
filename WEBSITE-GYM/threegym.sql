@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 INSERT INTO `orders` (`id`, `account_id`, `total_amount`, `status`, `payment_method`, `recipient_name`, `recipient_phone`, `recipient_address`, `notes`, `created_at`, `updated_at`) VALUES
 	(2, 2, 150000.00, 'shipped', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 03:40:52', '2026-04-22 04:00:53'),
 	(3, 2, 2800000.00, 'cancelled', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 03:44:03', '2026-04-22 04:02:17'),
-	(15, 2, 11900000.00, 'pending', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 04:57:55', '2026-04-22 04:57:55'),
+	(15, 2, 11900000.00, 'delivered', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 04:57:55', '2026-04-24 08:54:01'),
 	(22, 2, 400000.00, 'confirmed', 'direct', 'user01', '6969696969', 'gggg', '', '2026-04-22 05:04:44', '2026-04-22 05:46:25'),
 	(23, 2, 10000.00, 'delivered', 'momo', 'Test', '0901234567', 'HN', '', '2026-04-22 06:29:21', '2026-04-23 15:50:42'),
 	(24, 2, 1000000.00, 'delivered', 'momo', 'user01', '6969696969', 'gggg', '', '2026-04-22 06:30:17', '2026-04-22 06:35:02'),
@@ -154,30 +154,30 @@ CREATE TABLE IF NOT EXISTS `products` (
   PRIMARY KEY (`id`),
   KEY `fk_category` (`category_id`),
   CONSTRAINT `fk_category` FOREIGN KEY (`category_id`) REFERENCES `product_categories` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table threegym.products: ~20 rows (approximately)
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `avatar`, `created_at`, `updated_at`, `category_id`) VALUES
-	(1, 'Dumbbell 5kg', 'Tạ tay 5kg phù hợp tập cơ bản', 150000.00, 'product_1774560016_20be1c36.jpg', '2026-03-25 04:48:01', '2026-03-26 21:20:17', 1),
-	(2, 'Dumbbell 10kg', 'Tạ tay 10kg cho người tập trung cấp', 250000.00, 'product_1774559753_3551081b.jpg', '2026-03-25 04:48:01', '2026-03-26 21:15:54', 1),
-	(3, 'Barbell 20kg', 'Thanh đòn + tạ 20kg', 600000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
-	(4, 'Treadmill', 'Máy chạy bộ tại nhà', 7500000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
-	(5, 'Stationary Bike', 'Xe đạp tập thể dục', 4200000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
-	(6, 'Pull-up Bar', 'Xà đơn gắn cửa', 300000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
-	(7, 'Kettlebell 8kg', 'Tạ ấm 8kg', 220000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 1),
-	(8, 'Yoga Mat', 'Thảm tập yoga chống trượt', 120000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 2),
-	(9, 'Resistance Band Set', 'Bộ dây kháng lực 5 mức', 180000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 2),
-	(10, 'Gym Gloves', 'Găng tay tập gym chống trượt', 90000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 2),
-	(11, 'Foam Roller', 'Con lăn giãn cơ', 130000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 2),
-	(12, 'Skipping Rope', 'Dây nhảy thể lực', 50000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 2),
-	(13, 'Gym Backpack', 'Balo đựng đồ tập gym', 200000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 2),
-	(14, 'Lifting Belt', 'Đai lưng hỗ trợ nâng tạ', 250000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 2),
-	(15, 'Smart Fitness Watch', 'Đồng hồ theo dõi sức khỏe', 1500000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 2),
-	(16, 'Protein Whey 1kg', 'Bột whey protein hỗ trợ tăng cơ', 750000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 3),
-	(17, 'Creatine 300g', 'Tăng sức mạnh và hiệu suất', 450000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 3),
-	(18, 'Mass Gainer 3kg', 'Tăng cân nhanh cho người gầy', 900000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 3),
-	(19, 'Pre Workout', 'Tăng năng lượng trước khi tập', 550000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 3),
-	(20, 'BCAA 2:1:1', 'Hỗ trợ phục hồi cơ', 400000.00, NULL, '2026-03-25 04:48:01', '2026-03-25 04:48:01', 3);
+	(1, 'Dumbbell 5kg', 'Tạ tay 5kg phù hợp tập cơ bản', 150000.00, 'product_1778147609_a5b2dea2.jpg', '2026-03-25 04:48:01', '2026-05-07 09:53:31', 1),
+	(2, 'Dumbbell 10kg', 'Tạ tay 10kg cho người tập trung cấp', 250000.00, 'product_1778147680_242ae6c8.webp', '2026-03-25 04:48:01', '2026-05-07 09:54:41', 1),
+	(3, 'Barbell 20kg', 'Thanh đòn + tạ 20kg', 600000.00, 'product_1778147704_b53e4510.jpg', '2026-03-25 04:48:01', '2026-05-07 09:55:06', 1),
+	(4, 'Treadmill', 'Máy chạy bộ tại nhà', 7500000.00, 'product_1778147714_0d933340.webp', '2026-03-25 04:48:01', '2026-05-07 09:55:15', 1),
+	(5, 'Stationary Bike', 'Xe đạp tập thể dục', 4200000.00, 'product_1778147723_4742e30e.webp', '2026-03-25 04:48:01', '2026-05-07 09:55:26', 1),
+	(6, 'Pull-up Bar', 'Xà đơn gắn cửa', 300000.00, 'product_1778151909_38372772.jpg', '2026-03-25 04:48:01', '2026-05-07 11:05:12', 1),
+	(7, 'Kettlebell 8kg', 'Tạ ấm 8kg', 220000.00, 'product_1778151920_eb0d6a1b.jpg', '2026-03-25 04:48:01', '2026-05-07 11:05:21', 1),
+	(8, 'Yoga Mat', 'Thảm tập yoga chống trượt', 120000.00, 'product_1778151929_067de2c9.jpg', '2026-03-25 04:48:01', '2026-05-07 11:05:31', 2),
+	(9, 'Resistance Band Set', 'Bộ dây kháng lực 5 mức', 180000.00, 'product_1778151939_88582d6d.jpg', '2026-03-25 04:48:01', '2026-05-07 11:05:40', 2),
+	(10, 'Gym Gloves', 'Găng tay tập gym chống trượt', 90000.00, 'product_1778151948_19896ccd.jpg', '2026-03-25 04:48:01', '2026-05-07 11:05:49', 2),
+	(11, 'Foam Roller', 'Con lăn giãn cơ', 130000.00, 'product_1778152185_7f686b0a.jpg', '2026-03-25 04:48:01', '2026-05-07 11:09:46', 2),
+	(12, 'Skipping Rope', 'Dây nhảy thể lực', 50000.00, 'product_1778152174_50c9e9f7.jpg', '2026-03-25 04:48:01', '2026-05-07 11:09:35', 2),
+	(13, 'Gym Backpack', 'Balo đựng đồ tập gym', 200000.00, 'product_1778152196_5435b576.jpg', '2026-03-25 04:48:01', '2026-05-07 11:09:57', 2),
+	(14, 'Lifting Belt', 'Đai lưng hỗ trợ nâng tạ', 250000.00, 'product_1778152205_4b83902e.webp', '2026-03-25 04:48:01', '2026-05-07 11:10:06', 2),
+	(15, 'Smart Fitness Watch', 'Đồng hồ theo dõi sức khỏe', 1500000.00, 'product_1778152216_01e0c749.jpg', '2026-03-25 04:48:01', '2026-05-07 11:10:18', 2),
+	(16, 'Protein Whey 1kg', 'Bột whey protein hỗ trợ tăng cơ', 750000.00, 'product_1778152226_867d2072.jpg', '2026-03-25 04:48:01', '2026-05-07 11:10:28', 3),
+	(17, 'Creatine 300g', 'Tăng sức mạnh và hiệu suất', 450000.00, 'product_1778152236_8f9df0df.jpg', '2026-03-25 04:48:01', '2026-05-07 11:10:37', 3),
+	(18, 'Mass Gainer 3kg', 'Tăng cân nhanh cho người gầy', 900000.00, 'product_1778152244_65b18d2f.webp', '2026-03-25 04:48:01', '2026-05-07 11:10:47', 3),
+	(19, 'Pre Workout', 'Tăng năng lượng trước khi tập', 550000.00, 'product_1778152258_59fc4906.webp', '2026-03-25 04:48:01', '2026-05-07 11:10:59', 3),
+	(20, 'BCAA 2:1:1', 'Hỗ trợ phục hồi cơ', 400000.00, 'product_1778152273_8abd49fd.jpg', '2026-03-25 04:48:01', '2026-05-07 11:11:15', 3);
 
 -- Dumping structure for table threegym.product_categories
 CREATE TABLE IF NOT EXISTS `product_categories` (
@@ -203,14 +203,14 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table threegym.rooms: ~4 rows (approximately)
 INSERT INTO `rooms` (`id`, `name`, `description`, `avatar`, `created_at`, `updated_at`) VALUES
-	(1, 'Phòng Cardio', 'ở trời', '', '2026-04-24 02:00:00', '2026-04-24 02:20:04'),
-	(2, 'Phòng Free Weight', 'tphcm', '', '2026-04-24 02:05:00', '2026-04-24 02:19:50'),
-	(3, 'Phòng Functional', 'ggg 1234', '', '2026-04-24 02:10:00', '2026-04-24 02:24:19'),
-	(4, 'bter', 'feefww', '', '2026-04-24 01:59:36', '2026-04-24 02:20:11');
+	(1, 'Phòng Cardio', 'Tầng 7, 302 Lê Văn Trúc, Phường An Khánh Nam, TP. Thủ Đức, TP.HCM', '', '2026-04-24 02:00:00', '2026-05-07 14:06:32'),
+	(2, 'Phòng Free Weight', '45/9 Nguyễn Hải Minh, Phường Tân Phúc, Quận Gò Vấp, TP.HCM', '', '2026-04-24 02:05:00', '2026-05-07 14:06:09'),
+	(3, 'Phòng Functional', '1287 Đường Hoa Phượng Tím, Phường Bình An Đông, Quận 11, TP.HCM', '', '2026-04-24 02:10:00', '2026-05-07 14:05:55'),
+	(5, 'HaiHoan', '69699. Phạm Hùng, Bình Chánh, Tp.HCM, Việt Nam', '', '2026-05-07 11:42:28', '2026-05-07 11:42:28');
 
 -- Dumping structure for table threegym.room_equipments
 CREATE TABLE IF NOT EXISTS `room_equipments` (
@@ -226,18 +226,19 @@ CREATE TABLE IF NOT EXISTS `room_equipments` (
   KEY `idx_room_item_warehouse` (`warehouse_item_id`),
   CONSTRAINT `fk_room_equipments_room` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_room_equipments_warehouse_item` FOREIGN KEY (`warehouse_item_id`) REFERENCES `warehouse_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.room_equipments: ~10 rows (approximately)
+-- Dumping data for table threegym.room_equipments: ~9 rows (approximately)
 INSERT INTO `room_equipments` (`id`, `room_id`, `warehouse_item_id`, `quantity`, `created_at`, `updated_at`) VALUES
-	(19, 2, 2, 4, '2026-04-24 02:19:50', '2026-04-24 02:21:13'),
-	(20, 2, 1, 6, '2026-04-24 02:19:50', '2026-04-24 02:21:17'),
-	(21, 2, 4, 2, '2026-04-24 02:19:50', '2026-04-24 02:21:04'),
-	(23, 1, 3, 2, '2026-04-24 02:20:04', '2026-04-24 02:21:08'),
-	(24, 4, 1, 1, '2026-04-24 02:20:11', '2026-04-24 02:21:17'),
-	(35, 3, 1, 5, '2026-04-24 02:24:19', '2026-04-24 02:24:19'),
-	(36, 3, 4, 1, '2026-04-24 02:24:19', '2026-04-24 02:24:19'),
-	(38, 3, 3, 3, '2026-04-24 02:24:19', '2026-04-24 02:24:19');
+	(41, 5, 2, 4, '2026-05-07 11:42:28', '2026-05-07 14:18:23'),
+	(42, 5, 1, 2, '2026-05-07 11:42:28', '2026-05-07 14:18:27'),
+	(43, 3, 1, 5, '2026-05-07 14:05:55', '2026-05-07 14:18:27'),
+	(44, 3, 4, 1, '2026-05-07 14:05:55', '2026-05-07 14:18:14'),
+	(45, 3, 3, 3, '2026-05-07 14:05:55', '2026-05-07 14:18:19'),
+	(46, 2, 2, 4, '2026-05-07 14:06:09', '2026-05-07 14:18:23'),
+	(47, 2, 1, 6, '2026-05-07 14:06:09', '2026-05-07 14:18:27'),
+	(48, 2, 4, 2, '2026-05-07 14:06:09', '2026-05-07 14:18:14'),
+	(49, 1, 3, 2, '2026-05-07 14:06:32', '2026-05-07 14:18:19');
 
 -- Dumping structure for table threegym.service_packages
 CREATE TABLE IF NOT EXISTS `service_packages` (
@@ -254,28 +255,6 @@ INSERT INTO `service_packages` (`id`, `name`, `price`, `duration_days`, `created
 	(1, 'NORMAL', 250000.00, 30, '2026-04-23 10:01:54'),
 	(2, 'PRO', 350000.00, 30, '2026-04-23 10:01:54'),
 	(3, 'VIP', 500000.00, 30, '2026-04-23 10:01:54');
-
--- Dumping structure for table threegym.user_services
-CREATE TABLE IF NOT EXISTS `user_services` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL COMMENT 'FK → accounts.id',
-  `package_id` int NOT NULL COMMENT 'FK → service_packages.id',
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `status` enum('active','expired') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_user_active` (`user_id`,`status`),
-  KEY `idx_us_user_id` (`user_id`),
-  KEY `idx_us_package_id` (`package_id`),
-  KEY `idx_us_status` (`status`),
-  CONSTRAINT `us_fk_package` FOREIGN KEY (`package_id`) REFERENCES `service_packages` (`id`) ON DELETE RESTRICT,
-  CONSTRAINT `us_fk_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dumping data for table threegym.user_services: ~0 rows (approximately)
-INSERT INTO `user_services` (`id`, `user_id`, `package_id`, `start_date`, `end_date`, `status`, `created_at`) VALUES
-	(67, 2, 3, '2026-04-24', '2026-05-24', 'active', '2026-04-24 07:54:53');
 
 -- Dumping structure for table threegym.service_payment_history
 CREATE TABLE IF NOT EXISTS `service_payment_history` (
@@ -303,9 +282,48 @@ CREATE TABLE IF NOT EXISTS `service_payment_history` (
   CONSTRAINT `fk_sph_package` FOREIGN KEY (`package_id`) REFERENCES `service_packages` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_sph_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_sph_user_service` FOREIGN KEY (`user_service_id`) REFERENCES `user_services` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.service_payment_history: ~0 rows (approximately)
+-- Dumping data for table threegym.service_payment_history: ~16 rows (approximately)
+INSERT INTO `service_payment_history` (`id`, `user_id`, `user_service_id`, `package_id`, `package_name`, `event_type`, `payment_method`, `amount`, `is_revenue`, `performed_by_admin_id`, `note`, `created_at`) VALUES
+	(3, 2, NULL, 2, 'PRO', 'user_purchase', 'momo', 350000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-04-24 08:04:31'),
+	(4, 2, NULL, 3, 'VIP', 'user_purchase', 'momo', 500000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-04-24 08:05:22'),
+	(5, 2, NULL, 2, 'PRO', 'admin_update', 'admin_action', 0.00, 0, 1, 'Admin cập nhật dịch vụ (gói/trạng thái)', '2026-04-24 08:07:41'),
+	(6, 2, NULL, 2, 'PRO', 'admin_update', 'admin_action', 0.00, 0, 1, 'Admin cập nhật dịch vụ (gói/trạng thái)', '2026-04-24 08:08:07'),
+	(7, 2, NULL, 1, 'NORMAL', 'admin_grant', 'admin_action', 0.00, 0, 1, 'Admin tặng gói dịch vụ', '2026-04-24 08:08:25'),
+	(8, 2, NULL, 1, 'NORMAL', 'admin_remove', 'admin_action', 0.00, 0, 1, 'Admin xóa gói từ ServiceManagement', '2026-04-24 08:08:42'),
+	(9, 2, NULL, 1, 'NORMAL', 'admin_grant', 'admin_action', 0.00, 0, 1, 'Admin tặng gói dịch vụ', '2026-04-24 08:09:02'),
+	(10, 2, NULL, 2, 'PRO', 'user_purchase', 'momo', 350000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-04-24 08:09:56'),
+	(11, 2, NULL, 2, 'PRO', 'user_purchase', 'momo', 350000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-04-24 08:09:56'),
+	(13, 2, NULL, 1, 'NORMAL', 'user_purchase', 'momo', 250000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-04-24 08:11:39'),
+	(14, 2, NULL, 3, 'VIP', 'user_purchase', 'momo', 500000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-05-07 11:44:44'),
+	(15, 2, 83, 1, 'NORMAL', 'user_purchase', 'momo', 250000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-05-07 11:55:13'),
+	(16, 2, 83, 2, 'PRO', 'admin_update', 'admin_action', 0.00, 0, 1, 'Admin cập nhật dịch vụ (gói/trạng thái)', '2026-05-07 12:53:35'),
+	(17, 2, 83, 1, 'NORMAL', 'admin_update', 'admin_action', 0.00, 0, 1, 'Admin cập nhật dịch vụ (gói/trạng thái)', '2026-05-07 12:53:36'),
+	(18, 2, 83, 3, 'VIP', 'admin_update', 'admin_action', 0.00, 0, 1, 'Admin cập nhật dịch vụ (gói/trạng thái)', '2026-05-07 12:53:38'),
+	(19, 2, 83, 1, 'NORMAL', 'admin_update', 'admin_action', 0.00, 0, 1, 'Admin cập nhật dịch vụ (gói/trạng thái)', '2026-05-07 12:53:39');
+
+-- Dumping structure for table threegym.user_services
+CREATE TABLE IF NOT EXISTS `user_services` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL COMMENT 'FK → accounts.id',
+  `package_id` int NOT NULL COMMENT 'FK → service_packages.id',
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `status` enum('active','expired') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_user_active` (`user_id`,`status`),
+  KEY `idx_us_user_id` (`user_id`),
+  KEY `idx_us_package_id` (`package_id`),
+  KEY `idx_us_status` (`status`),
+  CONSTRAINT `us_fk_package` FOREIGN KEY (`package_id`) REFERENCES `service_packages` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `us_fk_user` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table threegym.user_services: ~1 rows (approximately)
+INSERT INTO `user_services` (`id`, `user_id`, `package_id`, `start_date`, `end_date`, `status`, `created_at`) VALUES
+	(83, 2, 1, '2026-05-07', '2026-06-06', 'active', '2026-05-07 11:55:13');
 
 -- Dumping structure for table threegym.warehouse_items
 CREATE TABLE IF NOT EXISTS `warehouse_items` (
@@ -320,14 +338,14 @@ CREATE TABLE IF NOT EXISTS `warehouse_items` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_warehouse_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.warehouse_items: ~5 rows (approximately)
+-- Dumping data for table threegym.warehouse_items: ~4 rows (approximately)
 INSERT INTO `warehouse_items` (`id`, `name`, `description`, `quantity`, `status`, `location`, `avatar`, `created_at`, `updated_at`) VALUES
-	(1, 'Dumbbell Rack', 'Kệ đựng tạ tay khu free-weight', 16, 'available', 'Khu tạ tay', NULL, '2026-04-24 01:00:00', '2026-04-24 02:21:17'),
-	(2, 'Barbell 20kg', 'Thanh đòn tiêu chuẩn Olympic', 11, 'available', 'Khu squat', NULL, '2026-04-24 01:01:00', '2026-04-24 02:21:13'),
-	(3, 'Treadmill', 'Máy chạy bộ điện', 5, 'maintenance', 'Khu cardio', NULL, '2026-04-24 01:02:00', '2026-04-24 02:21:08'),
-	(4, 'Kettlebell 12kg', 'Tạ ấm dùng tập functional', 7, 'out_of_stock', 'Kho tầng 1', NULL, '2026-04-24 01:03:00', '2026-04-24 02:21:04');
+	(1, 'Dumbbell Rack', 'Kệ đựng tạ tay khu free-weight', 20, 'available', 'Khu tạ tay', 'warehouse_1778163284_7bdf034f.jpg', '2026-04-24 01:00:00', '2026-05-07 14:18:27'),
+	(2, 'Barbell 20kg', 'Thanh đòn tiêu chuẩn Olympic', 20, 'available', 'Khu squat', 'warehouse_1778163278_cf5c9fd9.jpg', '2026-04-24 01:01:00', '2026-05-07 14:18:23'),
+	(3, 'Treadmill', 'Máy chạy bộ điện', 20, 'maintenance', 'Khu cardio', 'warehouse_1778163271_d151dcf3.jpg', '2026-04-24 01:02:00', '2026-05-07 14:18:19'),
+	(4, 'Kettlebell 12kg', 'Tạ ấm dùng tập functional', 20, 'out_of_stock', 'Kho tầng 1', 'warehouse_1778163263_1bc2a628.jpg', '2026-04-24 01:03:00', '2026-05-07 14:18:14');
 
 -- Dumping structure for table threegym.wishlists
 CREATE TABLE IF NOT EXISTS `wishlists` (
@@ -346,7 +364,7 @@ CREATE TABLE IF NOT EXISTS `wishlists` (
   CONSTRAINT `fk_wishlists_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.wishlists: ~23 rows (approximately)
+-- Dumping data for table threegym.wishlists: ~22 rows (approximately)
 INSERT INTO `wishlists` (`id`, `account_id`, `product_id`, `quantity`, `added_at`, `updated_at`) VALUES
 	(11, 1, 1, 19, '2026-04-18 13:11:52', '2026-04-22 02:30:00'),
 	(12, 1, 2, 26, '2026-04-18 13:11:52', '2026-04-22 02:28:44'),
@@ -368,7 +386,7 @@ INSERT INTO `wishlists` (`id`, `account_id`, `product_id`, `quantity`, `added_at
 	(29, 1, 12, 1, '2026-04-22 02:09:54', '2026-04-22 02:09:54'),
 	(30, 1, 11, 1, '2026-04-22 02:09:54', '2026-04-22 02:09:54'),
 	(31, 1, 16, 7, '2026-04-22 02:10:01', '2026-04-22 02:10:35'),
-	(139, 2, 1, 2, '2026-04-23 07:03:03', '2026-04-24 05:16:47'),
+	(139, 2, 1, 5, '2026-04-23 07:03:03', '2026-05-07 09:55:56'),
 	(140, 2, 2, 2, '2026-04-23 07:03:04', '2026-04-24 05:16:48'),
 	(141, 2, 3, 1, '2026-04-23 07:03:04', '2026-04-23 07:03:04'),
 	(142, 2, 16, 1, '2026-04-24 02:54:34', '2026-04-24 02:54:34'),

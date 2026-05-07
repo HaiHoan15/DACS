@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import api from "../../../../API/api";
 import Notification from "../../../../components/Notification";
+import Pagination2 from "../../../../components/Pagination2";
 
 function formatDateTime(value) {
 	if (!value) return "-";
@@ -20,6 +21,8 @@ export default function UserActivity() {
 	const [notification, setNotification] = useState(null);
 	const [expandedUsers, setExpandedUsers] = useState({});
 	const [expandedRooms, setExpandedRooms] = useState({});
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 5;
 
 	useEffect(() => {
 		const fetchActivities = async () => {
@@ -59,6 +62,14 @@ export default function UserActivity() {
 		setExpandedRooms((prev) => ({ ...prev, [key]: !prev[key] }));
 	};
 
+	const totalPages = Math.ceil(users.length / itemsPerPage);
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const currentUsers = users.slice(startIndex, startIndex + itemsPerPage);
+
+	const handlePageChange = (page) => {
+		setCurrentPage(page);
+	};
+
 	if (loading) {
 		return (
 			<div className="text-center text-gray-400 py-12">
@@ -91,7 +102,7 @@ export default function UserActivity() {
 						<table className="w-full text-sm text-left">
 							<thead className="bg-gray-700 border-b border-gray-600">
 								<tr>
-									<th className="px-6 py-4 font-semibold text-gray-300">#</th>
+									<th className="px-6 py-4 font-semibold text-gray-300">ID</th>
 									<th className="px-6 py-4 font-semibold text-gray-300">Tên user</th>
 									<th className="px-6 py-4 font-semibold text-gray-300">Gmail</th>
 									<th className="px-6 py-4 font-semibold text-gray-300">Số lần đi tập</th>
@@ -99,10 +110,10 @@ export default function UserActivity() {
 								</tr>
 							</thead>
 							<tbody>
-								{users.map((user, index) => (
+								{currentUsers.map((user, index) => (
 									<Fragment key={`user-group-${user.user_id}`}>
 										<tr key={`user-row-${user.user_id}`} className="border-b border-gray-700 hover:bg-gray-700/40 transition">
-											<td className="px-6 py-4 text-gray-400">{index + 1}</td>
+											<td className="px-6 py-4 text-gray-400">{(currentPage - 1) * itemsPerPage + index + 1}</td>
 											<td className="px-6 py-4 text-white font-medium">{user.username}</td>
 											<td className="px-6 py-4 text-gray-300">{user.email}</td>
 											<td className="px-6 py-4 text-yellow-400 font-semibold">{user.total_checkins || 0}</td>
@@ -174,6 +185,13 @@ export default function UserActivity() {
 							</tbody>
 						</table>
 					</div>
+				)}
+				{totalPages > 1 && (
+					<Pagination2
+						currentPage={currentPage}
+						totalPages={totalPages}
+						onPageChange={handlePageChange}
+					/>
 				)}
 			</div>
 		</div>

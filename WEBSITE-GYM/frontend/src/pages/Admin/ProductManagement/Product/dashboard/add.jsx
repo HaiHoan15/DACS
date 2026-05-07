@@ -226,17 +226,11 @@ export default function AddProduct() {
                 />
             )}
 
-            <div className="flex items-center gap-4">
-                <button
-                    onClick={() => navigate("/admin/ProductManagement")}
-                    className="text-gray-400 hover:text-white transition"
-                >
-                    ← Quay lại
-                </button>
-                <h2 className="text-2xl font-bold text-white">Thêm sản phẩm mới</h2>
-            </div>
-
-            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+            <div className="bg-gray-800 p-6  border border-gray-700">
+                <h1 className="text-4xl font-bold text-white mb-2">
+                    <span className="text-red-500">THÊM</span>
+                    <span className="text-yellow-500 ml-2">SẢN PHẨM</span>
+                </h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Product Name */}
                     <div>

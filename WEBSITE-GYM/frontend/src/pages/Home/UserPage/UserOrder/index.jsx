@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import Pagination from "../../../../components/Pagination";
 import Notification from "../../../../components/Notification";
 import api from "../../../../API/api";
 
@@ -9,6 +10,12 @@ export default function UserOrder() {
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [dateSearch, setDateSearch] = useState("");
+
+  const itemsPerPage = 4;
 
   useEffect(() => {
     if (user?.id) {
@@ -66,6 +73,60 @@ export default function UserOrder() {
     return colorMap[status] || 'bg-gray-100 text-gray-800';
   };
 
+  const getPaymentMethodLabel = (paymentMethod) => {
+    return paymentMethod === 'direct' ? 'Trực tiếp' : 'MOMO ATM';
+  };
+
+  const matchesDateSearch = (orderDate, searchText) => {
+    if (!searchText) return true;
+    if (!orderDate) return false;
+
+    const query = searchText.trim().toLowerCase();
+    if (!query) return true;
+
+    const dateObj = new Date(orderDate);
+    if (Number.isNaN(dateObj.getTime())) {
+      return String(orderDate).toLowerCase().includes(query);
+    }
+
+    const day = String(dateObj.getDate());
+    const month = String(dateObj.getMonth() + 1);
+    const year = String(dateObj.getFullYear());
+    const viDate = `${day}/${month}/${year}`;
+    const monthYear = `${month}/${year}`;
+    const isoDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+
+    return (
+      viDate.includes(query) ||
+      monthYear.includes(query) ||
+      year.includes(query) ||
+      isoDate.includes(query)
+    );
+  };
+
+  const filteredOrders = orders.filter((order) => {
+    const matchPayment = selectedPaymentMethod === "all" || order.payment_method === selectedPaymentMethod;
+    const matchStatus = selectedStatus === "all" || order.status === selectedStatus;
+    const matchDate = matchesDateSearch(order.created_at, dateSearch);
+
+    return matchPayment && matchStatus && matchDate;
+  });
+
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentOrders = filteredOrders.slice(startIndex, startIndex + itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setExpandedOrderId(null);
+  }, [selectedPaymentMethod, selectedStatus, dateSearch]);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -83,16 +144,53 @@ export default function UserOrder() {
   }
 
   return (
-    <div className="space-y-4">
-      {orders.map((order) => (
+    <div className="min-h-screen flex flex-col bg-gray-50 rounded-xl">
+      <div className="w-full max-w-7xl mx-auto px-4 py-8 flex-grow">
+        <div className="mb-6 flex flex-col lg:flex-row gap-4">
+          <input
+            type="text"
+            placeholder="Tìm theo ngày/tháng/năm... (vd: 23/4/2026, 4/2026, 2026)"
+            value={dateSearch}
+            onChange={(e) => setDateSearch(e.target.value)}
+            className="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <select
+            value={selectedPaymentMethod}
+            onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+            className="px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer"
+          >
+            <option value="all">Tất cả phương thức</option>
+            <option value="direct">Thanh toán trực tiếp</option>
+            <option value="momo">MOMO ATM</option>
+          </select>
+
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer"
+          >
+            <option value="all">Tất cả trạng thái</option>
+            <option value="pending">Chờ xử lý</option>
+            <option value="confirmed">Đã xác nhận</option>
+            <option value="shipped">Đang giao</option>
+            <option value="delivered">Đã giao</option>
+            <option value="cancelled">Đã hủy</option>
+          </select>
+        </div>
+
+        <div className="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+          <div className="p-4 md:p-6 space-y-4">
+      {currentOrders.length > 0 ? (
+        currentOrders.map((order) => (
         <div key={order.id} className="bg-gray-100 border border-gray-300 rounded-lg overflow-hidden">
           {/* Order Header */}
           <button
             onClick={() => toggleOrderExpand(order.id)}
-            className="w-full p-6 flex justify-between items-center hover:bg-gray-150 transition bg-gray-50"
+            className="w-full p-6 grid grid-cols-1 xl:grid-cols-[1fr_auto] gap-4 items-center hover:bg-gray-100 transition bg-gray-50"
           >
-            <div className="flex-grow text-left">
-              <div className="flex items-center gap-4 flex-wrap">
+            <div className="text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 <div>
                   <p className="text-gray-500 text-sm">Mã đơn hàng</p>
                   <p className="text-gray-900 font-bold text-lg">#{order.id}</p>
@@ -104,9 +202,9 @@ export default function UserOrder() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Phương thức thanh toán</p>
+                  <p className="text-gray-500 text-sm">Thanh toán</p>
                   <p className="text-blue-600 font-bold text-lg">
-                    {order.payment_method === 'direct' ? 'Thanh toán trực tiếp' : 'MOMO ATM'}
+                    {getPaymentMethodLabel(order.payment_method)}
                   </p>
                 </div>
                 <div>
@@ -121,10 +219,9 @@ export default function UserOrder() {
                     {order.created_at ? new Date(order.created_at).toLocaleDateString('vi-VN') : 'N/A'}
                   </p>
                 </div>
-
               </div>
             </div>
-            <div className={`text-gray-700 ml-4 text-2xl transition transform ${expandedOrderId === order.id ? 'rotate-180' : ''}`}>
+            <div className={`text-gray-700 text-2xl transition transform ${expandedOrderId === order.id ? 'rotate-180' : ''}`}>
               ▼
             </div>
           </button>
@@ -154,7 +251,7 @@ export default function UserOrder() {
                   <div>
                     <p className="text-gray-500">Phương thức thanh toán</p>
                     <p className="text-gray-900 font-semibold">
-                      {order.payment_method === 'direct' ? 'Thanh toán trực tiếp' : 'MOMO ATM'}
+                      {getPaymentMethodLabel(order.payment_method)}
                     </p>
                   </div>
                 </div>
@@ -197,7 +294,25 @@ export default function UserOrder() {
             </div>
           )}
         </div>
-      ))}
+      ))
+      ) : (
+        <div className="py-10 text-center">
+          <p className="text-gray-500 text-lg">Không tìm thấy đơn hàng phù hợp với bộ lọc</p>
+        </div>
+      )}
+          </div>
+        </div>
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              setExpandedOrderId(null);
+            }}
+          />
+        )}
 
       {/* Notification */}
       {notification && (
@@ -207,6 +322,7 @@ export default function UserOrder() {
           onClose={() => setNotification(null)}
         />
       )}
+      </div>
     </div>
   );
 }

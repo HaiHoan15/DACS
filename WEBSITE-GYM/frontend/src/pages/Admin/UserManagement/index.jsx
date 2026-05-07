@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import api from "../../../API/api";
 import Notification from "../../../components/Notification";
 import { toSlug } from "../../../routes/index";
+import Pagination2 from "../../../components/Pagination2";
 import UserActivity from "./UserActivity";
 
 export default function UserManagement() {
@@ -13,6 +14,8 @@ export default function UserManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   // Fetch danh sách users
   useEffect(() => {
@@ -54,9 +57,17 @@ export default function UserManagement() {
     navigate(`/admin/UserManagement/UM_Detail/${slug}`);
   };
 
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentUsers = users.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   const handleRoleChange = async (userId, username, currentRole) => {
     const newRole = currentRole === "admin" ? "user" : "admin";
-    
+
     try {
       const token = localStorage.getItem("authToken") || "temp-token";
       const response = await api.post("UserController.php", {
@@ -71,10 +82,10 @@ export default function UserManagement() {
 
       if (response.data.success) {
         // Cập nhật users list
-        setUsers(users.map(u => 
+        setUsers(users.map(u =>
           u.id === userId ? { ...u, role: newRole } : u
         ));
-        
+
         setNotification({
           message: `Đã ${newRole === "admin" ? "nâng" : "hạ"} ${username} thành công!`,
           type: "success",
@@ -124,7 +135,7 @@ export default function UserManagement() {
             <span className="text-red-500">QUẢN LÝ</span>
             <span className="text-yellow-500 ml-2">NGƯỜI DÙNG</span>
           </h1>
-          <p className="text-gray-400">Tổng: {users.length} người dùng</p>
+          <p className="text-gray-400 text-sm">Tổng: <span className="font-semibold text-white">{users.length}</span> người dùng</p>
         </div>
 
         <div className="flex gap-2 mb-6 border-b border-gray-700">
@@ -149,13 +160,16 @@ export default function UserManagement() {
         </div>
 
         {activeTab === "permission" && (
+          
           <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
             {users.length === 0 ? (
               <div className="text-center text-gray-400 py-8">
                 Không có người dùng nào
               </div>
             ) : (
+              
               <div className="overflow-x-auto">
+                
                 <table className="w-full">
                   <thead className="bg-gray-700 border-b border-gray-600">
                     <tr>
@@ -167,7 +181,7 @@ export default function UserManagement() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-700">
-                    {users.map((user) => (
+                    {currentUsers.map((user) => (
                       <tr key={user.id} className="hover:bg-gray-700/50 transition">
                         <td className="px-6 py-4 text-sm text-gray-300">{user.id}</td>
                         <td className="px-6 py-4 text-sm">
@@ -185,11 +199,10 @@ export default function UserManagement() {
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-300">{user.email}</td>
                         <td className="px-6 py-4 text-sm">
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            user.role === "admin"
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.role === "admin"
                               ? "bg-red-500/20 text-red-400"
                               : "bg-blue-500/20 text-blue-400"
-                          }`}>
+                            }`}>
                             {user.role === "admin" ? "Admin" : "User"}
                           </span>
                         </td>
@@ -210,11 +223,10 @@ export default function UserManagement() {
                               </button>
                               <button
                                 onClick={() => handleRoleChange(user.id, user.username, user.role)}
-                                className={`px-4 py-2 rounded-lg transition font-medium text-xs ${
-                                  user.role === "admin"
+                                className={`px-4 py-2 rounded-lg transition font-medium text-xs ${user.role === "admin"
                                     ? "bg-red-600 hover:bg-red-700 text-white"
                                     : "bg-blue-500 hover:bg-blue-600 text-white"
-                                }`}
+                                  }`}
                               >
                                 {user.role === "admin" ? "Admin" : "User"}
                               </button>
@@ -226,6 +238,13 @@ export default function UserManagement() {
                   </tbody>
                 </table>
               </div>
+            )}
+            {totalPages > 1 && (
+              <Pagination2
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             )}
           </div>
         )}

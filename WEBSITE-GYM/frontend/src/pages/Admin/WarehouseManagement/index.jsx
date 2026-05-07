@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../API/api";
 import Notification from "../../../components/Notification";
+import Pagination2 from "../../../components/Pagination2";
 import QuantityDistributionModal from "./QuantityDistributionModal";
+
+const ITEMS_PER_PAGE = 5;
 
 export default function WarehouseManagement() {
   const navigate = useNavigate();
@@ -10,6 +13,7 @@ export default function WarehouseManagement() {
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [distributionItemId, setDistributionItemId] = useState(null);
   const [distributionDeleteMode, setDistributionDeleteMode] = useState(false);
   const [deleteBlockedItem, setDeleteBlockedItem] = useState(null);
@@ -17,6 +21,10 @@ export default function WarehouseManagement() {
   useEffect(() => {
     fetchItems();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
 
   const fetchItems = async () => {
       try {
@@ -123,8 +131,8 @@ export default function WarehouseManagement() {
 
   if (loading) {
     return (
-      <div className="text-center text-gray-400 py-12">
-        <p>Đang tải dữ liệu kho...</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-400">Đang tải dữ liệu kho...</p>
       </div>
     );
   }
@@ -135,8 +143,11 @@ export default function WarehouseManagement() {
     return item.name?.toLowerCase().includes(q) || String(item.id).includes(q);
   });
 
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const currentItems = filtered.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-900 p-6">
       {notification && (
         <Notification
           message={notification.message}
@@ -145,71 +156,77 @@ export default function WarehouseManagement() {
         />
       )}
 
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Quản lý kho dụng cụ</h1>
+      <div className="mb-6">
+        <h1 className="text-4xl font-bold text-white mb-2">
+          <span className="text-red-500">QUẢN LÝ</span>
+          <span className="text-yellow-500 ml-2">KHO DỤNG CỤ</span>
+        </h1>                
+        <p className="text-gray-400 text-sm">Trang quản lý dụng cụ tập trong kho dụng cụ</p>
       </div>
 
-      <div className="mb-5 flex flex-col md:flex-row gap-4 items-start md:items-end">
-        <div className="flex-1 min-w-0">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-            Tìm kiếm theo tên hoặc ID
-          </label>
-          <input
-            type="text"
-            placeholder="Nhập tên dụng cụ hoặc ID..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+      <div className="mb-5 bg-gray-800 rounded-xl border border-gray-700 p-4">
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
+          <div className="flex-1 min-w-0">
+            <label className="block text-sm font-semibold text-gray-300 mb-1">
+              Tìm kiếm theo tên hoặc ID
+            </label>
+            <input
+              type="text"
+              placeholder="Nhập tên dụng cụ hoặc ID..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            />
+          </div>
+
+          <button
+            onClick={() => navigate("/admin/WarehouseManagement/dashboard/add")}
+            className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition whitespace-nowrap shadow"
+          >
+            + Thêm dụng cụ
+          </button>
         </div>
-
-        <button
-          onClick={() => navigate("/admin/WarehouseManagement/dashboard/add")}
-          className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition whitespace-nowrap shadow"
-        >
-          + Thêm dụng cụ
-        </button>
       </div>
 
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+      <p className="text-sm text-gray-400 mb-3">
         Hiển thị <strong>{filtered.length}</strong> / {items.length} bản ghi
       </p>
 
       {filtered.length === 0 ? (
-        <div className="text-center text-gray-500 dark:text-gray-400 py-16 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div className="text-center text-gray-400 py-16 bg-gray-800 rounded-xl border border-gray-700">
           <p>Không có dữ liệu phù hợp.</p>
         </div>
       ) : (
-        <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600">
-                <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">#</th>
-                <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Hình</th>
-                <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Tên dụng cụ</th>
-                <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Số lượng</th>
-                <th className="px-5 py-3 font-semibold text-gray-700 dark:text-gray-300">Thao tác</th>
+              <tr className="bg-gray-700 border-b border-gray-600">
+                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">#</th>
+                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">Hình</th>
+                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">Tên dụng cụ</th>
+                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">Số lượng</th>
+                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((item, idx) => (
-                <tr key={item.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                  <td className="px-5 py-3 text-gray-700 dark:text-gray-300">{idx + 1}</td>
+              {currentItems.map((item, idx) => (
+                <tr key={item.id} className="border-b border-gray-700 hover:bg-gray-750 transition-colors">
+                  <td className="px-5 py-3 text-gray-300">{(currentPage - 1) * ITEMS_PER_PAGE + idx + 1}</td>
                   <td className="px-5 py-3">
                     <img
                       src={getImageUrl(item.avatar)}
                       alt={item.name}
-                      className="w-11 h-11 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                      className="w-11 h-11 object-cover rounded-lg border border-gray-700"
                       onError={(e) => {
                         e.target.src = "/images/error/product.png";
                       }}
                     />
                   </td>
-                  <td className="px-5 py-3 font-medium text-gray-800 dark:text-gray-200">{item.name}</td>
+                  <td className="px-5 py-3 font-medium text-gray-200">{item.name}</td>
                   <td className="px-5 py-3">
                     <div className="space-y-1">
-                      <p className="font-semibold text-gray-800 dark:text-gray-200">{item.quantity}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Trong phòng: {item.allocated_quantity || 0} | Còn lại: {item.available_quantity || 0}</p>
+                      <p className="font-semibold text-gray-200">{item.quantity}</p>
+                      <p className="text-xs text-gray-400">Trong phòng: {item.allocated_quantity || 0} | Còn lại: {item.available_quantity || 0}</p>
                     </div>
                   </td>
                   <td className="px-5 py-3">
@@ -247,6 +264,16 @@ export default function WarehouseManagement() {
               ))}
             </tbody>
           </table>
+
+          {totalPages > 1 && (
+            <div className="px-4 py-3 border-t border-gray-700">
+              <Pagination2
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          )}
         </div>
       )}
 

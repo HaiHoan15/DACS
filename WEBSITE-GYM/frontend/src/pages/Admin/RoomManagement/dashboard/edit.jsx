@@ -1,5 +1,11 @@
 import RoomForm from "./RoomForm";
 
 export default function EditRoom() {
-  return <RoomForm mode="edit" />;
+  return (
+    <div className="min-h-screen bg-gray-900 py-8 px-4">
+      <div className="max-w-3xl mx-auto">
+        <RoomForm mode="edit" />
+      </div>
+    </div>
+  );
 }

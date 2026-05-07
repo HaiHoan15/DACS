@@ -139,14 +139,14 @@ export default function EditWarehouseItem() {
 
 	if (loading) {
 		return (
-			<div className="text-center text-gray-400 py-12">
-				<p>Đang tải dữ liệu...</p>
+			<div className="min-h-screen bg-gray-900 flex items-center justify-center">
+				<p className="text-gray-400">Đang tải dữ liệu...</p>
 			</div>
 		);
 	}
 
 	return (
-		<div className="space-y-6">
+		<div className="min-h-screen bg-gray-900 py-8 px-4">
 			{notification && (
 				<Notification
 					message={notification.message}
@@ -155,18 +155,25 @@ export default function EditWarehouseItem() {
 				/>
 			)}
 
-			<div className="flex items-center gap-4">
-				<button
-					onClick={() => navigate("/admin/WarehouseManagement")}
-					className="text-gray-400 hover:text-white transition"
-				>
-					← Quay lại
-				</button>
-				<h2 className="text-2xl font-bold text-white">Chỉnh sửa dụng cụ</h2>
-			</div>
+			<div className="max-w-4xl mx-auto">
+				<div className="mb-8">
+					<button
+						onClick={() => navigate("/admin/WarehouseManagement")}
+						className="mb-4 text-gray-400 hover:text-gray-300 transition flex items-center gap-2"
+					>
+						<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+						</svg>
+						Quay lại
+					</button>
+					<h1 className="text-4xl font-bold text-white">
+						<span className="text-red-500">CHỈNH SỮA</span>
+						<span className="text-yellow-500 ml-2">DỤNG CỤ</span>
+					</h1>
+				</div>
 
-			<div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-				<form onSubmit={handleSubmit} className="space-y-4">
+				<div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+					<form onSubmit={handleSubmit} className="space-y-4">
 					<div>
 						<label className="block text-sm font-medium text-gray-300 mb-2">ID dụng cụ</label>
 						<input
@@ -231,7 +238,8 @@ export default function EditWarehouseItem() {
 							Hủy
 						</button>
 					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		</div>
 	);

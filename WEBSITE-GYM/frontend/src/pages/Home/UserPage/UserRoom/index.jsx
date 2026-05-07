@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import api from "../../../../API/api";
+import Pagination2 from "../../../../components/Pagination2";
 import Notification from "../../../../components/Notification";
 
 export default function UserRoom() {
@@ -9,12 +10,16 @@ export default function UserRoom() {
   const [loading, setLoading] = useState(true);
   const [expandedRoomId, setExpandedRoomId] = useState(null);
   const [notification, setNotification] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [confirmationModal, setConfirmationModal] = useState({
     open: false,
     roomId: "",
     roomName: "",
     code: "",
   });
+
+  const itemsPerPage = 4;
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -71,6 +76,31 @@ export default function UserRoom() {
     ? `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrValue)}`
     : "";
 
+  const filteredRooms = rooms.filter((room) => {
+    const keyword = searchTerm.trim().toLowerCase();
+    if (!keyword) return true;
+
+    const roomName = (room.name || "").toLowerCase();
+    const roomAddress = (room.description || "").toLowerCase();
+    return roomName.includes(keyword) || roomAddress.includes(keyword);
+  });
+
+  const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentRooms = filteredRooms.slice(startIndex, startIndex + itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setExpandedRoomId(null);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+      setExpandedRoomId(null);
+    }
+  }, [currentPage, totalPages]);
+
   if (loading) {
     return (
       <div className="py-8 text-center">
@@ -88,7 +118,8 @@ export default function UserRoom() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="min-h-screen flex flex-col bg-gray-50 rounded-xl">
+      <div className="w-full max-w-7xl mx-auto px-4 py-8 flex-grow">
       {confirmationModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-gray-200 overflow-hidden">
@@ -139,7 +170,20 @@ export default function UserRoom() {
         />
       )}
 
-      {rooms.map((room) => (
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Tìm kiếm theo tên phòng hoặc địa chỉ..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div className="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+        <div className="p-4 md:p-6 space-y-4">
+      {currentRooms.length > 0 ? (
+        currentRooms.map((room) => (
         <div key={room.id} className="bg-gray-100 border border-gray-300 rounded-lg overflow-hidden">
           <div className="w-full p-5 flex items-center justify-between hover:bg-gray-200 transition">
             <div className="text-left">
@@ -198,7 +242,26 @@ export default function UserRoom() {
             </div>
           )}
         </div>
-      ))}
+      ))
+      ) : (
+        <div className="py-10 text-center">
+          <p className="text-gray-500 text-lg">Không tìm thấy phòng tập phù hợp</p>
+        </div>
+      )}
+        </div>
+      </div>
+
+      {totalPages > 1 && (
+        <Pagination2
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => {
+            setCurrentPage(page);
+            setExpandedRoomId(null);
+          }}
+        />
+      )}
+      </div>
     </div>
   );
 }

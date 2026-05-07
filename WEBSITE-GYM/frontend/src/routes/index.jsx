@@ -16,7 +16,7 @@ import AboutPage from "../pages/Home/AboutPage";
 import ServicePage from "../pages/Home/ServicePage";
 import NewsPage from "../pages/Home/NewsPage";
 import NewsDetail from "../pages/Home/NewsPage/NewsDetail";
-import TEST from "../pages/Home/TEST";
+// import TEST from "../pages/Home/TEST";
 
 //trang sản phẩm cho người dùng
 import ProductPage from "../pages/Home/ProductPage";
@@ -164,10 +164,10 @@ const routes = [
                 path: "user/:username/ai",
                 element: ProtectedUserRouteWrapper(UserPage),
             },
-            {
-                path: "test",
-                element: TEST,
-            },
+            // {
+            //     path: "test",
+            //     element: TEST,
+            // },
 
         ],
     },

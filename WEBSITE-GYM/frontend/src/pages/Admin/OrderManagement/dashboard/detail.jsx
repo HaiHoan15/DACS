@@ -71,27 +71,27 @@ export default function OrderDetail() {
 
   const getStatusColor = (status) => {
     const colorMap = {
-      'pending': 'bg-yellow-100 text-yellow-800',
-      'confirmed': 'bg-blue-100 text-blue-800',
-      'shipped': 'bg-purple-100 text-purple-800',
-      'delivered': 'bg-green-100 text-green-800',
-      'cancelled': 'bg-red-100 text-red-800'
+      'pending': 'bg-yellow-500',
+      'confirmed': 'bg-blue-500',
+      'shipped': 'bg-purple-500',
+      'delivered': 'bg-green-500',
+      'cancelled': 'bg-red-500'
     };
-    return colorMap[status] || 'bg-gray-100 text-gray-800';
+    return colorMap[status] || 'bg-gray-500/20';
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <p className="text-gray-500">Đang tải...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <p className="text-gray-400">Đang tải...</p>
       </div>
     );
   }
 
   if (!order) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <p className="text-gray-500 text-lg mb-4">Không tìm thấy đơn hàng</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900">
+        <p className="text-gray-400 text-lg mb-4">Không tìm thấy đơn hàng</p>
         <button
           onClick={() => navigate("/admin/OrderManagement")}
           className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded font-medium"
@@ -103,50 +103,57 @@ export default function OrderDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+    <div className="min-h-screen bg-gray-900 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-6">
           <button
             onClick={() => navigate("/admin/OrderManagement")}
-            className="text-blue-500 hover:text-blue-600 font-medium mb-4"
+            className="mb-4 text-gray-400 hover:text-gray-300 transition flex items-center gap-2"
           >
-            ← Quay lại
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Quay lại
           </button>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Chi tiết đơn hàng #{order.id}
+          <h1 className="text-3xl font-bold text-white mb-2">
+            <span className="text-red-500">CHI TIẾT</span>
+            <span className="text-yellow-500 ml-2">ĐƠN HÀNG</span>
           </h1>
+          <p className="text-sm text-gray-400">
+            Mã đơn: <span className="text-white font-semibold">#{order.id}</span> | Kiểm tra thông tin giao hàng và cập nhật trạng thái xử lý.
+          </p>
         </div>
 
         {/* Order Info */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+        <div className="bg-gray-800 rounded-xl border border-gray-700 shadow p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">Email</p>
-              <p className="text-gray-900 dark:text-white font-semibold text-lg">{order.email}</p>
+              <p className="text-gray-400 text-sm">Email</p>
+              <p className="text-white font-semibold text-lg">{order.email}</p>
             </div>
             <div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">Tổng tiền</p>
-              <p className="text-green-600 dark:text-green-400 font-bold text-lg">
+              <p className="text-gray-400 text-sm">Tổng tiền</p>
+              <p className="text-green-400 font-bold text-lg">
                 {(parseFloat(order.total_amount) || 0).toLocaleString('vi-VN')} VND
               </p>
             </div>
             <div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">Ngày tạo</p>
-              <p className="text-gray-900 dark:text-white font-semibold">
+              <p className="text-gray-400 text-sm">Ngày tạo</p>
+              <p className="text-white font-semibold">
                 {order.created_at ? new Date(order.created_at).toLocaleDateString('vi-VN') : 'N/A'}
               </p>
             </div>
             <div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">Trạng thái</p>
+              <p className="text-gray-400 text-sm">Trạng thái</p>
               <select
                 value={order.status}
                 onChange={(e) => handleStatusChange(e.target.value)}
                 disabled={updatingStatus}
-                className={`px-3 py-1 rounded-full text-sm font-semibold border-0 cursor-pointer ${getStatusColor(order.status)}`}
+                className={`px-3 py-1 rounded-full text-sm font-bold text-white border border-white/10 cursor-pointer ${getStatusColor(order.status)}`}
               >
                 {statuses.map(status => (
-                  <option key={status.value} value={status.value}>
+                  <option key={status.value} value={status.value} className="bg-white text-gray-900 font-semibold">
                     {status.label}
                   </option>
                 ))}
@@ -154,24 +161,24 @@ export default function OrderDetail() {
             </div>
           </div>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Thông tin giao hàng</h3>
+          <div className="border-t border-gray-700 pt-6">
+            <h3 className="text-lg font-bold text-white mb-4">Thông tin giao hàng</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-gray-500 dark:text-gray-400">Người nhận</p>
-                <p className="text-gray-900 dark:text-white font-semibold">{order.recipient_name}</p>
+                <p className="text-gray-400">Người nhận</p>
+                <p className="text-white font-semibold">{order.recipient_name}</p>
               </div>
               <div>
-                <p className="text-gray-500 dark:text-gray-400">Số điện thoại</p>
-                <p className="text-gray-900 dark:text-white font-semibold">{order.recipient_phone}</p>
+                <p className="text-gray-400">Số điện thoại</p>
+                <p className="text-white font-semibold">{order.recipient_phone}</p>
               </div>
               <div className="md:col-span-2">
-                <p className="text-gray-500 dark:text-gray-400">Địa chỉ giao hàng</p>
-                <p className="text-gray-900 dark:text-white font-semibold">{order.recipient_address}</p>
+                <p className="text-gray-400">Địa chỉ giao hàng</p>
+                <p className="text-white font-semibold">{order.recipient_address}</p>
               </div>
               <div>
-                <p className="text-gray-500 dark:text-gray-400">Phương thức thanh toán</p>
-                <p className="text-gray-900 dark:text-white font-semibold">
+                <p className="text-gray-400">Phương thức thanh toán</p>
+                <p className="text-white font-semibold">
                   {order.payment_method === 'direct' ? 'Thanh toán trực tiếp' : 'MOMO ATM'}
                 </p>
               </div>
@@ -180,31 +187,31 @@ export default function OrderDetail() {
         </div>
 
         {/* Order Items */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Danh sách sản phẩm</h3>
+        <div className="bg-gray-800 rounded-xl border border-gray-700 shadow overflow-hidden">
+          <div className="p-6 border-b border-gray-700">
+            <h3 className="text-lg font-bold text-white">Danh sách sản phẩm</h3>
           </div>
 
           {order.items && order.items.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                    <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300">Sản phẩm</th>
-                    <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300 text-center">Số lượng</th>
-                    <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300 text-right">Giá</th>
-                    <th className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300 text-right">Thành tiền</th>
+                  <tr className="bg-gray-700 border-b-2 border-gray-600">
+                    <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Sản phẩm</th>
+                    <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs text-center">Số lượng</th>
+                    <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs text-right">Giá</th>
+                    <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs text-right">Thành tiền</th>
                   </tr>
                 </thead>
                 <tbody>
                   {order.items.map((item) => (
-                    <tr key={item.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-                      <td className="px-6 py-4 text-gray-900 dark:text-gray-100">{item.product_name}</td>
-                      <td className="px-6 py-4 text-center text-gray-900 dark:text-gray-100">{item.quantity}</td>
-                      <td className="px-6 py-4 text-right text-gray-900 dark:text-gray-100">
+                    <tr key={item.id} className="border-b border-gray-700 hover:bg-gray-700/50">
+                      <td className="px-6 py-4 text-white">{item.product_name}</td>
+                      <td className="px-6 py-4 text-center text-white">{item.quantity}</td>
+                      <td className="px-6 py-4 text-right text-white">
                         {(parseFloat(item.price) || 0).toLocaleString('vi-VN')} VND
                       </td>
-                      <td className="px-6 py-4 text-right font-semibold text-green-600 dark:text-green-400">
+                      <td className="px-6 py-4 text-right font-semibold text-green-400">
                         {(parseFloat(item.subtotal) || 0).toLocaleString('vi-VN')} VND
                       </td>
                     </tr>
@@ -213,7 +220,7 @@ export default function OrderDetail() {
               </table>
             </div>
           ) : (
-            <div className="p-6 text-center text-gray-500">
+            <div className="p-6 text-center text-gray-400">
               Không có sản phẩm trong đơn hàng này
             </div>
           )}

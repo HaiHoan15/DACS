@@ -119,7 +119,7 @@ export default function AddWarehouseItem() {
 	};
 
 	return (
-		<div className="space-y-6">
+		<div className="min-h-screen bg-gray-900 py-8 px-4">
 			{notification && (
 				<Notification
 					message={notification.message}
@@ -128,18 +128,25 @@ export default function AddWarehouseItem() {
 				/>
 			)}
 
-			<div className="flex items-center gap-4">
-				<button
-					onClick={() => navigate("/admin/WarehouseManagement")}
-					className="text-gray-400 hover:text-white transition"
-				>
-					← Quay lại
-				</button>
-				<h2 className="text-2xl font-bold text-white">Thêm dụng cụ tập luyện</h2>
-			</div>
+			<div className="max-w-4xl mx-auto">
+				<div className="mb-8">
+					<button
+						onClick={() => navigate("/admin/WarehouseManagement")}
+						className="mb-4 text-gray-400 hover:text-gray-300 transition flex items-center gap-2"
+					>
+						<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+						</svg>
+						Quay lại
+					</button>
+					<h1 className="text-4xl font-bold text-white">
+						<span className="text-red-500">THÊM</span>
+						<span className="text-yellow-500 ml-2">DỤNG CỤ</span>
+					</h1>
+				</div>
 
-			<div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-				<form onSubmit={handleSubmit} className="space-y-4">
+				<div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+					<form onSubmit={handleSubmit} className="space-y-4">
 					<div>
 						<label className="block text-sm font-medium text-gray-300 mb-2">Tên dụng cụ *</label>
 						<input
@@ -207,7 +214,8 @@ export default function AddWarehouseItem() {
 							Hủy
 						</button>
 					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		</div>
 	);

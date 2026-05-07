@@ -139,18 +139,21 @@ export default function MemberConfirmationManagement() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-900 p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Xác nhận thành viên</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <h1 className="text-4xl font-bold text-white mb-2">
+          <span className="text-red-500">XÁC NHẬN</span>
+          <span className="text-yellow-500 ml-2">THÀNH VIÊN</span>
+        </h1>
+        <p className="text-sm text-gray-400">
           Quét mã QR từ phía user để xác nhận thành viên vào phòng tập.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+        <div className="bg-gray-800 border border-gray-700 rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Camera quét mã</h2>
+            <h2 className="text-lg font-semibold text-white">Camera quét mã</h2>
             <div className="flex gap-2">
               {!isScanning ? (
                 <button
@@ -176,7 +179,7 @@ export default function MemberConfirmationManagement() {
             </div>
           </div>
 
-          <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-black relative min-h-[360px]">
+          <div className="rounded-xl overflow-hidden border border-gray-700 bg-black relative min-h-[360px]">
             <div id={scannerElementId} className="w-full h-[360px]" />
             {!isScanning && (
               <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-sm">
@@ -186,30 +189,30 @@ export default function MemberConfirmationManagement() {
           </div>
 
           {scanError && (
-            <p className="mt-3 text-sm text-red-600 dark:text-red-400">{scanError}</p>
+            <p className="mt-3 text-sm text-red-400">{scanError}</p>
           )}
         </div>
 
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Kết quả quét</h2>
+        <div className="bg-gray-800 border border-gray-700 rounded-xl p-5">
+          <h2 className="text-lg font-semibold text-white mb-4">Kết quả quét</h2>
 
           {scanResult ? (
             <div className="space-y-4">
-              <div className="rounded-lg border border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-700 p-4">
-                <p className="text-sm text-green-700 dark:text-green-300 font-semibold">Quét mã thành công</p>
+              <div className="rounded-lg border border-green-700 bg-green-900/20 p-4">
+                <p className="text-sm text-green-300 font-semibold">Quét mã thành công</p>
               </div>
 
               <div className="space-y-2 text-sm">
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-300">
                   <span className="font-semibold">Tên user:</span> {scanResult.username || "Không xác định"}
                 </p>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-300">
                   <span className="font-semibold">Gmail:</span> {scanResult.email || "Không xác định"}
                 </p>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-300">
                   <span className="font-semibold">Phòng:</span> {scanResult.roomName || "Không xác định"}
                 </p>
-                <p className="text-gray-600 dark:text-gray-300 break-all">
+                <p className="text-gray-300 break-all">
                   <span className="font-semibold">Mã:</span> {scanResult.code || scanResult.rawValue}
                 </p>
               </div>
@@ -223,14 +226,14 @@ export default function MemberConfirmationManagement() {
                 {confirming ? "Đang xác nhận..." : "Xác nhận thành viên"}
               </button>
               {confirmMessage && (
-                <p className="text-sm text-blue-600 dark:text-blue-300">{confirmMessage}</p>
+                <p className="text-sm text-blue-300">{confirmMessage}</p>
               )}
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-400">
                 Dữ liệu xác nhận sẽ được lưu vào lịch sử hoạt động thành viên.
               </p>
             </div>
           ) : (
-            <div className="h-[220px] flex items-center justify-center rounded-lg border border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 text-sm">
+            <div className="h-[220px] flex items-center justify-center rounded-lg border border-dashed border-gray-600 text-gray-400 text-sm">
               Chưa có dữ liệu quét.
             </div>
           )}
