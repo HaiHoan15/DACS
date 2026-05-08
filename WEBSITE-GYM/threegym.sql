@@ -338,14 +338,15 @@ CREATE TABLE IF NOT EXISTS `warehouse_items` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_warehouse_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table threegym.warehouse_items: ~4 rows (approximately)
 INSERT INTO `warehouse_items` (`id`, `name`, `description`, `quantity`, `status`, `location`, `avatar`, `created_at`, `updated_at`) VALUES
 	(1, 'Dumbbell Rack', 'Kệ đựng tạ tay khu free-weight', 20, 'available', 'Khu tạ tay', 'warehouse_1778163284_7bdf034f.jpg', '2026-04-24 01:00:00', '2026-05-07 14:18:27'),
 	(2, 'Barbell 20kg', 'Thanh đòn tiêu chuẩn Olympic', 20, 'available', 'Khu squat', 'warehouse_1778163278_cf5c9fd9.jpg', '2026-04-24 01:01:00', '2026-05-07 14:18:23'),
 	(3, 'Treadmill', 'Máy chạy bộ điện', 20, 'maintenance', 'Khu cardio', 'warehouse_1778163271_d151dcf3.jpg', '2026-04-24 01:02:00', '2026-05-07 14:18:19'),
-	(4, 'Kettlebell 12kg', 'Tạ ấm dùng tập functional', 20, 'out_of_stock', 'Kho tầng 1', 'warehouse_1778163263_1bc2a628.jpg', '2026-04-24 01:03:00', '2026-05-07 14:18:14');
+	(4, 'Kettlebell 12kg', 'Tạ ấm dùng tập functional', 20, 'out_of_stock', 'Kho tầng 1', 'warehouse_1778163263_1bc2a628.jpg', '2026-04-24 01:03:00', '2026-05-07 14:18:14'),
+	(9, 'ewffwe', 'wefewfwf', 34, 'available', NULL, 'warehouse_1778164313_7cea9b09.jpg', '2026-05-07 14:31:45', '2026-05-07 14:31:55');
 
 -- Dumping structure for table threegym.wishlists
 CREATE TABLE IF NOT EXISTS `wishlists` (

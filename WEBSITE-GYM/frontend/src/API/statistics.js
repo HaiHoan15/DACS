@@ -1,6 +1,7 @@
 import api from './api';
 
 const STATS_BASE_URL = 'http://localhost/backend/controllers/StatisticsController.php';
+// const STATS_BASE_URL = 'https://threegym.fit/backend/controllers/StatisticsController.php';
 
 export const statisticsAPI = {
   // TỔNG QUAN HỆ THỐNG
