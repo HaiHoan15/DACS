@@ -6,6 +6,7 @@ import Notification from "../../../components/Notification";
 import { toSlug } from "../../../routes/index";
 import Pagination2 from "../../../components/Pagination2";
 import UserActivity from "./UserActivity";
+import UserService from "./UserService";
 
 export default function UserManagement() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function UserManagement() {
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 5;
 
   // Fetch danh sách users
@@ -57,12 +59,27 @@ export default function UserManagement() {
     navigate(`/admin/UserManagement/UM_Detail/${slug}`);
   };
 
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredUsers = users.filter((user) => {
+    if (!normalizedQuery) return true;
+    return (
+      String(user.id).toLowerCase().includes(normalizedQuery) ||
+      (user.username || "").toLowerCase().includes(normalizedQuery) ||
+      (user.email || "").toLowerCase().includes(normalizedQuery)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentUsers = users.slice(startIndex, startIndex + itemsPerPage);
+  const currentUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleRoleChange = async (userId, username, currentRole) => {
@@ -130,12 +147,25 @@ export default function UserManagement() {
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            <span className="text-red-500">QUẢN LÝ</span>
-            <span className="text-yellow-500 ml-2">NGƯỜI DÙNG</span>
-          </h1>
-          <p className="text-gray-400 text-sm">Tổng: <span className="font-semibold text-white">{users.length}</span> người dùng</p>
+        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-white mb-2">
+              <span className="text-red-500">QUẢN LÝ</span>
+              <span className="text-yellow-500 ml-2">NGƯỜI DÙNG</span>
+            </h1>
+            <p className="text-gray-400 text-sm">Tổng: <span className="font-semibold text-white">{users.length}</span> người dùng</p>
+          </div>
+
+          <div className="w-full lg:w-[420px]">
+            <label className="block text-xs text-gray-400 mb-1">Tìm kiếm chung (Tên người dùng, Gmail)</label>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Nhập từ khóa tìm kiếm..."
+              className="w-full rounded-lg border border-gray-600 bg-gray-800 text-gray-100 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
 
         <div className="flex gap-2 mb-6 border-b border-gray-700">
@@ -157,19 +187,34 @@ export default function UserManagement() {
           >
             Hoạt động
           </button>
+          <button
+            onClick={() => setActiveTab("service")}
+            className={`px-6 py-3 font-medium transition border-b-2 ${activeTab === "service"
+              ? "text-red-500 border-red-500"
+              : "text-gray-400 border-transparent hover:text-gray-300"
+              }`}
+          >
+            Dịch vụ
+          </button>
         </div>
 
         {activeTab === "permission" && (
-          
-          <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-            {users.length === 0 ? (
+          <>
+            <div className="mb-4 bg-gray-800 border border-gray-700 rounded-lg p-4">
+              <p className="text-sm text-white">
+                Danh sách user, xem chi tiết user và phân quyền.
+              </p>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+            {filteredUsers.length === 0 ? (
               <div className="text-center text-gray-400 py-8">
-                Không có người dùng nào
+                Không có người dùng nào phù hợp với từ khóa tìm kiếm.
               </div>
             ) : (
-              
+
               <div className="overflow-x-auto">
-                
+
                 <table className="w-full">
                   <thead className="bg-gray-700 border-b border-gray-600">
                     <tr>
@@ -200,8 +245,8 @@ export default function UserManagement() {
                         <td className="px-6 py-4 text-sm text-gray-300">{user.email}</td>
                         <td className="px-6 py-4 text-sm">
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.role === "admin"
-                              ? "bg-red-500/20 text-red-400"
-                              : "bg-blue-500/20 text-blue-400"
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-blue-500/20 text-blue-400"
                             }`}>
                             {user.role === "admin" ? "Admin" : "User"}
                           </span>
@@ -224,8 +269,8 @@ export default function UserManagement() {
                               <button
                                 onClick={() => handleRoleChange(user.id, user.username, user.role)}
                                 className={`px-4 py-2 rounded-lg transition font-medium text-xs ${user.role === "admin"
-                                    ? "bg-red-600 hover:bg-red-700 text-white"
-                                    : "bg-blue-500 hover:bg-blue-600 text-white"
+                                  ? "bg-red-600 hover:bg-red-700 text-white"
+                                  : "bg-blue-500 hover:bg-blue-600 text-white"
                                   }`}
                               >
                                 {user.role === "admin" ? "Admin" : "User"}
@@ -246,10 +291,12 @@ export default function UserManagement() {
                 onPageChange={handlePageChange}
               />
             )}
-          </div>
+            </div>
+          </>
         )}
 
-        {activeTab === "activity" && <UserActivity />}
+        {activeTab === "activity" && <UserActivity searchQuery={searchQuery} />}
+        {activeTab === "service" && <UserService searchQuery={searchQuery} />}
       </div>
     </div>
   );

@@ -30,6 +30,8 @@ class ServiceModel {
             is_revenue TINYINT(1) NOT NULL DEFAULT 0,
             performed_by_admin_id INT DEFAULT NULL,
             note VARCHAR(255) DEFAULT NULL,
+            start_date DATE DEFAULT NULL,
+            end_date DATE DEFAULT NULL,
             created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             KEY idx_sph_user_id (user_id),
@@ -44,6 +46,31 @@ class ServiceModel {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
         $this->conn->exec($sql);
+
+        $this->ensurePaymentHistoryDateColumns();
+    }
+
+    private function ensurePaymentHistoryDateColumns() {
+        $columns = [
+            'start_date' => 'ALTER TABLE service_payment_history ADD COLUMN start_date DATE DEFAULT NULL',
+            'end_date' => 'ALTER TABLE service_payment_history ADD COLUMN end_date DATE DEFAULT NULL',
+        ];
+
+        foreach ($columns as $columnName => $alterSql) {
+            $stmt = $this->conn->prepare(
+                "SELECT COUNT(*)
+                 FROM INFORMATION_SCHEMA.COLUMNS
+                 WHERE TABLE_SCHEMA = DATABASE()
+                   AND TABLE_NAME = 'service_payment_history'
+                   AND COLUMN_NAME = :column_name"
+            );
+            $stmt->execute([':column_name' => $columnName]);
+            $exists = (int)$stmt->fetchColumn() > 0;
+
+            if (!$exists) {
+                $this->conn->exec($alterSql);
+            }
+        }
     }
 
     private function getPackageInfo($packageId) {
@@ -67,13 +94,15 @@ class ServiceModel {
         $amount,
         $isRevenue,
         $performedByAdminId,
-        $note
+        $note,
+        $startDate = null,
+        $endDate = null
     ) {
         $stmt = $this->conn->prepare(
             "INSERT INTO service_payment_history
-                (user_id, user_service_id, package_id, package_name, event_type, payment_method, amount, is_revenue, performed_by_admin_id, note)
+                (user_id, user_service_id, package_id, package_name, event_type, payment_method, amount, is_revenue, performed_by_admin_id, note, start_date, end_date)
              VALUES
-                (:user_id, :user_service_id, :package_id, :package_name, :event_type, :payment_method, :amount, :is_revenue, :performed_by_admin_id, :note)"
+                (:user_id, :user_service_id, :package_id, :package_name, :event_type, :payment_method, :amount, :is_revenue, :performed_by_admin_id, :note, :start_date, :end_date)"
         );
 
         $stmt->execute([
@@ -87,6 +116,8 @@ class ServiceModel {
             ':is_revenue' => $isRevenue ? 1 : 0,
             ':performed_by_admin_id' => $performedByAdminId ? (int)$performedByAdminId : null,
             ':note' => $note ?: null,
+            ':start_date' => $startDate ?: null,
+            ':end_date' => $endDate ?: null,
         ]);
     }
 
@@ -178,7 +209,9 @@ class ServiceModel {
             $amount,
             $isRevenue,
             $adminId,
-            $resolvedNote
+            $resolvedNote,
+            $startDate,
+            $endDate
         );
 
         return $newUserServiceId;
@@ -234,7 +267,9 @@ class ServiceModel {
                 0,
                 false,
                 $adminId,
-                $note ?: 'Admin xóa gói dịch vụ của người dùng'
+                $note ?: 'Admin xóa gói dịch vụ của người dùng',
+                null,
+                null
             );
         }
 
@@ -337,7 +372,9 @@ class ServiceModel {
                 0,
                 false,
                 $adminId,
-                'Admin cập nhật dịch vụ (gói/trạng thái)'
+                'Admin cập nhật dịch vụ (gói/trạng thái)',
+                $startDate,
+                $endDate
             );
         }
 
@@ -375,5 +412,86 @@ class ServiceModel {
         $stmt->bindValue(':limit', max(1, (int)$limit), \PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getUsageStats() {
+        $usersStmt = $this->conn->prepare(
+            "SELECT
+                a.id AS user_id,
+                a.username,
+                a.email,
+                us.id AS user_service_id,
+                us.start_date,
+                us.end_date,
+                sp.name AS current_package_name
+             FROM accounts a
+             LEFT JOIN (
+                SELECT t1.*
+                FROM user_services t1
+                INNER JOIN (
+                    SELECT user_id, MAX(id) AS max_id
+                    FROM user_services
+                    GROUP BY user_id
+                ) t2 ON t1.user_id = t2.user_id AND t1.id = t2.max_id
+             ) us ON us.user_id = a.id
+             LEFT JOIN service_packages sp ON sp.id = us.package_id
+             WHERE a.role = 'user'
+             ORDER BY a.id ASC"
+        );
+        $usersStmt->execute();
+        $users = $usersStmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $historyStmt = $this->conn->prepare(
+            "SELECT
+                sph.id,
+                sph.user_id,
+                COALESCE(sph.package_name, sp.name, 'Không rõ') AS package_name,
+                sph.event_type,
+                COALESCE(sph.start_date, us.start_date) AS start_date,
+                COALESCE(sph.end_date, us.end_date) AS end_date,
+                sph.created_at
+             FROM service_payment_history sph
+             LEFT JOIN user_services us ON us.id = sph.user_service_id
+             LEFT JOIN service_packages sp ON sp.id = sph.package_id
+             WHERE sph.event_type IN ('user_purchase', 'admin_grant', 'admin_update')
+             ORDER BY sph.user_id ASC, sph.created_at DESC, sph.id DESC"
+        );
+        $historyStmt->execute();
+        $historyRows = $historyStmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $historyByUser = [];
+        foreach ($historyRows as $row) {
+            $uid = (int)$row['user_id'];
+            if (!isset($historyByUser[$uid])) {
+                $historyByUser[$uid] = [];
+            }
+
+            $activation = $row['event_type'] === 'user_purchase' ? 'UserPay' : 'AdminGive';
+            $historyByUser[$uid][] = [
+                'service' => $row['package_name'] ?: 'Không rõ',
+                'activation' => $activation,
+                'start_date' => $row['start_date'] ?: null,
+                'end_date' => $row['end_date'] ?: null,
+                'created_at' => $row['created_at'],
+            ];
+        }
+
+        $result = [];
+        foreach ($users as $u) {
+            $uid = (int)$u['user_id'];
+            $history = $historyByUser[$uid] ?? [];
+            $latestActivation = count($history) > 0 ? $history[0]['activation'] : '-';
+
+            $result[] = [
+                'id' => $uid,
+                'username' => $u['username'],
+                'email' => $u['email'],
+                'service' => $u['current_package_name'] ?: 'Chưa có',
+                'activation' => $latestActivation,
+                'history' => $history,
+            ];
+        }
+
+        return $result;
     }
 }

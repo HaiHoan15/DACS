@@ -211,12 +211,12 @@ export default function Product() {
           <table className="w-full text-sm text-left text-gray-300">
             <thead className="bg-gray-700 border-b-2 border-gray-600">
               <tr>
-                <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">ID</th>
-                <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Hình</th>
-                <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Tên sản phẩm</th>
-                <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Danh mục</th>
-                <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Giá</th>
-                <th className="px-4 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Thao tác</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">ID</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Hình</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Tên sản phẩm</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Danh mục</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Giá</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Thao tác</th>
               </tr>
             </thead>
             <tbody>

@@ -26,8 +26,16 @@ export const statisticsAPI = {
     return api.get(`${STATS_BASE_URL}?action=service-revenue`);
   },
 
+  getRevenueByService: async (limit = 10) => {
+    return api.get(`${STATS_BASE_URL}?action=revenue-by-service&limit=${limit}`);
+  },
+
   getTopSpenders: async (limit = 5) => {
     return api.get(`${STATS_BASE_URL}?action=top-spenders&limit=${limit}`);
+  },
+
+  getTopTotalSpenders: async (limit = 10) => {
+    return api.get(`${STATS_BASE_URL}?action=top-total-spenders&limit=${limit}`);
   },
 
   // QUẢN LÝ ĐƠN HÀNG
@@ -82,6 +90,10 @@ export const statisticsAPI = {
   // KHO
   getWarehouseStatus: async () => {
     return api.get(`${STATS_BASE_URL}?action=warehouse-status`);
+  },
+
+  getWarehouseItems: async () => {
+    return api.get(`${STATS_BASE_URL}?action=warehouse-items`);
   },
 
   // WISHLIST

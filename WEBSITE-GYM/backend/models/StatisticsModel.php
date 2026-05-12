@@ -100,6 +100,22 @@ class StatisticsModel {
         ];
     }
 
+    public function getRevenueByService($limit = 10) {
+        $limit = $this->toPositiveInt($limit, 10);
+        $sql = "SELECT COALESCE(sp.id, sph.package_id) AS id,
+                       COALESCE(sp.name, sph.package_name, 'Khac') AS service_name,
+                       COUNT(*) AS transaction_count,
+                       COALESCE(SUM(sph.amount), 0) AS total_revenue
+                FROM service_payment_history sph
+                LEFT JOIN service_packages sp ON sph.package_id = sp.id
+                WHERE sph.is_revenue = 1
+                GROUP BY COALESCE(sp.id, sph.package_id), COALESCE(sp.name, sph.package_name, 'Khac')
+                ORDER BY total_revenue DESC
+                LIMIT {$limit}";
+
+        return $this->fetchAll($sql);
+    }
+
     public function getTopSpenders($limit = 5) {
         $limit = $this->toPositiveInt($limit, 5);
         $sql = "SELECT a.id,
@@ -112,6 +128,37 @@ class StatisticsModel {
                 LEFT JOIN orders o ON a.id = o.account_id AND o.status = 'delivered'
                 WHERE a.role = 'user'
                 GROUP BY a.id, a.username, a.email, a.avatar
+                ORDER BY total_spent DESC
+                LIMIT {$limit}";
+
+        return $this->fetchAll($sql);
+    }
+
+    public function getTopTotalSpenders($limit = 10) {
+        $limit = $this->toPositiveInt($limit, 10);
+        $sql = "SELECT a.id,
+                       a.username,
+                       a.email,
+                       a.avatar,
+                       COALESCE(op.product_spent, 0) AS product_spent,
+                       COALESCE(sp.service_spent, 0) AS service_spent,
+                       (COALESCE(op.product_spent, 0) + COALESCE(sp.service_spent, 0)) AS total_spent
+                FROM accounts a
+                LEFT JOIN (
+                    SELECT o.account_id,
+                           COALESCE(SUM(o.total_amount), 0) AS product_spent
+                    FROM orders o
+                    WHERE o.status = 'delivered'
+                    GROUP BY o.account_id
+                ) op ON a.id = op.account_id
+                LEFT JOIN (
+                    SELECT sph.user_id,
+                           COALESCE(SUM(sph.amount), 0) AS service_spent
+                    FROM service_payment_history sph
+                    WHERE sph.is_revenue = 1
+                    GROUP BY sph.user_id
+                ) sp ON a.id = sp.user_id
+                WHERE a.role = 'user'
                 ORDER BY total_spent DESC
                 LIMIT {$limit}";
 
@@ -279,11 +326,41 @@ class StatisticsModel {
     }
 
     public function getWarehouseStatus() {
-        $sql = "SELECT status,
+        $sql = "SELECT stock_status AS status,
                        COUNT(*) AS count,
-                       SUM(quantity) AS total_quantity
-                FROM warehouse_items
-                GROUP BY status";
+                       SUM(remaining_quantity) AS total_quantity
+                FROM (
+                    SELECT wi.id,
+                           GREATEST(wi.quantity - COALESCE(SUM(re.quantity), 0), 0) AS remaining_quantity,
+                           CASE
+                               WHEN GREATEST(wi.quantity - COALESCE(SUM(re.quantity), 0), 0) > 0 THEN 'available'
+                               ELSE 'out_of_stock'
+                           END AS stock_status
+                    FROM warehouse_items wi
+                    LEFT JOIN room_equipments re ON re.warehouse_item_id = wi.id
+                    GROUP BY wi.id, wi.quantity
+                ) stock_agg
+                GROUP BY stock_status";
+
+        return $this->fetchAll($sql);
+    }
+
+    public function getWarehouseItems() {
+        $sql = "SELECT wi.id,
+                       wi.name,
+                       wi.quantity AS total_quantity,
+                       COALESCE(SUM(re.quantity), 0) AS exported_quantity,
+                       GREATEST(wi.quantity - COALESCE(SUM(re.quantity), 0), 0) AS remaining_quantity,
+                       CASE
+                           WHEN GREATEST(wi.quantity - COALESCE(SUM(re.quantity), 0), 0) > 0 THEN 'available'
+                           ELSE 'out_of_stock'
+                       END AS status,
+                       wi.avatar,
+                       wi.updated_at
+                FROM warehouse_items wi
+                LEFT JOIN room_equipments re ON re.warehouse_item_id = wi.id
+                GROUP BY wi.id, wi.name, wi.quantity, wi.avatar, wi.updated_at
+                ORDER BY status DESC, remaining_quantity DESC, wi.name ASC";
 
         return $this->fetchAll($sql);
     }

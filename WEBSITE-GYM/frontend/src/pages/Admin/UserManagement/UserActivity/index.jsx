@@ -15,7 +15,7 @@ function formatDateTime(value) {
 	});
 }
 
-export default function UserActivity() {
+export default function UserActivity({ searchQuery = "" }) {
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [notification, setNotification] = useState(null);
@@ -48,9 +48,19 @@ export default function UserActivity() {
 		fetchActivities();
 	}, []);
 
+	const normalizedQuery = searchQuery.trim().toLowerCase();
+	const filteredUsers = useMemo(() => {
+		if (!normalizedQuery) return users;
+		return users.filter((user) =>
+			String(user.user_id).toLowerCase().includes(normalizedQuery) ||
+			(user.username || "").toLowerCase().includes(normalizedQuery) ||
+			(user.email || "").toLowerCase().includes(normalizedQuery)
+		);
+	}, [users, normalizedQuery]);
+
 	const totalCheckins = useMemo(
-		() => users.reduce((sum, user) => sum + Number(user.total_checkins || 0), 0),
-		[users]
+		() => filteredUsers.reduce((sum, user) => sum + Number(user.total_checkins || 0), 0),
+		[filteredUsers]
 	);
 
 	const toggleUser = (userId) => {
@@ -62,9 +72,13 @@ export default function UserActivity() {
 		setExpandedRooms((prev) => ({ ...prev, [key]: !prev[key] }));
 	};
 
-	const totalPages = Math.ceil(users.length / itemsPerPage);
+	const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 	const startIndex = (currentPage - 1) * itemsPerPage;
-	const currentUsers = users.slice(startIndex, startIndex + itemsPerPage);
+	const currentUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [searchQuery]);
 
 	const handlePageChange = (page) => {
 		setCurrentPage(page);
@@ -89,24 +103,24 @@ export default function UserActivity() {
 			)}
 
 			<div className="bg-gray-800 border border-gray-700 rounded-lg p-4 text-sm text-gray-300">
-				Tổng số người dùng: <span className="text-white font-semibold">{users.length}</span>
+				Tổng số người dùng: <span className="text-white font-semibold">{filteredUsers.length}</span>
 				<span className="mx-2">|</span>
 				Tổng lượt đi tập: <span className="text-yellow-400 font-semibold">{totalCheckins}</span>
 			</div>
 
 			<div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-				{users.length === 0 ? (
-					<div className="text-center text-gray-400 py-10">Chưa có dữ liệu hoạt động.</div>
+				{filteredUsers.length === 0 ? (
+					<div className="text-center text-gray-400 py-10">Không có dữ liệu phù hợp từ khóa tìm kiếm.</div>
 				) : (
 					<div className="overflow-x-auto">
 						<table className="w-full text-sm text-left">
 							<thead className="bg-gray-700 border-b border-gray-600">
 								<tr>
-									<th className="px-6 py-4 font-semibold text-gray-300">ID</th>
-									<th className="px-6 py-4 font-semibold text-gray-300">Tên user</th>
-									<th className="px-6 py-4 font-semibold text-gray-300">Gmail</th>
-									<th className="px-6 py-4 font-semibold text-gray-300">Số lần đi tập</th>
-									<th className="px-6 py-4 font-semibold text-gray-300 text-center">Chi tiết</th>
+									<th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">ID</th>
+									<th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Tên người dùng</th>
+									<th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Email</th>
+									<th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Số lần đi tập</th>
+									<th className="px-6 py-4 text-center text-sm font-semibold text-gray-300">Chi tiết</th>
 								</tr>
 							</thead>
 							<tbody>

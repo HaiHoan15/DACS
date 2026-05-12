@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `room_equipments` (
   CONSTRAINT `fk_room_equipments_warehouse_item` FOREIGN KEY (`warehouse_item_id`) REFERENCES `warehouse_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.room_equipments: ~9 rows (approximately)
+-- Dumping data for table threegym.room_equipments: ~10 rows (approximately)
 INSERT INTO `room_equipments` (`id`, `room_id`, `warehouse_item_id`, `quantity`, `created_at`, `updated_at`) VALUES
 	(41, 5, 2, 4, '2026-05-07 11:42:28', '2026-05-07 14:18:23'),
 	(42, 5, 1, 2, '2026-05-07 11:42:28', '2026-05-07 14:18:27'),
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `service_payment_history` (
   CONSTRAINT `fk_sph_user_service` FOREIGN KEY (`user_service_id`) REFERENCES `user_services` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table threegym.service_payment_history: ~16 rows (approximately)
+-- Dumping data for table threegym.service_payment_history: ~15 rows (approximately)
 INSERT INTO `service_payment_history` (`id`, `user_id`, `user_service_id`, `package_id`, `package_name`, `event_type`, `payment_method`, `amount`, `is_revenue`, `performed_by_admin_id`, `note`, `created_at`) VALUES
 	(3, 2, NULL, 2, 'PRO', 'user_purchase', 'momo', 350000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-04-24 08:04:31'),
 	(4, 2, NULL, 3, 'VIP', 'user_purchase', 'momo', 500000.00, 1, NULL, 'Người dùng tự thanh toán gói dịch vụ', '2026-04-24 08:05:22'),

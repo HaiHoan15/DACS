@@ -55,9 +55,21 @@ try {
             echo json_encode(["success" => true, "data" => $data]);
             break;
 
+        case 'revenue-by-service':
+            $limit = $_GET['limit'] ?? 10;
+            $data = $stats->getRevenueByService($limit);
+            echo json_encode(["success" => true, "data" => $data]);
+            break;
+
         case 'top-spenders':
             $limit = $_GET['limit'] ?? 5;
             $data = $stats->getTopSpenders($limit);
+            echo json_encode(["success" => true, "data" => $data]);
+            break;
+
+        case 'top-total-spenders':
+            $limit = $_GET['limit'] ?? 10;
+            $data = $stats->getTopTotalSpenders($limit);
             echo json_encode(["success" => true, "data" => $data]);
             break;
 
@@ -130,6 +142,11 @@ try {
         // KHO
         case 'warehouse-status':
             $data = $stats->getWarehouseStatus();
+            echo json_encode(["success" => true, "data" => $data]);
+            break;
+
+        case 'warehouse-items':
+            $data = $stats->getWarehouseItems();
             echo json_encode(["success" => true, "data" => $data]);
             break;
 

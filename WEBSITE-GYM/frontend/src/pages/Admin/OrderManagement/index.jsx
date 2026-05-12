@@ -215,12 +215,12 @@ export default function OrderManagement() {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-700 border-b-2 border-gray-600">
-                  <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Mã đơn hàng</th>
-                  <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Email</th>
-                  <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Tổng tiền</th>
-                  <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Trạng thái</th>
-                  <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Phương thức thanh toán</th>
-                  <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Ngày tạo</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">ID</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Email</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Tổng tiền</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Trạng thái</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Phương thức thanh toán</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Ngày tạo</th>
                   <th className="px-6 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Thao tác</th>
                 </tr>
               </thead>

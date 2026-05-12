@@ -6,7 +6,7 @@ import LoginButton from "../../../../components/LoginButton";
 import AdminDropdown from "../AdminDropdown";
 
 const navItems = [
-    // { label: "Thống kê", path: "/admin" },
+    { label: "Thống kê", path: "/admin" },
     { label: "Người dùng", path: "/admin/UserManagement" },
     { label: "Xác nhận", path: "/admin/MemberConfirmationManagement" },
     { label: "Dịch vụ", path: "/admin/ServiceManagement" },
@@ -40,10 +40,10 @@ const Header = () => {
 
     return (
         <header className="bg-black/75 backdrop-blur sticky top-0 z-50 border-b border-red-900">
-            <div className="max-w-7xl mx-auto relative flex items-center px-2 py-4">
+            <div className="max-w-7xl mx-auto flex items-center gap-4 px-3 py-4 lg:px-4">
 
                 {/* Logo */}
-                <div className="flex items-center gap-5">
+                <div className="flex items-center gap-4 shrink-0">
                     <img
                         src="/images/logo/logo.png"
                         alt="Three GYM Logo"
@@ -68,8 +68,8 @@ const Header = () => {
 
                 {/* Menu */}
                 <nav className="
-                    hidden md:flex items-center gap-5 text-lg font-medium
-                    absolute left-1/2 -translate-x-1/2
+                    hidden md:flex flex-1 min-w-0 items-center justify-center
+                    gap-3 lg:gap-5 px-3 text-base lg:text-lg font-medium
                 ">
                     {navItems.map((item) => (
                         <NavLink
@@ -78,7 +78,7 @@ const Header = () => {
                             end
                             className={({ isActive }) =>
                                 `
-                                relative transition-colors duration-300
+                                relative whitespace-nowrap transition-colors duration-300
                                 ${isActive ? "text-red-500" : "text-gray-300 hover:text-yellow-400"}
 
                                 after:absolute
@@ -99,7 +99,7 @@ const Header = () => {
                 </nav>
 
                 {/* User Section */}
-                <div className="ml-auto flex items-center gap-3">
+                <div className="ml-auto flex items-center gap-3 shrink-0">
                     {user ? (
                         // Đã đăng nhập
                         <div className="flex items-center gap-3">

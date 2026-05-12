@@ -201,11 +201,11 @@ export default function WarehouseManagement() {
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="bg-gray-700 border-b border-gray-600">
-                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">#</th>
-                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">Hình</th>
-                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">Tên dụng cụ</th>
-                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">Số lượng</th>
-                <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300">Thao tác</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">ID</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Hình</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Tên dụng cụ</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Số lượng</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Thao tác</th>
               </tr>
             </thead>
             <tbody>

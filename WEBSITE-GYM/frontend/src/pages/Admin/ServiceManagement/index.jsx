@@ -253,13 +253,13 @@ export default function ServiceManagement() {
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="bg-gray-700 border-b-2 border-gray-600">
-                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">#</th>
-                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Tên</th>
-                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Email</th>
-                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Gói dịch vụ</th>
-                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Ngày bắt đầu</th>
-                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Ngày kết thúc</th>
-                  <th className="px-5 py-3 font-bold uppercase tracking-wide text-gray-300 text-xs">Tình trạng</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">ID</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Tên người dùng</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Email</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Gói dịch vụ</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Ngày bắt đầu</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Ngày kết thúc</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Tình trạng</th>
                 </tr>
               </thead>
               <tbody>

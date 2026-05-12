@@ -33,6 +33,7 @@ try {
         case 'getUsersWithoutService': getUsersWithoutService(); break;
         case 'deleteService':           deleteService();           break;
         case 'getPaymentHistory':      getPaymentHistory();        break;
+        case 'getUsageStats':          getUsageStats();            break;
         default:
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid action']);
@@ -171,4 +172,10 @@ function getPaymentHistory() {
 
     $history = $serviceModel->getServicePaymentHistory($onlyRevenue, $limit);
     echo json_encode(['success' => true, 'history' => $history]);
+}
+
+function getUsageStats() {
+    global $serviceModel;
+    $rows = $serviceModel->getUsageStats();
+    echo json_encode(['success' => true, 'rows' => $rows]);
 }
